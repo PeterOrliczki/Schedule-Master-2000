@@ -1,5 +1,3 @@
-DO $$ BEGIN
-
 DROP TABLE IF EXISTS schedule_tasks CASCADE;
 DROP TABLE IF EXISTS tasks CASCADE;
 DROP TABLE IF EXISTS schedules CASCADE;
@@ -58,21 +56,21 @@ CREATE TABLE all_audit(
 
 CREATE SEQUENCE counter AS integer INCREMENT BY 1 START 1; 
 
-CREATE OR REPLACE FUNCTION process_audit() RETURNS TRIGGER AS $all_audit$
+CREATE OR REPLACE FUNCTION process_audit() RETURNS TRIGGER AS '
     BEGIN
-        IF (TG_OP = 'DELETE') THEN
+        IF (TG_OP = ''DELETE'') THEN
             INSERT INTO all_audit
-                VALUES(nextval('counter'),'DELETE', TG_TABLE_NAME, OLD.user_id, now());
-        ELSIF (TG_OP = 'UPDATE') THEN
+                VALUES(nextval(''counter''),''DELETE'', TG_TABLE_NAME, OLD.user_id, now());
+        ELSIF (TG_OP = ''UPDATE'') THEN
             INSERT INTO all_audit
-                VALUES(nextval('counter'), 'UPDATE', TG_TABLE_NAME, OLD.user_id, now());
-        ELSIF (TG_OP = 'INSERT') THEN
+                VALUES(nextval(''counter''), ''UPDATE'', TG_TABLE_NAME, OLD.user_id, now());
+        ELSIF (TG_OP = ''INSERT'') THEN
             INSERT INTO all_audit
-                VALUES(nextval('counter'), 'INSERT', TG_TABLE_NAME, NEW.user_id, now());
+                VALUES(nextval(''counter''), ''INSERT'', TG_TABLE_NAME, NEW.user_id, now());
         END IF;
         RETURN NEW;
     END;
-$all_audit$ LANGUAGE plpgsql;
+' LANGUAGE plpgsql;
 
 
 CREATE TRIGGER tasks_audit_ins
@@ -113,6 +111,3 @@ CREATE TRIGGER users_audit_del
    -- INSERT INTO schedules VALUES(1, 1, 'title', 1, true);
    -- UPDATE users SET user_name = 'z';
    -- DELETE FROM users WHERE user_id = 2;
-  
-   
-  END $$
