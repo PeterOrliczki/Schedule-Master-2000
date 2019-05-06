@@ -9,7 +9,7 @@ CREATE TABLE users(
 	user_id SERIAL UNIQUE PRIMARY KEY,
 	user_name varchar(16) NOT NULL,
 	user_email varchar(254) NOT NULL,
-	user_password varchar(16) NOT NULL,
+	user_password text NOT NULL,
 	user_role varchar(10) NOT NULL,
 	CONSTRAINT user_name_not_empty CHECK (user_name <> ''),
 	CONSTRAINT user_email_not_empty CHECK (user_email <> ''),
