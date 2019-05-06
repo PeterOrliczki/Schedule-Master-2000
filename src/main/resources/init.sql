@@ -72,6 +72,22 @@ CREATE OR REPLACE FUNCTION process_audit() RETURNS TRIGGER AS '
     END;
 ' LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION check_task_id() RETURNS TRIGGER AS '
+    BEGIN
+        IF (TG_OP = ''INSERT'') THEN
+            DECLARE
+                id integer;
+            BEGIN
+                FOR id IN SELECT task_id FROM schedule_tasks WHERE schedule_id = NEW.schedule_id LOOP
+                IF id = NEW.task_id THEN
+                RAISE EXCEPTION ''Task already exists in schedule!'';
+                END IF;
+                END LOOP;
+			END;
+        END IF;
+        RETURN NEW;
+    END;
+' LANGUAGE plpgsql;
 
 CREATE TRIGGER tasks_audit_ins
     AFTER INSERT ON tasks
@@ -82,7 +98,7 @@ CREATE TRIGGER tasks_audit_upd
 CREATE TRIGGER tasks_audit_del
     AFTER DELETE ON tasks
     FOR EACH ROW EXECUTE procedure process_audit();
-   
+
 CREATE TRIGGER schedules_audit_ins
     AFTER INSERT ON schedules
     FOR EACH ROW EXECUTE Procedure process_audit();
@@ -92,7 +108,7 @@ CREATE TRIGGER schedules_audit_upd
 CREATE TRIGGER schedules_audit_del
     AFTER DELETE ON schedules
     FOR EACH ROW EXECUTE procedure process_audit();
-   
+
 CREATE TRIGGER users_audit_ins
     AFTER INSERT ON users
     FOR EACH ROW EXECUTE Procedure process_audit();
@@ -102,12 +118,16 @@ CREATE TRIGGER users_audit_upd
 CREATE TRIGGER users_audit_del
     AFTER DELETE ON users
     FOR EACH ROW EXECUTE procedure process_audit();
-   
-   
-   
-   -- INSERT INTO users VALUES(1, 'a', 'b', 'c', 'd');
+
+CREATE TRIGGER schedule_task_check
+    BEFORE INSERT ON schedule_tasks
+    FOR EACH ROW EXECUTE procedure check_task_id();
+
+   --INSERT INTO users VALUES(1, 'a', 'b', 'c', 'd');
    -- INSERT INTO users VALUES(2, 'a', 'b', 'c', 'd');
-   -- INSERT INTO tasks VALUES(1, 1, 'a', 'b', 1, 1);
-   -- INSERT INTO schedules VALUES(1, 1, 'title', 1, true);
+   --INSERT INTO tasks VALUES(1, 1, 'a', 'b', 1, 1);
+   --INSERT INTO schedules VALUES(1, 1, 'title', 1, true);
    -- UPDATE users SET user_name = 'z';
    -- DELETE FROM users WHERE user_id = 2;
+   --INSERT INTO schedule_tasks VALUES(1, 1);
+   --INSERT INTO schedule_tasks VALUES(1, 1);
