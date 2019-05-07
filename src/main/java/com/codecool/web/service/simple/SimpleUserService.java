@@ -19,6 +19,10 @@ public final class SimpleUserService implements UserService {
         this.userDao = userDao;
     }
 
+    public List<User> getUsers() throws SQLException {
+        return userDao.findAllUsers();
+    }
+
     public List<User> findAllUser() throws SQLException {
         return userDao.findAllUsers();
     }
