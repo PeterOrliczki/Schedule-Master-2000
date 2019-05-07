@@ -3,13 +3,14 @@ package com.codecool.web.service.simple;
 import com.codecool.web.dao.UserDao;
 import com.codecool.web.model.Role;
 import com.codecool.web.model.User;
+import com.codecool.web.service.PasswordService;
 import com.codecool.web.service.UserService;
 import com.codecool.web.service.exception.ServiceException;
 
-import java.security.Provider;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
 import java.util.List;
-//import javafx.concurrent.Service;
 
 public final class SimpleUserService implements UserService {
 
@@ -64,6 +65,20 @@ public final class SimpleUserService implements UserService {
             return false;
         } else {
             throw new ServiceException("Email already exists");
+        }
+    }
+
+    @Override
+    public User loginUser(String email, String password) throws SQLException, ServiceException {
+        PasswordService passwordService = new PasswordService();
+        try {
+            User user = userDao.findUserByEmail(email);
+            if (user == null || !passwordService.validatePassword(password, user.getPassword())) {
+                throw new ServiceException("Bad login");
+            }
+            return user;
+        } catch (IllegalArgumentException | NoSuchAlgorithmException | InvalidKeySpecException ex) {
+            throw new ServiceException(ex.getMessage());
         }
     }
 }

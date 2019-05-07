@@ -29,4 +29,6 @@ public interface UserService {
 
     boolean doesUserExists(String email) throws SQLException, ServiceException;
 
+    User loginUser(String email, String password) throws SQLException, ServiceException;
+
 }
