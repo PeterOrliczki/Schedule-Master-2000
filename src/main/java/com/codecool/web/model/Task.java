@@ -10,13 +10,13 @@ public final class Task extends AbstractModel {
     private final int end;
     private final int userId;
 
-    public Task(int id, String title, String content, int start, int end, int userId) {
+    public Task(int id, int userId, String title, String content, int start, int end) {
         super(id);
+        this.userId = userId;
         this.title = title;
         this.content = content;
         this.start = start;
         this.end = end;
-        this.userId = userId;
     }
 
     @Override

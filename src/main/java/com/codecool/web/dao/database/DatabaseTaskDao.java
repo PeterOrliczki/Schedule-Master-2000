@@ -4,6 +4,7 @@ import com.codecool.web.dao.TaskDao;
 import com.codecool.web.model.Task;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public final class DatabaseTaskDao extends AbstractDao implements TaskDao {
@@ -12,23 +13,166 @@ public final class DatabaseTaskDao extends AbstractDao implements TaskDao {
         super(connection);
     }
 
+    @Override
     public List<Task> findAll() throws SQLException {
+        List<Task> tasks = new ArrayList<>();
+        String sql = "SELECT * FROM tasks";
+        try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
+            while (resultSet.next()) {
+                tasks.add(fetchTask(resultSet));
+            }
+        }
+        return tasks;
+    }
+
+    @Override
+    public Task findByTaskId(int id) throws SQLException {
+        String sql = "SELECT * FROM tasks WHERE task_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return fetchTask(resultSet);
+                }
+            }
+        }
         return null;
     }
 
-    public Task findById(int id) throws SQLException {
+    @Override
+    public Task findByUserId(int id) throws SQLException {
+        String sql = "SELECT * FROM tasks WHERE user_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return fetchTask(resultSet);
+                }
+            }
+        }
         return null;
     }
 
-    public void add() throws SQLException {
-
+    @Override
+    public Task addTask(int userId, String taskTitle, String taskContent, int taskStart, int taskEnd) throws SQLException {
+        boolean autoCommit = connection.getAutoCommit();
+        connection.setAutoCommit(false);
+        String sql = "INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setInt(1, userId);
+            statement.setString(2, taskTitle);
+            statement.setString(3, taskContent);
+            statement.setInt(4, taskStart);
+            statement.setInt(5, taskEnd);
+            executeInsert(statement);
+            int taskId = fetchGeneratedId(statement);
+            connection.commit();
+            return new Task(taskId, userId, taskTitle, taskContent, taskStart, taskEnd);
+        } catch (SQLException exc) {
+            connection.rollback();
+            throw exc;
+        } finally {
+            connection.setAutoCommit(autoCommit);
+        }
     }
 
-    public void add(int scheduleId, int... taskIds) throws SQLException {
+    @Override
+    public void deleteByTaskId(int id) throws SQLException {
+        boolean autoCommit = connection.getAutoCommit();
+        connection.setAutoCommit(false);
+        String sql = "DELETE FROM tasks WHERE task_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setInt(1, id);
+            executeInsert(statement);
+            connection.commit();
+        } catch (SQLException exc) {
+            connection.rollback();
+            throw exc;
+        } finally {
+            connection.setAutoCommit(autoCommit);
+        }
+    }
 
+    @Override
+    public void updateTitleById(String id, String title) throws SQLException {
+        boolean autoCommit = connection.getAutoCommit();
+        connection.setAutoCommit(false);
+        String sql = "UPDATE tasks SET task_title=? WHERE task_id=?";
+        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, title);
+            statement.setString(2, id);
+            executeInsert(statement);
+            connection.commit();
+        } catch (SQLException exc) {
+            connection.rollback();
+            throw exc;
+        } finally {
+            connection.setAutoCommit(autoCommit);
+        }
+    }
+
+    @Override
+    public void updateContentById(String id, String content) throws SQLException {
+        boolean autoCommit = connection.getAutoCommit();
+        connection.setAutoCommit(false);
+        String sql = "UPDATE tasks SET task_content=? WHERE task_id=?";
+        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, content);
+            statement.setString(2, id);
+            executeInsert(statement);
+            connection.commit();
+        } catch (SQLException exc) {
+            connection.rollback();
+            throw exc;
+        } finally {
+            connection.setAutoCommit(autoCommit);
+        }
+    }
+
+    @Override
+    public void updateStartByID(String id, String start) throws SQLException {
+        boolean autoCommit = connection.getAutoCommit();
+        connection.setAutoCommit(false);
+        String sql = "UPDATE tasks SET task_start=? WHERE task_id=?";
+        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, start);
+            statement.setString(2, id);
+            executeInsert(statement);
+            connection.commit();
+        } catch (SQLException exc) {
+            connection.rollback();
+            throw exc;
+        } finally {
+            connection.setAutoCommit(autoCommit);
+        }
+    }
+
+    @Override
+    public void updateEndByID(String id, String end) throws SQLException {
+        boolean autoCommit = connection.getAutoCommit();
+        connection.setAutoCommit(false);
+        String sql = "UPDATE tasks SET task_end=? WHERE task_id=?";
+        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, end);
+            statement.setString(2, id);
+            executeInsert(statement);
+            connection.commit();
+        } catch (SQLException exc) {
+            connection.rollback();
+            throw exc;
+        } finally {
+            connection.setAutoCommit(autoCommit);
+        }
     }
 
     private Task fetchTask(ResultSet resultSet) throws SQLException {
-        return null;
+        int taskId = resultSet.getInt("task_id");
+        int userId = resultSet.getInt("user_id");
+        String taskTitle = resultSet.getString("task_title");
+        String taskContent = resultSet.getString("task_content");
+        int taskStart = resultSet.getInt("task_start");
+        int taskEnd = resultSet.getInt("task_end");
+
+        return new Task(taskId, userId, taskTitle, taskContent, taskStart, taskEnd);
     }
 }
