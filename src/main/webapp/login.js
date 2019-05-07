@@ -49,6 +49,7 @@ function onLoginButtonClicked() {
     xhr.addEventListener('load', onLoginResponse);
     xhr.addEventListener('error', onNetworkError);
     xhr.open('POST', 'login');
+
     xhr.send(params);
 }
 

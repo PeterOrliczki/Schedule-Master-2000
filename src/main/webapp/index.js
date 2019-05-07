@@ -22,11 +22,12 @@ function newError(targetEl, message) {
     newMessage(targetEl, 'error', message);
 }
 
-function newMessage(targetEl, message) {
+function newMessage(targetEl, cssClass, message) {
     clearMessages();
 
     const pEl = document.createElement('p');
     pEl.classList.add('message');
+    pEl.classList.add(cssClass);
     pEl.textContent = message;
 
     targetEl.appendChild(pEl);
