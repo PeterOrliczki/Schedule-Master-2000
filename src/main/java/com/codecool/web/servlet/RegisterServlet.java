@@ -28,7 +28,7 @@ public class RegisterServlet extends AbstractServlet {
             String name = req.getParameter("name");
             String email = req.getParameter("email");
             String password = req.getParameter("password");
-            Role userRole = Role.valueOf(req.getParameter("role").toUpperCase());
+            Role userRole = Role.REGULAR;
 
 
             if (!userService.doesUserExists(email)) {

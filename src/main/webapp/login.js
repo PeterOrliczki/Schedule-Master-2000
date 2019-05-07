@@ -1,9 +1,13 @@
 function onRegisterRedirectClicked() {
+      const loginTitleEl = document.getElementById('login-content-title');
+      loginTitleEl.textContent = 'Register';
       hideContentById('login-form');
       showContentById('register-form');
 }
 
 function onLoginRedirectClicked() {
+    const loginTitleEl = document.getElementById('login-content-title');
+    loginTitleEl.textContent = 'Login';
     hideContentById('register-form');
     showContentById('login-form');
 }
@@ -51,9 +55,9 @@ function onLoginButtonClicked() {
 function onRegisterButtonClicked() {
     const registerFormEl = document.forms['register-form'];
 
-    const nameInputEl = loginFormEl.querySelector('input[name="name"]');
-    const emailInputEl = loginFormEl.querySelector('input[name="email"]');
-    const passwordInputEl = loginFormEl.querySelector('input[name="password"]');
+    const nameInputEl = registerFormEl.querySelector('input[name="name"]');
+    const emailInputEl = registerFormEl.querySelector('input[name="email"]');
+    const passwordInputEl = registerFormEl.querySelector('input[name="password"]');
 
     const name = nameInputEl.value;
     const email = emailInputEl.value;

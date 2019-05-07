@@ -73,7 +73,7 @@ public final class SimpleUserService implements UserService {
         PasswordService passwordService = new PasswordService();
         try {
             User user = userDao.findUserByEmail(email);
-            if (user == null || !passwordService.validatePassword(password, user.getPassword())) {
+            if (user == null || !passwordService.validatePassword(password, passwordService.getHashedPassword(password))) {
                 throw new ServiceException("Bad login");
             }
             return user;

@@ -27,7 +27,7 @@ public final class LoginServlet extends AbstractServlet {
             User user = userService.loginUser(email, password);
             sendMessage(resp, HttpServletResponse.SC_OK, user);
         } catch (ServiceException ex) {
-            sendMessage(resp, HttpServletResponse.SC_BAD_REQUEST, ex.getMessage());
+           sendMessage(resp, HttpServletResponse.SC_BAD_REQUEST, ex.getMessage());
         } catch (SQLException ex) {
             handleSqlError(resp, ex);
         }

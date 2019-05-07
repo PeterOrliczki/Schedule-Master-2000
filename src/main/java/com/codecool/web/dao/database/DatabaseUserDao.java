@@ -74,12 +74,12 @@ public final class DatabaseUserDao extends AbstractDao implements UserDao {
     public User addUser(String name, String email, String password, Role role) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
-        String sql = "INSERT INTO users(name, email, password, role) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO users(user_name, user_email, user_password, user_role) VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, name);
             statement.setString(2, email);
             statement.setString(3, password);
-            statement.setObject(4, role);
+            statement.setString(4, role.getValue());
             executeInsert(statement);
             int id = fetchGeneratedId(statement);
             connection.commit();
@@ -183,7 +183,7 @@ public final class DatabaseUserDao extends AbstractDao implements UserDao {
         String name = resultSet.getString("user_name");
         String email = resultSet.getString("user_email");
         String password = resultSet.getString("user_password");
-        Role role = (Role)resultSet.getObject("user_role");
+        Role role = Role.valueOf(resultSet.getString("user_role").toUpperCase());
 
         return new User(id, name, email, password, role);
     }
