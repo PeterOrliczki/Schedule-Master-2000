@@ -11,7 +11,7 @@ import java.io.IOException;
 public final class LogoutServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getSession().invalidate();
         resp.setStatus(HttpServletResponse.SC_OK);
     }
