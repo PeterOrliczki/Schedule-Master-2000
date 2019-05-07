@@ -4,7 +4,6 @@ import com.codecool.web.dao.UserDao;
 import com.codecool.web.model.Role;
 import com.codecool.web.model.User;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,10 +41,10 @@ public final class DatabaseUserDao extends AbstractDao implements UserDao {
     }
 
     @Override
-    public User findUserByName(String name) throws SQLException {
-        String sql = "SELECT * FROM users WHERE user_name = ?";
+    public User findUserByEmail(String email) throws SQLException {
+        String sql = "SELECT * FROM users WHERE user_email = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, name);
+            statement.setString(1, email);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return fetchUser(resultSet);
