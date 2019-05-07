@@ -9,12 +9,12 @@ public final class Schedule extends AbstractModel {
     private final boolean visibility;
     private final int userId;
 
-    public Schedule(int id, String title, String duration, boolean visibility, int userId) {
+    public Schedule(int id, int userId, String title, String duration, boolean visibility) {
         super(id);
+        this.userId = userId;
         this.title = title;
         this.duration = duration;
         this.visibility = visibility;
-        this.userId = userId;
     }
 
     @Override
