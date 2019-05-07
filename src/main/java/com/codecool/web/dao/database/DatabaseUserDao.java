@@ -41,10 +41,10 @@ public final class DatabaseUserDao extends AbstractDao implements UserDao {
     }
 
     @Override
-    public User findUserByEmail(String email) throws SQLException {
-        String sql = "SELECT * FROM users WHERE user_email = ?";
+    public User findUserByName(String name) throws SQLException {
+        String sql = "SELECT * FROM users WHERE user_name = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, email);
+            statement.setString(1, name);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return fetchUser(resultSet);

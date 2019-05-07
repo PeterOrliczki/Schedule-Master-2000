@@ -13,7 +13,7 @@ public interface UserDao {
 
     User findUserById(int id) throws SQLException;
 
-    User findUserByEmail(String email) throws SQLException;
+    User findUserByName(String name) throws SQLException;
 
     User findUserByEmail(String email) throws SQLException;
 
