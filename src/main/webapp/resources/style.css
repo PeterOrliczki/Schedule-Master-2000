@@ -1,0 +1,385 @@
+* {
+    margin: 0;
+    padding: 0
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block
+}
+
+a {
+    color: inherit;
+    text-decoration: none
+}
+
+ol,
+ul {
+    list-style: none
+}
+
+blockquote,
+q {
+    quotes: none
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: none
+}
+
+img {
+    border: none;
+    height: auto;
+    max-width: 100%;
+    vertical-align: middle
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0
+}
+
+.main {
+    background: #F2F2F2 url('');
+    font: 14px/24px 'Lato', Helvetica, Arial, sans-serif, 'sans-serif';
+    overflow-x: hidden
+}
+
+.login {
+    background: #F2F2F2 url('background.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: auto;
+    font: 14px/24px 'Lato', Helvetica, Arial, sans-serif, 'sans-serif';
+    overflow-x: hidden
+}
+
+#login-content {
+    text-align: center;
+}
+
+#register-form {
+    display: none;
+}
+
+.register-text {
+    text-align: right;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.clear {
+    clear: both
+}
+
+.footer {
+    color: #444;
+    font: bold 14px/24px "Montserrat", sans-serif;
+    letter-spacing: 1px;
+    margin: 50px auto;
+    padding: 0 10px;
+    text-align: center;
+    text-transform: uppercase
+}
+
+.footer-link {
+    border-bottom: 1px solid #222;
+    color: #222
+}
+
+.header {
+    background: #1C1C1C url('header-small.png') center;
+    background-size: cover;
+    display: table;
+    padding: 100px 0;
+    position: relative;
+    width: 100%
+}
+
+.header-wrapper {
+    color: #fff;
+    display: table-cell;
+    text-align: center;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+    vertical-align: middle
+}
+
+.header-center {
+    margin: auto;
+    max-width: 800px;
+    width: 90%
+}
+
+.header-title {
+    font: 400 40px "Cookie", cursive;
+    letter-spacing: 1px;
+    text-transform: lowercase;
+    word-wrap: break-word
+}
+
+.header-title a {
+    color: #fff
+}
+
+.header-title:after {
+    background: rgba(255, 255, 255, 0.4);
+    background: #fff;
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+    content: '';
+    display: block;
+    height: 2px;
+    margin: 5px auto;
+    width: 100px
+}
+
+.header-description {
+    font: 400 14px 'Lato', Helvetica, Arial, sans-serif, 'sans-serif';
+    letter-spacing: 1px
+}
+
+.header-description a {
+    border-bottom: 1px solid #fff;
+    color: #fff
+}
+
+.menu {
+    background: #fff;
+    margin-bottom: 25px
+}
+
+.menu-list {
+    margin: auto;
+    max-width: 1800px;
+    padding: 0 50px;
+    //display: none;
+    text-align: center
+}
+
+.menu-item {
+    display: inline
+}
+
+.menu-link,
+.menu-search {
+    color: #444;
+    display: inline-block;
+    font: 400 14px/60px "Montserrat", sans-serif;
+    letter-spacing: 1px;
+    margin: 0 20px;
+    position: relative;
+    text-transform: uppercase
+}
+
+.menu-search:focus {
+    color: #e57873;
+}
+
+.menu-line {
+    background: #e57873;
+    bottom: 0;
+    display: block;
+    height: 2px;
+    position: absolute;
+    -webkit-transition: width 0.25s;
+    -moz-transition: width 0.25s;
+    -o-transition: width 0.25s;
+    transition: width 0.25s;
+    width: 0
+}
+
+.menu-link:hover .menu-line {
+    width: 100%
+}
+
+.menu-form {
+    display: inline
+}
+
+.menu-search {
+    border: none;
+    display: inline-block;
+    outline: none;
+    text-align: left;
+    width: 70px
+}
+
+.text-input {
+    color: #444;
+    font: 16px/24px 'Lato', Helvetica, Arial, sans-serif, 'sans-serif';
+    letter-spacing: 1px;
+    border: none;
+    outline: none;
+    text-align: left;
+    margin: 0;
+    padding: 10px 5px 10px 5px;
+    width: 70%
+}
+
+.text-input:focus {
+    color: #000;
+}
+
+.form-button {
+    background-color: #e57873;
+    margin: 0;
+    margin-top: 10px;
+    border: 1px solid transparent;
+    padding: 5px 15px;
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
+    font: normal 24px 'Cookie', cursive;
+    letter-spacing: 2px;
+    text-transform: lowercase;
+}
+
+.form-button:hover {
+    background-color: #fff;
+    border: 1px solid #e57873;
+    color: #e57873;
+}
+
+.container {
+    margin: auto;
+    max-width: 990px;
+    width: 90%
+}
+
+.login-container {
+    margin: auto;
+    padding-top: 15%;
+    max-width: 990px;
+    width: 45%
+}
+
+.content-wrapper {
+    background: #fff;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin: 50px auto;
+    width: 100%
+}
+
+.content {
+    padding: 25px 35px 30px 35px;
+}
+
+.content-header {
+    font: bold 14px/30px "Montserrat", sans-serif;
+    margin: 5px auto;
+    text-transform: uppercase;
+    padding-bottom: 15px;
+    text-align: center
+}
+
+.content-title {
+    color: #e57873;
+    font: 600 22px "Montserrat", sans-serif;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+    word-wrap: break-word
+}
+
+.content-title:after {
+    background: #e57873;
+    content: '';
+    display: block;
+    height: 2px;
+    margin: 0 auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 50px
+}
+
+.content-title-link {
+    color: #e57873;
+}
+
+.content a {
+    border-bottom: 1px solid #FA4646;
+}
+
+a {
+    color: #444;
+}
+
+h2 {
+    font: 16px/24px "Montserrat", sans-serif;
+    text-transform: uppercase
+}
+
+p {
+    padding-bottom: 5px;
+}
+
+hr {
+    background: #ccc;
+    border: none;
+    height: 1px
+}
+
+.content-header-link:before {
+    content: '\203A';
+    display: block;
+    float: left;
+    margin-right: 10px;
+    margin-top: -2px
+}
+
+.content-footer {
+    padding: 25px;
+    position: relative
+}
+
+@media screen and (max-width: 1024px) {
+    .menu-item {
+        display: block;
+        width: 100%
+    }
+
+    .menu-link {
+        line-height: 30px;
+        margin-bottom: 25px
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .header {
+        padding: 25px 0
+    }
+
+    .header-title {
+        font-size: 22px
+    }
+
+    .header-description {
+        font-size: 14px;
+        line-height: 24px
+    }
+}
