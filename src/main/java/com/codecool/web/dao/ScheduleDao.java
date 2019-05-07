@@ -13,7 +13,7 @@ public interface ScheduleDao {
 
     Schedule findByUserId(int id) throws SQLException;
 
-    Schedule addTask(int userId, String scheduleTitle, String scheduleDuration, boolean scheduleVisiblity) throws SQLException;
+    Schedule addTask(int userId, String scheduleTitle, int scheduleDuration, boolean scheduleVisiblity) throws SQLException;
 
     void deleteByScheduleId(int id) throws SQLException;
 

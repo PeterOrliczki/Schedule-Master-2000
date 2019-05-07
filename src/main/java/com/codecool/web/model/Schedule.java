@@ -5,11 +5,11 @@ import java.util.Objects;
 public final class Schedule extends AbstractModel {
 
     private final String title;
-    private final String duration;
+    private final int duration;
     private final boolean visibility;
     private final int userId;
 
-    public Schedule(int id, int userId, String title, String duration, boolean visibility) {
+    public Schedule(int id, int userId, String title, int duration, boolean visibility) {
         super(id);
         this.userId = userId;
         this.title = title;
