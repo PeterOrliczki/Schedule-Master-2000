@@ -15,6 +15,8 @@ public interface UserDao {
 
     User findUserByName(String name) throws SQLException;
 
+    User findUserByEmail(String email) throws SQLException;
+
     void deleteUserById(int id) throws SQLException;
 
     void updateUserNameById(String id, String name) throws SQLException;
@@ -22,4 +24,6 @@ public interface UserDao {
     void updateUserEmailById(String id, String email) throws SQLException;
 
     void updateUserPasswordById(String id, String password) throws SQLException;
+
+    boolean doesUserExists(String name) throws SQLException;
 }
