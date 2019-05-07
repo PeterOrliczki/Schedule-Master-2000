@@ -4,7 +4,9 @@ import com.codecool.web.dao.UserDao;
 import com.codecool.web.model.Role;
 import com.codecool.web.model.User;
 import com.codecool.web.service.UserService;
+import com.codecool.web.service.exception.ServiceException;
 
+import java.security.Provider;
 import java.sql.SQLException;
 import java.util.List;
 //import javafx.concurrent.Service;
@@ -53,7 +55,11 @@ public final class SimpleUserService implements UserService {
         userDao.updateUserPasswordById(id, password);
     }
 
-    public boolean doesUserExists(String name) throws SQLException {
-        return userDao.doesUserExists(name);
+    public boolean doesUserExists(String email) throws SQLException, ServiceException {
+        if (!userDao.doesUserExists(email)) {
+            return false;
+        } else {
+            throw new ServiceException("Email already exists");
+        }
     }
 }

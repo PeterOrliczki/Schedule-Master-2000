@@ -165,22 +165,17 @@ public final class DatabaseUserDao extends AbstractDao implements UserDao {
     }
 
     @Override
-    public boolean doesUserExists(String name) throws SQLException {
-        List<User> users = new ArrayList<>();
-        String sql = "SELECT * FROM users WHERE user_name = ?";
+    public boolean doesUserExists(String email) throws SQLException {
+        String sql = "SELECT * FROM users WHERE user_email = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, name);
+            statement.setString(1, email);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    users.add(fetchUser(resultSet));
+                    return true;
                 }
             }
         }
-        if (users == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return false;
     }
 
 

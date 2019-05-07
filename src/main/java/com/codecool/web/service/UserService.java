@@ -27,6 +27,6 @@ public interface UserService {
 
     void updateUserPasswordById(String id, String password) throws SQLException;
 
-    boolean doesUserExists(String name) throws SQLException;
+    boolean doesUserExists(String email) throws SQLException, ServiceException;
 
 }
