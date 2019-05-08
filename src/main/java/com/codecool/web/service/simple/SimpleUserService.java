@@ -20,46 +20,52 @@ public final class SimpleUserService implements UserService {
         this.userDao = userDao;
     }
 
-    public List<User> getUsers() throws SQLException {
-        return userDao.findAllUsers();
-    }
-
+    @Override
     public List<User> findAllUser() throws SQLException {
         return userDao.findAllUsers();
     }
 
+    @Override
     public User findUserById(int id) throws SQLException {
         return userDao.findUserById(id);
     }
 
+    @Override
     public User findUserByName(String name) throws SQLException {
         return userDao.findUserByName(name);
     }
 
+    @Override
     public User findUserByEmail(String email) throws SQLException {
         return userDao.findUserByEmail(email);
     }
 
+    @Override
     public User addUser(String name, String email, String password, Role role) throws SQLException {
         return userDao.addUser(name, email, password, role);
     }
 
+    @Override
     public void deleteUserById(int id) throws SQLException {
         userDao.deleteUserById(id);
     }
 
+    @Override
     public void updateUserNameById(int id, String name) throws SQLException {
         userDao.updateUserNameById(id, name);
     }
 
+    @Override
     public void updateUserEmailById(int id, String email) throws SQLException {
         userDao.updateUserEmailById(id, email);
     }
 
+    @Override
     public void updateUserPasswordById(int id, String password) throws SQLException {
         userDao.updateUserPasswordById(id, password);
     }
 
+    @Override
     public boolean doesUserExists(String email) throws SQLException, ServiceException {
         if (!userDao.doesUserExists(email)) {
             return false;
