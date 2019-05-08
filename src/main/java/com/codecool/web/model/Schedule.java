@@ -4,16 +4,28 @@ import java.util.Objects;
 
 public final class Schedule extends AbstractModel {
 
-    private final String title;
-    private final int duration;
-    private final boolean visibility;
-    private final int userId;
+    private String title;
+    private int duration;
+    private boolean visibility;
+    private int userId;
+
+    public Schedule(int id, int userId, String title, int duration) {
+        super(id);
+        this.userId = userId;
+        this.title = title;
+        this.duration = duration;
+        this.visibility = false;
+    }
 
     public Schedule(int id, int userId, String title, int duration, boolean visibility) {
         super(id);
         this.userId = userId;
         this.title = title;
         this.duration = duration;
+        this.visibility = visibility;
+    }
+
+    public void setVisibility(boolean visibility) {
         this.visibility = visibility;
     }
 
