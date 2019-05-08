@@ -123,7 +123,8 @@ CREATE TRIGGER schedule_task_check
     BEFORE INSERT ON schedule_tasks
     FOR EACH ROW EXECUTE procedure check_task_id();
 
-   --INSERT INTO users VALUES(1, 'a', 'b', 'c', 'd');
+   INSERT INTO users VALUES(1, 'a', 'a', '1000:52a2e5376fe9155814775f1e3231a526:191ade9da2dcbabfc870ba70263b7af6865b40d8e179d19e8ea504d257810c6e78a316d77f5bd8716a7fa54f39b1f082c773ca80b45526dd59c933522e341216', 'ADMIN');
+   INSERT INTO users VALUES(2, 'r', 'r', '1000:12b64240b3c5da1f64daa0d26dbd7bfb:e314534adbb83fa0d605557a1d7394f6936b10efcfc89cae85260e69ad452241cbdd6d043ae51ecc92e8776b4aa369fa6afb028cac5254f9cc7a4e8eae0722c2', 'REGULAR');
    -- INSERT INTO users VALUES(2, 'a', 'b', 'c', 'd');
    --INSERT INTO tasks VALUES(1, 1, 'a', 'b', 1, 1);
    --INSERT INTO schedules VALUES(1, 1, 'title', 1, true);
