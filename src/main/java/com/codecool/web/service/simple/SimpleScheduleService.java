@@ -1,11 +1,14 @@
 package com.codecool.web.service.simple;
 
 import com.codecool.web.dao.ScheduleDao;
+import com.codecool.web.model.Role;
 import com.codecool.web.model.Schedule;
+import com.codecool.web.model.User;
 import com.codecool.web.service.ScheduleService;
 import com.codecool.web.service.exception.ServiceException;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public final class SimpleScheduleService implements ScheduleService {
@@ -17,12 +20,11 @@ public final class SimpleScheduleService implements ScheduleService {
     }
 
     @Override
-    public List<Schedule> findAll() throws SQLException, ServiceException {
-        List<Schedule> schedules = scheduleDao.findAll();
-        if (schedules != null) {
-            return schedules;
+    public List<Schedule> findAll(User user) throws SQLException, ServiceException {
+        if (user.getRole().equals(Role.ADMIN)) {
+            return scheduleDao.findAll();
         } else {
-            throw new ServiceException("No existing schedule yet, but you can create a new one now.");
+            return scheduleDao.findAllByVisibility();
         }
     }
 

@@ -1,6 +1,7 @@
 package com.codecool.web.dao;
 
 import com.codecool.web.model.Schedule;
+import com.codecool.web.model.User;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -8,6 +9,10 @@ import java.util.List;
 public interface ScheduleDao {
 
     List<Schedule> findAll() throws SQLException;
+
+    List<Schedule> findAllById(int id) throws SQLException;
+
+    List<Schedule> findAllByVisibility() throws SQLException;
 
     Schedule findByScheduleId(int id) throws SQLException;
 
