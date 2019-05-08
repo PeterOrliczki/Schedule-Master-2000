@@ -123,11 +123,40 @@ CREATE TRIGGER schedule_task_check
     BEFORE INSERT ON schedule_tasks
     FOR EACH ROW EXECUTE procedure check_task_id();
 
-   INSERT INTO users(user_name, user_email, user_password, user_role) VALUES('a', 'a', '1000:52a2e5376fe9155814775f1e3231a526:191ade9da2dcbabfc870ba70263b7af6865b40d8e179d19e8ea504d257810c6e78a316d77f5bd8716a7fa54f39b1f082c773ca80b45526dd59c933522e341216', 'ADMIN');
-   INSERT INTO users(user_name, user_email, user_password, user_role) VALUES('r', 'r', '1000:12b64240b3c5da1f64daa0d26dbd7bfb:e314534adbb83fa0d605557a1d7394f6936b10efcfc89cae85260e69ad452241cbdd6d043ae51ecc92e8776b4aa369fa6afb028cac5254f9cc7a4e8eae0722c2', 'REGULAR');
-   INSERT INTO users(user_name, user_email, user_password, user_role)  VALUES('peti', 'peti', '1000:f074ea92965ce178a8b1f5268f8fcdf4:4c1ee44787c9bf719299beadc07d4f09cc0f473edccafeb23d9938b53d9134e670eddbf74db2948bfdd0b47693e13279b1d42b4d13726bd74f1d08f2424b1dfb', 'REGULAR');
-   INSERT INTO users(user_name, user_email, user_password, user_role)  VALUES('andi', 'andi', '1000:cafa85fbe65927fb7cf235fbb5a3787e:5311a5ec8a594736709abe582b9d51b05cf2c02798dbb11618b723236821f227047bafadbdcf6eb9809d6791baf34e3542af0c764d84ebd3aafc5b2bd9cb52f7', 'REGULAR');
-   INSERT INTO users(user_name, user_email, user_password, user_role)  VALUES('berta', 'berta', '1000:6092951cee335fec6f8e436ba995476b:c98729fb8912dc85e8d2233b0cb3b3856a8cfa611991716ff8236b90a148b57def3b233ba65698e8b8d719e366659e89e91d9fb9a0138f415eef3a8713dc89e0', 'ADMIN');
+    -- users
+    INSERT INTO users(user_name, user_email, user_password, user_role) VALUES('a', 'a', '1000:52a2e5376fe9155814775f1e3231a526:191ade9da2dcbabfc870ba70263b7af6865b40d8e179d19e8ea504d257810c6e78a316d77f5bd8716a7fa54f39b1f082c773ca80b45526dd59c933522e341216', 'ADMIN');
+    INSERT INTO users(user_name, user_email, user_password, user_role) VALUES('r', 'r', '1000:12b64240b3c5da1f64daa0d26dbd7bfb:e314534adbb83fa0d605557a1d7394f6936b10efcfc89cae85260e69ad452241cbdd6d043ae51ecc92e8776b4aa369fa6afb028cac5254f9cc7a4e8eae0722c2', 'REGULAR');
+    INSERT INTO users(user_name, user_email, user_password, user_role)  VALUES('peti', 'peti', '1000:f074ea92965ce178a8b1f5268f8fcdf4:4c1ee44787c9bf719299beadc07d4f09cc0f473edccafeb23d9938b53d9134e670eddbf74db2948bfdd0b47693e13279b1d42b4d13726bd74f1d08f2424b1dfb', 'REGULAR');
+    INSERT INTO users(user_name, user_email, user_password, user_role)  VALUES('andi', 'andi', '1000:cafa85fbe65927fb7cf235fbb5a3787e:5311a5ec8a594736709abe582b9d51b05cf2c02798dbb11618b723236821f227047bafadbdcf6eb9809d6791baf34e3542af0c764d84ebd3aafc5b2bd9cb52f7', 'REGULAR');
+    INSERT INTO users(user_name, user_email, user_password, user_role)  VALUES('berta', 'berta', '1000:6092951cee335fec6f8e436ba995476b:c98729fb8912dc85e8d2233b0cb3b3856a8cfa611991716ff8236b90a148b57def3b233ba65698e8b8d719e366659e89e91d9fb9a0138f415eef3a8713dc89e0', 'ADMIN');
+
+   -- schedules
+    INSERT INTO schedules(user_id, schedule_title, schedule_duration) VALUES (1, 'schedule1', 3);
+    INSERT INTO schedules(user_id, schedule_title, schedule_duration) VALUES (2, 'schedule2', 4);
+    INSERT INTO schedules(user_id, schedule_title, schedule_duration) VALUES (3, 'schedule3', 5);
+    INSERT INTO schedules(user_id, schedule_title, schedule_duration) VALUES (4, 'schedule4', 6);
+    INSERT INTO schedules(user_id, schedule_title, schedule_duration) VALUES (5, 'schedule5', 2);
+
+    -- tasks
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'task11', 'taask12 content', 2, 4);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'task12', 'taask12 content', 6, 7);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (2, 'task21', 'taask21 content', 3, 4);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (2, 'task22', 'taask22 content', 5, 10);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (3, 'task3', 'taask3 content', 1, 2);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (4, 'task2', 'taask2 content', 6, 8);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (5, 'task3', 'taask3 content', 10, 12);
+
+    -- schedule_tasks
+    INSERT INTO schedule_tasks(schedule_id, task_id) VALUES
+        (1, 1),
+        (1, 2),
+        (2, 3),
+        (2, 4),
+        (3, 5),
+        (4, 6),
+        (5, 7);
+
+
     -- INSERT INTO users VALUES(2, 'a', 'b', 'c', 'd');
    --INSERT INTO tasks VALUES(1, 1, 'a', 'b', 1, 1);
    --INSERT INTO schedules VALUES(1, 1, 'title', 1, true);
