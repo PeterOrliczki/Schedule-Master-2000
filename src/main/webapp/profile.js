@@ -28,9 +28,7 @@ function showProfileContent(user) {
       pEl.textContent = 'Welcome ' + user.name + '!'
       showContents(['profile-content'])
     }
-    while (profileContentDivEl.childNodes.length > 2) {
-      profileContentDivEl.removeChild(profileContentDivEl.lastChild);
-    }
+    removeAllChildren(profileContentDivEl);
     profileContentDivEl.appendChild(pEl);
 
 }

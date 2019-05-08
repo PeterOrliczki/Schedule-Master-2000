@@ -1,8 +1,10 @@
 function onSchedulesClicked() {
+    debugger;
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onSchedulesLoad);
     xhr.addEventListener('error', onNetworkError);
     xhr.open('GET', 'protected/my-schedules');
+    xhr.send();
 }
 
 function onSchedulesLoad() {
@@ -18,22 +20,22 @@ function onSchedulesLoad() {
 function createSchedulesDisplay(schedules) {
     const buttonEl = createNewScheduleButton();
     if (schedules.length === 0) {
+      removeAllChildren(mySchedulesDivEl);
       const pEl = document.createElement('p');
+      pEl.setAttribute('id', 'schedule-info');
       pEl.textContent = 'You have no schedules yet. Click the button below to create one.'
       mySchedulesDivEl.appendChild(pEl);
+      mySchedulesDivEl.appendChild(buttonEl);
     } else {
+      removeAllChildren(mySchedulesDivEl);
       const tableEl = document.createElement('table');
       const theadEl = createSchedulesTableHeader();
       const tbodyEl = createSchedulesTableBody(schedules);
       tableEl.appendChild(theadEl);
       tableEl.appendChild(tbodyEl);
+      mySchedulesDivEl.appendChild(tableEl);
+      mySchedulesDivEl.appendChild(buttonEl);
     }
-
-    while (mySchedulesDivEl.childNodes.length > 2) {
-      mySchedulesDivEl.removeChild(mySchedulesDivEl.lastChild);
-    }
-    mySchedulesDivEl.appendChild(buttonEl);
-    mySchedulesDivEl.appendChild(tableEl);
 }
 
 function createNewScheduleButton() {

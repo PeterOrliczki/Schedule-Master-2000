@@ -47,8 +47,12 @@ function clearMessages() {
 }
 
 function removeAllChildren(el) {
-    while (el.firstChild) {
-        el.removeChild(el.firstChild);
+    while (el.lastChild) {
+      if (el.lastChild.className !== 'content-header') {
+        el.lastChild.remove();
+      } else if (el.lastChild.className === 'content-header') {
+        break;
+      }
     }
 }
 
