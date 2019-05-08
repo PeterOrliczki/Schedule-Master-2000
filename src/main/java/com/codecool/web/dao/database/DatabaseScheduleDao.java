@@ -28,11 +28,11 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
     @Override
     public List<Schedule> findAllById(int id) throws SQLException {
         List<Schedule> schedules = new ArrayList<>();
-        String sql = "SELECT * FROM schedules WHERE schedule_id = ?";
+        String sql = "SELECT * FROM schedules WHERE user_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
+                while (resultSet.next()) {
                     schedules.add(fetchSchedule(resultSet));
                 }
             }
@@ -176,8 +176,8 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
         int userId = resultSet.getInt("user_id");
         String scheduleTitle = resultSet.getString("schedule_title");
         int scheduleDuration = resultSet.getInt("schedule_duration");
-        boolean scheduleVisiblity = resultSet.getBoolean("schedule_visibilty");
+        boolean scheduleVisibility = resultSet.getBoolean("schedule_visibility");
 
-        return new Schedule(scheduleId, userId, scheduleTitle, scheduleDuration, scheduleVisiblity);
+        return new Schedule(scheduleId, userId, scheduleTitle, scheduleDuration, scheduleVisibility);
     }
 }

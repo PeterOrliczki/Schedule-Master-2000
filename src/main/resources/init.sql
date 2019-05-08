@@ -22,7 +22,7 @@ CREATE TABLE schedules(
 	user_id integer,
 	schedule_title varchar(40) NOT NULL,
 	schedule_duration integer NOT NULL,
-	schedule_visibility boolean,
+	schedule_visibility boolean DEFAULT false,
 	FOREIGN KEY(user_id) REFERENCES users(user_id),
 	CONSTRAINT schedule_duration_max CHECK (schedule_duration > 0 AND schedule_duration <= 7)
 );

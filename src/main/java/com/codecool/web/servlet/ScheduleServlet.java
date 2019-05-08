@@ -32,11 +32,9 @@ public class ScheduleServlet extends AbstractServlet {
             ScheduleService scheduleService = new SimpleScheduleService(scheduleDao);
 
             User user = (User)req.getSession().getAttribute("user");
-            List<Schedule> schedules = scheduleService.findAll(user);
+            List<Schedule> schedules = scheduleService.findAllById(user.getId());
             sendMessage(resp, HttpServletResponse.SC_OK, schedules);
 
-        } catch (ServiceException ex) {
-            sendMessage(resp, HttpServletResponse.SC_BAD_REQUEST, ex.getMessage());
         } catch (SQLException ex) {
             handleSqlError(resp, ex);
         }

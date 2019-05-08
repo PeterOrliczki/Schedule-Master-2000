@@ -11,6 +11,8 @@ public interface ScheduleService {
 
     List<Schedule> findAll(User user) throws SQLException, ServiceException;
 
+    List<Schedule> findAllById(int id) throws SQLException;
+
     Schedule findByScheduleId(int id) throws SQLException;
 
     Schedule findByUserId(int id) throws SQLException;

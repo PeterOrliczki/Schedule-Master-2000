@@ -1,5 +1,4 @@
 function onSchedulesClicked() {
-    debugger;
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onSchedulesLoad);
     xhr.addEventListener('error', onNetworkError);
