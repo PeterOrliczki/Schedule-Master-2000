@@ -1,16 +1,15 @@
 function onSchedulesClicked() {
-    const user = getCurrentUser();
-
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onSchedulesLoad);
     xhr.addEventListener('error', onNetworkError);
-    xhr.open('GET', 'protected/myschedules');
+    xhr.open('GET', 'protected/my-schedules');
 }
 
 function onSchedulesLoad() {
     if (this.status === OK) {
         const schedules = JSON.parse(this.responseText);
         createSchedulesDisplay(schedules);
+        showContents(['my-schedules-content']);
     } else {
         onOtherResponse(mySchedulesDivEl, this);
     }

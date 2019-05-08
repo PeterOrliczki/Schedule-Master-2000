@@ -108,7 +108,7 @@ function hideContentById(id) {
 function hasAuthorization() {
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('error', onNetworkError);
-    xhr.open('GET', 'protected/myschedules');
+    xhr.open('GET', 'protected/my-schedules');
     xhr.send();
     if (xhr.status === OK) {
       return true;
@@ -152,7 +152,7 @@ function onLoad() {
     myTasksDivEl = document.getElementById('my-tasks-content');
 
     activityDivEl = document.getElementById('activity-content');
-    
+
     footerDivEl = document.getElementById('footer');
 
     const loginButtonEl = document.getElementById('login-button');

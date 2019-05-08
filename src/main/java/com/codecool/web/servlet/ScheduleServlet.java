@@ -21,7 +21,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet("/myschedules")
+@WebServlet("/protected/my-schedules")
 public class ScheduleServlet extends AbstractServlet {
 
     @Override
@@ -32,6 +32,7 @@ public class ScheduleServlet extends AbstractServlet {
 
             User user = (User)req.getSession().getAttribute("user");
             List<Schedule> schedules = scheduleService.findAll(user);
+            resp.setStatus(HttpServletResponse.SC_OK);
             sendMessage(resp, HttpServletResponse.SC_OK, schedules);
 
         } catch (ServiceException ex) {
