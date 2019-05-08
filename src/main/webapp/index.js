@@ -13,6 +13,10 @@ let guestRedirectEl;
 let loginRedirectEl;
 let profileContentDivEl;
 let profileContentTitleDivEl;
+let mySchedulesDivEl;
+let allSchedulesDivEl;
+let myTasksDivEl;
+let activityDivEl;
 let footerDivEl;
 
 function newInfo(targetEl, message) {
@@ -115,7 +119,7 @@ function setAuthorization(user) {
     return localStorage.setItem('user', JSON.stringify(user));
 }
 
-function getAuthorization() {
+function getCurrentUser() {
     return JSON.parse(localStorage.getItem('user'));
 }
 
@@ -140,6 +144,15 @@ function onLoad() {
 
     profileContentDivEl = document.getElementById('profile-content');
     profileContentTitleDivEl = document.getElementById('profile-content-title');
+
+    mySchedulesDivEl = document.getElementById('my-schedules-content');
+
+    allSchedulesDivEl = document.getElementById('all-schedules-content');
+
+    myTasksDivEl = document.getElementById('my-tasks-content');
+
+    activityDivEl = document.getElementById('activity-content');
+    
     footerDivEl = document.getElementById('footer');
 
     const loginButtonEl = document.getElementById('login-button');
@@ -149,7 +162,7 @@ function onLoad() {
     registerButtonEl.addEventListener('click', onRegisterButtonClicked);
 
     if (hasAuthorization()) {
-        onProfileLoad(getAuthorization());
+        onProfileLoad(getCurrentUser());
     } else {
         hideMenu();
         showContents(['login-content']);
