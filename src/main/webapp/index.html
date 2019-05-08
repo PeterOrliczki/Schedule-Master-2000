@@ -10,6 +10,7 @@
     <link href="resources/favicon.png" type="image/png" rel="icon">
     <script src="index.js"></script>
     <script src="login.js"></script>
+    <script src="profile.js"></script>
 </head>
 
 <body class="main">
@@ -34,88 +35,100 @@
 
         <ul id="menu-list" class="menu-list">
             <li class="menu-item">
-                <a href="" class="menu-link">Link 1<span class="menu-line"></span></a>
+                <a href="javascript:void(0)" id="link-activity" class="menu-link">Activity Log<span class="menu-line"></span></a>
             </li>
             <li class="menu-item">
-                <a href="" class="menu-link">Link 2<span class="menu-line"></span></a>
+                <a href="javascript:void(0)" id="link-shedules" class="menu-link">My Schedules<span class="menu-line"></span></a>
             </li>
             <li class="menu-item">
-                <a href="" class="menu-link">Link 3<span class="menu-line"></span></a>
+                <a href="javascript:void(0)" id="link-all-schedules" class="menu-link">All Schedules<span class="menu-line"></span></a>
             </li>
             <li class="menu-item">
-                <a href="" class="menu-link">Link 4<span class="menu-line"></span></a>
+                <a href="javascript:void(0)" id="link-tasks" class="menu-link">My Tasks<span class="menu-line"></span></a>
             </li>
             <li class="menu-item">
-                <a href="logout" class="menu-link">Logout<span class="menu-line"></span></a>
+                <a href="javascript:void(0)" id="link-profile" class="menu-link">My Profile<span class="menu-line"></span></a>
             </li>
             <li class="menu-item">
-                <form class="menu-form" action="" method="get">
-                    <input class="menu-search" type="text" name="q" value="" placeholder="Search">
-                </form>
+                <a href="protected/logout" id="link-logout" class="menu-link">Logout<span class="menu-line"></span></a>
             </li>
         </ul>
     </nav>
 
     <div id="container" class="container">
 
-      <section id="login-content-wrapper" class="content-wrapper">
-          <article id="login-content" class="content">
-              <header class="content-header">
-                  <h3 id="login-content-title" class="content-title">
-                      Login
-                  </h3>
-              </header>
+      <section id="login-content" class="content">
+          <header class="content-header">
+              <h3 id="login-content-title" class="content-title">
+                  Login
+              </h3>
+          </header>
 
-              <form id="login-form" class="menu-form" onsubmit="return false;">
-                <input name="email" class="text-input" placeholder="Email">
-                <input name="password" type="password" class="text-input" placeholder="Password">
-                <br>
-                <button id="login-button" class="form-button">Login</button>
-                <p id="register-text" class="register-text">
-                  No account yet? Click <a href="javascript:void(0)" id="register-redirect">here</a> to register!
-                </p>
-              </form>
+          <form id="login-form" class="menu-form" onsubmit="return false;">
+            <input name="email" class="text-input" placeholder="Email">
+            <input name="password" type="password" class="text-input" placeholder="Password">
+            <br>
+            <button id="login-button" class="form-button">Login</button>
+            <p id="register-text" class="register-text">
+              No account yet? Click <a href="javascript:void(0)" id="register-redirect">here</a> to register!
+              <br>
+              Or click <a href="javascript:void(0)" id="guest-redirect">here</a> to continue as a guest.
+            </p>
+          </form>
 
-              <form id="register-form" class="menu-form" onsubmit="return false;">
-                <input name="name" class="text-input" placeholder="Name">
-                <input name="email" class="text-input" placeholder="Email">
-                <input name="password" type="password" class="text-input" placeholder="Password">
-                <br>
-                <button id="register-button" class="form-button">Register</button>
-                <p id="login-text" class="register-text">
-                  Already have an account? Click <a href="javascript:void(0)" id="login-redirect">here</a> to login!
-                </p>
-              </form>
-
-          </article>
-
+          <form id="register-form" class="menu-form" onsubmit="return false;">
+            <input name="name" class="text-input" placeholder="Name">
+            <input name="email" class="text-input" placeholder="Email">
+            <input name="password" type="password" class="text-input" placeholder="Password">
+            <br>
+            <button id="register-button" class="form-button">Register</button>
+            <p id="login-text" class="register-text">
+              Already have an account? Click <a href="javascript:void(0)" id="login-redirect">here</a> to login!
+            </p>
+          </form>
       </section>
 
-        <section id="main-content-wrapper" class="content-wrapper">
-            <article id="main-content" class="content">
-                <header class="content-header">
-                    <h3 id="main-content-title" class="content-title">
-                        Content title
-                    </h3>
-                </header>
+        <section id="profile-content" class="content">
+            <header class="content-header">
+                <h3 id="profile-content-title" class="content-title">
+                    Profile
+                </h3>
+            </header>
+        </section>
 
-                <p>
-                  Text Text Text Text Text Text Text Text Text
-                  Text Text Text Text Text Text Text Text <a href="">Text</a>
-                </p>
+        <section id="all-schedules-content" class="content">
+            <header class="content-header">
+                <h3 id="all-schedules-content-title" class="content-title">
+                    Public Schedules
+                </h3>
+            </header>
+        </section>
 
-                <p>
-                  Text Text Text Text Text Text Text Text Text
-                  Text Text Text Text Text Text Text Text <a href="">Text</a>
-                </p>
+        <section id="my-schedules-content" class="content">
+            <header class="content-header">
+                <h3 id="my-schedules-content-title" class="content-title">
+                    My Schedules
+                </h3>
+            </header>
+        </section>
 
+        <section id="my-tasks-content" class="content">
+            <header class="content-header">
+                <h3 id="my-tasks-content-title" class="content-title">
+                    My Tasks
+                </h3>
+            </header>
+        </section>
 
-            </article>
-
+        <section id="activity-content" class="content">
+            <header class="content-header">
+                <h3 id="activity-content-title" class="content-title">
+                    Activity Log
+                </h3>
+            </header>
         </section>
 
         <footer id="footer" class="footer">
-          Footer text.
         </footer>
     </div>
 
