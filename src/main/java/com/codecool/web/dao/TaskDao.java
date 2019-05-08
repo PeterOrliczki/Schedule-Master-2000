@@ -9,6 +9,8 @@ public interface TaskDao {
 
     List<Task> findAll() throws SQLException;
 
+    List<Task> findAllByTaskId(int id) throws SQLException;
+
     Task findByTaskId(int id) throws SQLException;
 
     Task findByUserId(int id) throws SQLException;

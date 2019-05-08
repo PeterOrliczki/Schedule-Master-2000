@@ -9,6 +9,8 @@ public interface TaskService {
 
     List<Task> getTasks() throws SQLException;
 
+    List<Task> findAllByTaskId(int id) throws SQLException;
+
     Task findTaskById(int id) throws SQLException;
 
     Task findTaskByUserId(int id) throws SQLException;
