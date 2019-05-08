@@ -9,9 +9,10 @@ let navDivEl;
 let menuListEl;
 let loginContentDivEl;
 let registerRedirectEl;
+let guestRedirectEl;
 let loginRedirectEl;
-let mainContentDivEl;
-let mainContentTitleDivEl;
+let profileContentDivEl;
+let profileContentTitleDivEl;
 let footerDivEl;
 
 function newInfo(targetEl, message) {
@@ -51,7 +52,7 @@ function onNetworkError(response) {
     document.body.remove();
     const bodyEl = document.createElement('body');
     document.appendChild(bodyEl);
-    newError(bodyEl, 'Network error, please try reloaing the page');
+    newError(bodyEl, 'Network error, please try reloading the page');
 }
 
 function onOtherResponse(targetEl, xhr) {
@@ -71,7 +72,7 @@ function onOtherResponse(targetEl, xhr) {
 }
 
 function showContents(ids) {
-    const contentEls = document.getElementsByClassName('content-wrapper');
+    const contentEls = document.getElementsByClassName('content');
     for (let i = 0; i < contentEls.length; i++) {
         const contentEl = contentEls[i];
         if (ids.includes(contentEl.id)) {
@@ -114,6 +115,10 @@ function setAuthorization(user) {
     return localStorage.setItem('user', JSON.stringify(user));
 }
 
+function getAuthorization() {
+    return JSON.parse(localStorage.getItem('user'));
+}
+
 function setUnauthorized() {
     return localStorage.removeItem('user');
 }
@@ -122,7 +127,7 @@ function onLoad() {
     headerDivEl = document.getElementById('header');
     navDivEl = document.getElementById('menu');
     menuListEl = document.getElementById('menu-list');
-    loginContentDivEl = document.getElementById('login-content-wrapper');
+    loginContentDivEl = document.getElementById('login-content');
 
     loginRedirectEl = document.getElementById('login-redirect');
     loginRedirectEl.addEventListener('click', onLoginRedirectClicked);
@@ -130,8 +135,11 @@ function onLoad() {
     registerRedirectEl = document.getElementById('register-redirect');
     registerRedirectEl.addEventListener('click', onRegisterRedirectClicked);
 
-    mainContentDivEl = document.getElementById('main-content-wrapper');
-    mainContentTitleDivEl = document.getElementById('main-content-title');
+    guestRedirectEl = document.getElementById('guest-redirect');
+    guestRedirectEl.addEventListener('click', onGuestRedirectClicked);
+
+    profileContentDivEl = document.getElementById('profile-content');
+    profileContentTitleDivEl = document.getElementById('profile-content-title');
     footerDivEl = document.getElementById('footer');
 
     const loginButtonEl = document.getElementById('login-button');
@@ -141,13 +149,10 @@ function onLoad() {
     registerButtonEl.addEventListener('click', onRegisterButtonClicked);
 
     if (hasAuthorization()) {
-        showMenu();
-        showContents('main-content-wrapper');
-        // Replace with function call
-        // onProfileLoad?
+        onProfileLoad(getAuthorization());
     } else {
         hideMenu();
-        showContents('login-content-wrapper');
+        showContents(['login-content']);
     }
 }
 
