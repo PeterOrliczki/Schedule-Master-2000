@@ -130,12 +130,12 @@ public final class DatabaseTaskDao extends AbstractDao implements TaskDao {
     }
 
     @Override
-    public void updateStartByID(int id, String start) throws SQLException {
+    public void updateStartByID(int id, int start) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         String sql = "UPDATE tasks SET task_start=? WHERE task_id=?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, start);
+            statement.setInt(1, start);
             statement.setInt(2, id);
             executeInsert(statement);
             connection.commit();
@@ -148,12 +148,12 @@ public final class DatabaseTaskDao extends AbstractDao implements TaskDao {
     }
 
     @Override
-    public void updateEndByID(int id, String end) throws SQLException {
+    public void updateEndByID(int id, int end) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         String sql = "UPDATE tasks SET task_end=? WHERE task_id=?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, end);
+            statement.setInt(1, end);
             statement.setInt(2, id);
             executeInsert(statement);
             connection.commit();
