@@ -16,10 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
 
 
-@WebServlet("/protected/tasks")
+@WebServlet("/protected/task")
 public class TaskServlet extends AbstractServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,33 +28,13 @@ public class TaskServlet extends AbstractServlet {
             TaskService taskService = new SimpleTaskService(taskDao, scheduleDao);
 
             User user = (User) request.getSession().getAttribute("user");
-            List<Task> tasks = taskService.findAllByTaskId(user.getId());
 
-            sendMessage(response, HttpServletResponse.SC_OK, tasks);
+            int id = Integer.valueOf(request.getParameter("id"));
+            Task task = taskService.findTaskById(id);
+
+            sendMessage(response, HttpServletResponse.SC_OK, task);
         } catch (SQLException exc) {
             handleSqlError(response, exc);
         }
     }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try (Connection connection = getConnection(request.getServletContext())) {
-            TaskDao taskDao = new DatabaseTaskDao(connection);
-            ScheduleDao scheduleDao = new DatabaseScheduleDao(connection);
-            TaskService taskService = new SimpleTaskService(taskDao, scheduleDao);
-
-            User user = (User) request.getSession().getAttribute("user");
-
-            int userId = user.getId();
-            String taskTitle = request.getParameter("task-title");
-            String taskContent = request.getParameter("task-content");
-            int taskStart = Integer.valueOf(request.getParameter("task-start"));
-            int taskEnd = Integer.valueOf(request.getParameter("task-end"));
-
-            taskService.addTask(userId, taskTitle, taskContent, taskStart, taskEnd);
-
-        } catch (SQLException exc) {
-            handleSqlError(response, exc);
-        }
-    }
-
 }

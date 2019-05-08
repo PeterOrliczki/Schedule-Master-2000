@@ -9,7 +9,6 @@ function onTasksClicked() {
 function onTasksLoad() {
     if(this.status === OK) {
         const tasks = JSON.parse(this.responseText);
-        console.log(tasks);
         createTasksDisplay(tasks);
         showContents(['my-tasks-content']);
     } else {
@@ -19,6 +18,7 @@ function onTasksLoad() {
 
 function createTasksDisplay(tasks) {
     const buttonEl = createNewTaskButton();
+    buttonEl.addEventListener('click', addNewTask);
     if (tasks.length === 0) {
         removeAllChildren(myTasksDivEl);
         const pEl = document.createElement('p');
@@ -78,7 +78,8 @@ function createTasksTableBody(tasks) {
         const titleTdEl = document.createElement('td');
         const titleAEl = document.createElement('a');
         titleAEl.href = 'javascript:void(0)';
-        //titleAEl.onclick = onTaskTitleClicked;
+        titleAEl.dataset.taskId = task.id;
+        titleAEl.onclick = onTaskTitleClicked;
         titleAEl.textContent = task.title;
         titleAEl.setAttribute('id', task.id);
         titleTdEl.appendChild(titleAEl);
@@ -116,4 +117,82 @@ function createTasksTableBody(tasks) {
     }
 
     return tbodyEl;
+}
+
+function onTaskTitleClicked() {
+    const taskId = this.dataset.taskId;
+
+    const params = new URLSearchParams();
+    params.append('id', taskId);
+
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onTaskResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('GET', 'protected/task?' + params.toString());
+    xhr.send();
+}
+
+function onTaskResponse() {
+    if (this.status === OK) {
+        onTaskLoad(JSON.parse(this.responseText));
+    } else {
+        onOtherResponse(myTasksDivEl, this);
+    }
+}
+
+function onTaskLoad(task) {
+    removeAllChildren(myTasksDivEl);
+    const pTiEl = document.createElement('p');
+    pTiEl.textContent = "Task title: " + task.title;
+
+    const pCoEl = document.createElement('p');
+    pCoEl.textContent = "Task content: " + task.content;
+
+    const pStEl = document.createElement('p');
+    pStEl.textContent = "Task start: " + task.start;
+
+    const pEnEl = document.createElement('p');
+    pEnEl.textContent = "Task end: " + task.end;
+
+    myTasksDivEl.appendChild(pTiEl);
+    myTasksDivEl.appendChild(pCoEl);
+    myTasksDivEl.appendChild(pStEl);
+    myTasksDivEl.appendChild(pEnEl);
+}
+
+function addNewTask() {
+    removeAllChildren(myTasksDivEl);
+    createNewTaskForm();
+}
+
+function createNewTaskForm() {
+    const formEl = document.createElement("form");
+    formEl.setAttribute('id',"new-task-form");
+    formEl.classList.add('menu-form');
+    formEl.onSubmit = "return false;";
+
+    const inputTiEl = document.createElement("input"); //input element, text
+    inputTiEl.setAttribute('type',"text");
+    inputTiEl.setAttribute('name',"title");
+
+    const inputCoEl = document.createElement("input"); //input element, text
+    inputCoEl.setAttribute('type',"text");
+    inputCoEl.setAttribute('name',"content");
+
+    var sEl = createNewSubmitButton();
+
+    formEl.appendChild(inputTiEl);
+    formEl.appendChild(inputCoEl);
+    formEl.appendChild(sEl);
+
+
+    myTasksDivEl.appendChild(formEl);
+}
+
+function createNewSubmitButton() {
+    const buttonEl = document.createElement('button');
+    buttonEl.setAttribute('id', 'new-task-button');
+    buttonEl.classList.add('new-task-button');
+    buttonEl.textContent = 'Create new task';
+    return buttonEl;
 }
