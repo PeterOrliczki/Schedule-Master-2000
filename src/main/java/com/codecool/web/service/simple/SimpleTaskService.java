@@ -24,6 +24,11 @@ public final class SimpleTaskService implements TaskService {
     }
 
     @Override
+    public List<Task> findAllByTaskId(int id) throws SQLException {
+        return taskDao.findAllByTaskId(id);
+    }
+
+    @Override
     public Task findTaskById(int id) throws SQLException {
         return taskDao.findByTaskId(id);
     }
