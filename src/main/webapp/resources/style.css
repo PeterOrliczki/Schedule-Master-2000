@@ -233,8 +233,8 @@ table {
 
 .form-button {
     background-color: #e57873;
-    margin: 0;
-    margin-top: 10px;
+    margin: 0 auto;
+    margin-top: 20px;
     border: 1px solid transparent;
     padding: 5px 15px;
     color: #ffffff;
@@ -274,6 +274,7 @@ table {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     margin: 50px auto;
     padding: 25px 35px 30px 35px;
+    text-align: center;
     width: 100%
 }
 
@@ -347,6 +348,29 @@ hr {
 .content-footer {
     padding: 25px;
     position: relative
+}
+
+table {
+  margin: 0 auto;
+  width: 100%;
+}
+
+th {
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  font-weight: bold;
+}
+td {
+  padding: 8px;
+  text-align: center;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+
+i {
+  font-size: 20px;
+  cursor: pointer
 }
 
 @media screen and (max-width: 1024px) {
