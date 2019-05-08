@@ -25,6 +25,22 @@ public final class Schedule extends AbstractModel {
         this.visibility = visibility;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public boolean isVisibility() {
+        return visibility;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
     public void setVisibility(boolean visibility) {
         this.visibility = visibility;
     }

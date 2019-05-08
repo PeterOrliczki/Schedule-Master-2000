@@ -66,12 +66,12 @@ function createSchedulesTableBody(schedules) {
     }
 
     const buttonEditEl = document.createElement('i');
-    buttonEditEl.classList.add('fa fa-pencil');
+    buttonEditEl.classList.add('icon-edit');
     buttonEditEl.setAttribute('id', schedule.id);
     buttonEditEl.addEventListener('click', onScheduleEditClicked);
 
     const buttonDeleteEl = document.createElement('i');
-    buttonDeleteEl.classList.add('fa fa-trash');
+    buttonDeleteEl.classList.add('icon-trash');
     buttonDeleteEl.setAttribute('id', schedule.id);
     buttonDeleteEl.addEventListener('click', onScheduleDeleteClicked);
 
@@ -81,8 +81,8 @@ function createSchedulesTableBody(schedules) {
     buttonTwoTdEl.appendChild(buttonDeleteEl);
 
     const trEl = document.createElement('tr');
-    trEl.appendChild(idTdEl);
-    trEl.appendChild(usernameTdEl);
+    trEl.appendChild(titleTdEl);
+    trEl.appendChild(visibilityTdEl);
     trEl.appendChild(buttonOneTdEl);
     trEl.appendChild(buttonTwoTdEl);
 
@@ -93,25 +93,91 @@ function createSchedulesTableBody(schedules) {
 }
 
 function createSchedulesTableHeader() {
-    const titleTdEl = document.createElement('td');
-    titleTdEl.textContent = 'Title';
+    const titleThEl = document.createElement('th');
+    titleThEl.textContent = 'Title';
 
-    const visibilityTdEl = document.createElement('td');
-    visibilityTdEl.textContent = 'Visibility';
+    const visibilityThEl = document.createElement('th');
+    visibilityThEl.textContent = 'Visibility';
 
-    const buttonOneTdEl = document.createElement('td');
-    buttonOneTdEl.textContent = '';
+    const buttonOneThEl = document.createElement('th');
+    buttonOneThEl.textContent = 'Edit';
 
-    const buttonTwoTdEl = document.createElement('td');
-    buttonTwoTdEl.textContent = '';
+    const buttonTwoThEl = document.createElement('th');
+    buttonTwoThEl.textContent = 'Delete';
 
     const trEl = document.createElement('tr');
-    trEl.appendChild(titleTdEl);
-    trEl.appendChild(visibilityTdEl);
-    trEl.appendChild(buttonOneTdEl);
-    trEl.appendChild(buttonTwoTdEl);
+    trEl.appendChild(titleThEl);
+    trEl.appendChild(visibilityThEl);
+    trEl.appendChild(buttonOneThEl);
+    trEl.appendChild(buttonTwoThEl);
 
     const theadEl = document.createElement('thead');
     theadEl.appendChild(trEl);
     return theadEl;
+}
+
+function onScheduleTitleClicked() {
+    const params = new URLSearchParams();
+    params.append('schedule-id', this.id);
+
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onScheduleResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('POST', 'protected/edit-schedule');
+    xhr.send(params);
+}
+
+function onScheduleResponse() {
+    if (this.status === OK) {
+        const schedule = JSON.parse(this.responseText);
+        onScheduleLoad(schedule);
+    } else {
+        onOtherResponse(mySchedulesDivEl, this);
+    }
+}
+
+function onScheduleLoad(schedule) {
+    const theadEl = createScheduleTableHeader(schedule);
+    const tbodyEl = createScheduleTableBody(schedule);
+    const tableEl = document.createElement('table');
+    tableEl.appendChild(theadEl);
+    tableEl.appendChild(tbodyEl);
+    removeAllChildren(mySchedulesDivEl);
+    mySchedulesDivEl.appendChild(tableEl);
+}
+
+function createScheduleTableHeader(schedule) {
+    const daysList = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+
+    const theadEl = document.createElement('thead');
+    const trEl = document.createElement('tr');
+    for (let i = 0; i < schedule.duration; i++) {
+        const thEl = document.createElement('th');
+        thEl.textContent = daysList[i];
+        trEl.appendChild(thEl);
+    }
+    theadEl.appendChild(trEl);
+    return theadEl;
+}
+
+function createScheduleTableBody(schedule) {
+    const tbodyEl = document.createElement('tbody');
+
+    for (let i = 0; i < schedule.duration; i++) {
+      for (let j = 0; j < 24; i++) {
+          const trEl = document.createElement('tr');
+          const tdEl = document.createElement('td');
+          tdEl.textContent = '';
+          tdEl.setAttribute('id', i)
+          trEl.appendChild(tdEl);
+          tbodyEl.appendChild(trEl);
+        }
+    }
+    return tbodyEl;
+}
+
+function onScheduleEditClicked() {
+}
+
+function onScheduleDeleteClicked() {
 }

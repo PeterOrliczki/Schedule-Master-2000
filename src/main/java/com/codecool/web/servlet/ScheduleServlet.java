@@ -34,7 +34,6 @@ public class ScheduleServlet extends AbstractServlet {
             User user = (User)req.getSession().getAttribute("user");
             List<Schedule> schedules = scheduleService.findAllById(user.getId());
             sendMessage(resp, HttpServletResponse.SC_OK, schedules);
-
         } catch (SQLException ex) {
             handleSqlError(resp, ex);
         }
