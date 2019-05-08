@@ -1,11 +1,25 @@
+function onGuestRedirectClicked() {
+    const params = new URLSearchParams();
+    params.append('email', 'Guest');
+    params.append('password', '');
+
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onLoginResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('POST', 'login');
+    xhr.send(params);
+}
+
 function onRegisterRedirectClicked() {
-      const loginTitleEl = document.getElementById('login-content-title');
-      loginTitleEl.textContent = 'Register';
-      hideContentById('login-form');
-      showContentById('register-form');
+    showContents(['login-content']);
+    const loginTitleEl = document.getElementById('login-content-title');
+    loginTitleEl.textContent = 'Register';
+    hideContentById('login-form');
+    showContentById('register-form');
 }
 
 function onLoginRedirectClicked() {
+    showContents(['login-content']);
     const loginTitleEl = document.getElementById('login-content-title');
     loginTitleEl.textContent = 'Login';
     hideContentById('register-form');
@@ -18,7 +32,7 @@ function onRegisterResponse() {
         alert('Thank you for registering ' + user.name + ' !')
         onLoginRedirectClicked();
     } else {
-        onOtherResponse(loginContentDivEl, this);
+        onOtherResponse(document.getElementById('register-form'), this);
     }
 }
 
@@ -28,7 +42,7 @@ function onLoginResponse() {
         setAuthorization(user);
         onProfileLoad(user);
     } else {
-        onOtherResponse(loginContentDivEl, this);
+        onOtherResponse(document.getElementById('login-form'), this);
     }
 }
 
