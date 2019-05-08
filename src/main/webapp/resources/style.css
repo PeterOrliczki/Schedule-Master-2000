@@ -65,15 +65,6 @@ table {
     overflow-x: hidden
 }
 
-.login {
-    background: #F2F2F2 url('background.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: auto;
-    font: 14px/24px 'Lato', Helvetica, Arial, sans-serif, 'sans-serif';
-    overflow-x: hidden
-}
-
 #login-content {
     text-align: center;
 }
@@ -173,12 +164,15 @@ table {
     margin: auto;
     max-width: 1800px;
     padding: 0 50px;
-    //display: none;
     text-align: center
 }
 
 .menu-item {
     display: inline
+}
+
+#link-activity {
+    display: none;
 }
 
 .menu-link,
@@ -274,7 +268,7 @@ table {
     width: 45%
 }
 
-.content-wrapper {
+.content {
     background: #fff;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
@@ -283,11 +277,8 @@ table {
     -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     margin: 50px auto;
-    width: 100%
-}
-
-.content {
     padding: 25px 35px 30px 35px;
+    width: 100%
 }
 
 .content-header {
@@ -336,6 +327,11 @@ h2 {
 
 p {
     padding-bottom: 5px;
+}
+
+.error {
+    color: red;
+    font-weight: bold
 }
 
 hr {
