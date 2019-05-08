@@ -97,6 +97,7 @@ function createTasksTableBody(tasks) {
         const buttonDeleteEl = document.createElement('i');
         buttonDeleteEl.classList.add('icon-trash');
         buttonDeleteEl.setAttribute('id', task.id);
+        buttonDeleteEl.dataset.taskDeleteId = task.id;
         buttonDeleteEl.addEventListener('click', onTaskDeleteClicked);
 
         const buttonOneTdEl = document.createElement('td');
@@ -248,14 +249,31 @@ function onSubmissionResponse() {
         const task = JSON.parse(this.responseText);
         console.log(task);
     } else {
-        onOtherResponse(mySchedulesDivEl, this);
+        onOtherResponse(myTasksDivEl, this);
+    }
+}
+
+function onTaskDeleteClicked() {
+    removeAllChildren(myTasksDivEl);
+    const taskId = this.dataset.taskDeleteId;
+
+    const params = new URLSearchParams();
+    params.append('id', taskId);
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onDeleteResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('GET', 'protected/deletetask?' + params.toString());
+    xhr.send();
+}
+
+function onDeleteResponse() {
+    if(this.status === OK) {
+        newInfo(myTasksDivEl, JSON.parse(this.responseText).message);
+    } else {
+        onOtherResponse(myTasksDivEl, this);
     }
 }
 
 function onTaskEditClicked() {
-    removeAllChildren(myTasksDivEl);
-}
-
-function onTaskDeleteClicked() {
     removeAllChildren(myTasksDivEl);
 }
