@@ -48,15 +48,15 @@ public final class SimpleUserService implements UserService {
         userDao.deleteUserById(id);
     }
 
-    public void updateUserNameById(String id, String name) throws SQLException {
+    public void updateUserNameById(int id, String name) throws SQLException {
         userDao.updateUserNameById(id, name);
     }
 
-    public void updateUserEmailById(String id, String email) throws SQLException {
+    public void updateUserEmailById(int id, String email) throws SQLException {
         userDao.updateUserEmailById(id, email);
     }
 
-    public void updateUserPasswordById(String id, String password) throws SQLException {
+    public void updateUserPasswordById(int id, String password) throws SQLException {
         userDao.updateUserPasswordById(id, password);
     }
 
