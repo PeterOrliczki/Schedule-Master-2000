@@ -1,9 +1,9 @@
 function onProfileLoad(user) {
     if (user.role === 'ADMIN') {
-      const activityLiEl = document.getElementById('link-activity');
-      activityLiEl.style.display = 'inline';
       showMenu();
     } else if (user.role === 'REGULAR') {
+      const activityLiEl = document.getElementById('link-activity');
+      activityLiEl.style.display = 'none';
       showMenu();
     } else if (user.role === 'GUEST') {
       hideMenu();
