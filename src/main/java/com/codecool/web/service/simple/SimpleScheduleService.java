@@ -39,8 +39,8 @@ public final class SimpleScheduleService implements ScheduleService {
     }
 
     @Override
-    public Schedule addTask(int userId, String scheduleTitle, int scheduleDuration) throws SQLException {
-        return scheduleDao.addTask(userId, scheduleTitle, scheduleDuration);
+    public Schedule addSchedule(int userId, String scheduleTitle, int scheduleDuration) throws SQLException {
+        return scheduleDao.addSchedule(userId, scheduleTitle, scheduleDuration);
     }
 
     @Override

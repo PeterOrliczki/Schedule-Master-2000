@@ -13,6 +13,7 @@ import com.codecool.web.service.exception.ServiceException;
 import com.codecool.web.service.simple.SimpleScheduleService;
 import com.codecool.web.service.simple.SimpleUserService;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,6 +40,21 @@ public class ScheduleServlet extends AbstractServlet {
         } catch (SQLException ex) {
             handleSqlError(resp, ex);
         }
+    }
 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try (Connection connection = getConnection(request.getServletContext())) {
+            ScheduleDao scheduleDao = new DatabaseScheduleDao(connection);
+
+            ScheduleService scheduleService = new SimpleScheduleService(scheduleDao);
+            User user = (User)request.getSession().getAttribute("user");
+            String title = request.getParameter("schedule-title");
+            int duration = Integer.valueOf(request.getParameter("schedule-duration"));
+
+            scheduleService.addSchedule(user.getId(), title, duration);
+
+        } catch (SQLException exc) {
+            handleSqlError(response, exc);
+        }
     }
 }

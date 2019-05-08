@@ -81,10 +81,10 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
     }
 
     @Override
-    public Schedule addTask(int userId, String scheduleTitle, int scheduleDuration) throws SQLException {
+    public Schedule addSchedule(int userId, String scheduleTitle, int scheduleDuration) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
-        String sql = "INSERT INTO tasks(user_id, schedule_title, schedule_duration) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO schedules(user_id, schedule_title, schedule_duration) VALUES (?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, userId);
             statement.setString(2, scheduleTitle);

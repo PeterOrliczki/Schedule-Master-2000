@@ -15,7 +15,7 @@ public interface ScheduleService {
 
     Schedule findByUserId(int id) throws SQLException;
 
-    Schedule addTask(int userId, String scheduleTitle, int scheduleDuration) throws SQLException;
+    Schedule addSchedule(int userId, String scheduleTitle, int scheduleDuration) throws SQLException;
 
     void deleteByScheduleId(int id) throws SQLException;
 
