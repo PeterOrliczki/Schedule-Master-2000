@@ -19,8 +19,8 @@ public interface ScheduleDao {
 
     void updateTitleById(int id, String title) throws SQLException;
 
-    void updateDurationById(int id, String duration) throws SQLException;
+    void updateDurationById(int id, int duration) throws SQLException;
 
-    void updateVisibilityById(int id, String visibility) throws SQLException;
+    void updateVisibilityById(int id, boolean visibility) throws SQLException;
 
 }
