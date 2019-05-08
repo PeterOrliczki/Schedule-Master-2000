@@ -71,14 +71,18 @@ public final class SimpleUserService implements UserService {
     @Override
     public User loginUser(String email, String password) throws SQLException, ServiceException {
         PasswordService passwordService = new PasswordService();
-        try {
-            User user = userDao.findUserByEmail(email);
-            if (user == null || !passwordService.validatePassword(password, passwordService.getHashedPassword(password))) {
-                throw new ServiceException("Bad login");
+        if (email.equals("Guest")) {
+            return new User(0, "Guest", "Guest", "Guest", Role.GUEST);
+        } else {
+            try {
+                User user = userDao.findUserByEmail(email);
+                if (user == null || !passwordService.validatePassword(password, passwordService.getHashedPassword(password))) {
+                    throw new ServiceException("Bad login");
+                }
+                return user;
+            } catch (IllegalArgumentException | NoSuchAlgorithmException | InvalidKeySpecException ex) {
+                throw new ServiceException(ex.getMessage());
             }
-            return user;
-        } catch (IllegalArgumentException | NoSuchAlgorithmException | InvalidKeySpecException ex) {
-            throw new ServiceException(ex.getMessage());
         }
     }
 }
