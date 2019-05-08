@@ -27,12 +27,12 @@ public final class DatabaseTaskDao extends AbstractDao implements TaskDao {
 
     @Override
     public List<Task> findAllByTaskId(int id) throws SQLException {
-        String sql = "SELECT * FROM tasks WHERE task_id = ?";
+        String sql = "SELECT * FROM tasks WHERE user_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 List<Task> tasks = new ArrayList<>();
-                if (resultSet.next()) {
+                while (resultSet.next()) {
                     tasks.add(fetchTask(resultSet));
                 }
                 return tasks;
@@ -42,7 +42,7 @@ public final class DatabaseTaskDao extends AbstractDao implements TaskDao {
 
     @Override
     public Task findByTaskId(int id) throws SQLException {
-        String sql = "SELECT * FROM tasks WHERE user_id = ?";
+        String sql = "SELECT * FROM tasks WHERE task_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {

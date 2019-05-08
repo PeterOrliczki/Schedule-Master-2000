@@ -19,7 +19,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 
-@WebServlet("/tasks")
+@WebServlet("/protected/tasks")
 public class TaskServlet extends AbstractServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
