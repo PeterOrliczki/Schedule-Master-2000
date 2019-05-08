@@ -19,11 +19,11 @@ public interface UserDao {
 
     void deleteUserById(int id) throws SQLException;
 
-    void updateUserNameById(String id, String name) throws SQLException;
+    void updateUserNameById(int id, String name) throws SQLException;
 
-    void updateUserEmailById(String id, String email) throws SQLException;
+    void updateUserEmailById(int id, String email) throws SQLException;
 
-    void updateUserPasswordById(String id, String password) throws SQLException;
+    void updateUserPasswordById(int id, String password) throws SQLException;
 
     boolean doesUserExists(String email) throws SQLException;
 }

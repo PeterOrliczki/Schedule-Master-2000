@@ -9,6 +9,8 @@ public interface TaskDao {
 
     List<Task> findAll() throws SQLException;
 
+    List<Task> findAllByTaskId(int id) throws SQLException;
+
     Task findByTaskId(int id) throws SQLException;
 
     Task findByUserId(int id) throws SQLException;
@@ -17,12 +19,12 @@ public interface TaskDao {
 
     void deleteByTaskId(int id) throws SQLException;
 
-    void updateTitleById(String id, String title) throws SQLException;
+    void updateTitleById(int id, String title) throws SQLException;
 
-    void updateContentById(String id, String content) throws SQLException;
+    void updateContentById(int id, String content) throws SQLException;
 
-    void updateStartByID(String id, String start) throws SQLException;
+    void updateStartByID(int id, int start) throws SQLException;
 
-    void updateEndByID(String id, String end) throws SQLException;
+    void updateEndByID(int id, int end) throws SQLException;
 
 }

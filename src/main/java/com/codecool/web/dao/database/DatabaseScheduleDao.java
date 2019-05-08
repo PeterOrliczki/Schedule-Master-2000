@@ -26,6 +26,33 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
     }
 
     @Override
+    public List<Schedule> findAllById(int id) throws SQLException {
+        List<Schedule> schedules = new ArrayList<>();
+        String sql = "SELECT * FROM schedules WHERE schedule_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    schedules.add(fetchSchedule(resultSet));
+                }
+            }
+        }
+        return schedules;
+    }
+
+    @Override
+    public List<Schedule> findAllByVisibility() throws SQLException {
+        List<Schedule> schedules = new ArrayList<>();
+        String sql = "SELECT * FROM schedules WHERE schedule_visibility = true";
+        try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
+            while (resultSet.next()) {
+                schedules.add(fetchSchedule(resultSet));
+            }
+        }
+        return schedules;
+    }
+
+    @Override
     public Schedule findByScheduleId(int id) throws SQLException {
         String sql = "SELECT * FROM schedules WHERE schedule_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -54,19 +81,18 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
     }
 
     @Override
-    public Schedule addTask(int userId, String scheduleTitle, int scheduleDuration, boolean scheduleVisiblity) throws SQLException {
+    public Schedule addTask(int userId, String scheduleTitle, int scheduleDuration) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
-        String sql = "INSERT INTO tasks(user_id, schedule_title, schedule_duration, schedule_visibility) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO tasks(user_id, schedule_title, schedule_duration) VALUES (?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, userId);
             statement.setString(2, scheduleTitle);
             statement.setInt(3, scheduleDuration);
-            statement.setBoolean(4, scheduleVisiblity);
             executeInsert(statement);
             int scheduleId = fetchGeneratedId(statement);
             connection.commit();
-            return new Schedule(scheduleId, userId, scheduleTitle, scheduleDuration, scheduleVisiblity);
+            return new Schedule(scheduleId, userId, scheduleTitle, scheduleDuration);
         } catch (SQLException exc) {
             connection.rollback();
             throw exc;
@@ -74,7 +100,6 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
             connection.setAutoCommit(autoCommit);
         }
     }
-
     @Override
     public void deleteByScheduleId(int id) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
@@ -93,13 +118,13 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
     }
 
     @Override
-    public void updateTitleById(String id, String title) throws SQLException {
+    public void updateTitleById(int id, String title) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         String sql = "UPDATE schedules SET schedule_title=? WHERE schedule_id=?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, title);
-            statement.setString(2, id);
+            statement.setInt(2, id);
             executeInsert(statement);
             connection.commit();
         } catch (SQLException exc) {
@@ -111,13 +136,13 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
     }
 
     @Override
-    public void updateDurationById(String id, String duration) throws SQLException {
+    public void updateDurationById(int id, int duration) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         String sql = "UPDATE schedules SET schedule_duration=? WHERE schedule_id=?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, duration);
-            statement.setString(2, id);
+            statement.setInt(1, duration);
+            statement.setInt(2, id);
             executeInsert(statement);
             connection.commit();
         } catch (SQLException exc) {
@@ -129,13 +154,13 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
     }
 
     @Override
-    public void updateVisibilityById(String id, String visibility) throws SQLException {
+    public void updateVisibilityById(int id, boolean visibility) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         String sql = "UPDATE schedules SET schedule_visibility=? WHERE schedule_id=?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, visibility);
-            statement.setString(2, id);
+            statement.setBoolean(1, visibility);
+            statement.setInt(2, id);
             executeInsert(statement);
             connection.commit();
         } catch (SQLException exc) {
