@@ -19,6 +19,26 @@ public final class Task extends AbstractModel {
         this.end = end;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public int getStart() {
+        return start;
+    }
+
+    public int getEnd() {
+        return end;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
