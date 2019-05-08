@@ -94,13 +94,13 @@ public final class DatabaseTaskDao extends AbstractDao implements TaskDao {
     }
 
     @Override
-    public void updateTitleById(String id, String title) throws SQLException {
+    public void updateTitleById(int id, String title) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         String sql = "UPDATE tasks SET task_title=? WHERE task_id=?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, title);
-            statement.setString(2, id);
+            statement.setInt(2, id);
             executeInsert(statement);
             connection.commit();
         } catch (SQLException exc) {
@@ -112,13 +112,13 @@ public final class DatabaseTaskDao extends AbstractDao implements TaskDao {
     }
 
     @Override
-    public void updateContentById(String id, String content) throws SQLException {
+    public void updateContentById(int id, String content) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         String sql = "UPDATE tasks SET task_content=? WHERE task_id=?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, content);
-            statement.setString(2, id);
+            statement.setInt(2, id);
             executeInsert(statement);
             connection.commit();
         } catch (SQLException exc) {
@@ -130,13 +130,13 @@ public final class DatabaseTaskDao extends AbstractDao implements TaskDao {
     }
 
     @Override
-    public void updateStartByID(String id, String start) throws SQLException {
+    public void updateStartByID(int id, String start) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         String sql = "UPDATE tasks SET task_start=? WHERE task_id=?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, start);
-            statement.setString(2, id);
+            statement.setInt(2, id);
             executeInsert(statement);
             connection.commit();
         } catch (SQLException exc) {
@@ -148,13 +148,13 @@ public final class DatabaseTaskDao extends AbstractDao implements TaskDao {
     }
 
     @Override
-    public void updateEndByID(String id, String end) throws SQLException {
+    public void updateEndByID(int id, String end) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         String sql = "UPDATE tasks SET task_end=? WHERE task_id=?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, end);
-            statement.setString(2, id);
+            statement.setInt(2, id);
             executeInsert(statement);
             connection.commit();
         } catch (SQLException exc) {

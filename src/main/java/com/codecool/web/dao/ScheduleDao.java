@@ -17,10 +17,10 @@ public interface ScheduleDao {
 
     void deleteByScheduleId(int id) throws SQLException;
 
-    void updateTitleById(String id, String title) throws SQLException;
+    void updateTitleById(int id, String title) throws SQLException;
 
-    void updateDurationById(String id, String duration) throws SQLException;
+    void updateDurationById(int id, String duration) throws SQLException;
 
-    void updateVisibilityById(String id, String visibility) throws SQLException;
+    void updateVisibilityById(int id, String visibility) throws SQLException;
 
 }

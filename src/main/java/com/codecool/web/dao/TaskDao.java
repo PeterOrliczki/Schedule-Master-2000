@@ -17,12 +17,12 @@ public interface TaskDao {
 
     void deleteByTaskId(int id) throws SQLException;
 
-    void updateTitleById(String id, String title) throws SQLException;
+    void updateTitleById(int id, String title) throws SQLException;
 
-    void updateContentById(String id, String content) throws SQLException;
+    void updateContentById(int id, String content) throws SQLException;
 
-    void updateStartByID(String id, String start) throws SQLException;
+    void updateStartByID(int id, String start) throws SQLException;
 
-    void updateEndByID(String id, String end) throws SQLException;
+    void updateEndByID(int id, String end) throws SQLException;
 
 }

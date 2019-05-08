@@ -93,13 +93,13 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
     }
 
     @Override
-    public void updateTitleById(String id, String title) throws SQLException {
+    public void updateTitleById(int id, String title) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         String sql = "UPDATE schedules SET schedule_title=? WHERE schedule_id=?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, title);
-            statement.setString(2, id);
+            statement.setInt(2, id);
             executeInsert(statement);
             connection.commit();
         } catch (SQLException exc) {
@@ -111,13 +111,13 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
     }
 
     @Override
-    public void updateDurationById(String id, String duration) throws SQLException {
+    public void updateDurationById(int id, String duration) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         String sql = "UPDATE schedules SET schedule_duration=? WHERE schedule_id=?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, duration);
-            statement.setString(2, id);
+            statement.setInt(2, id);
             executeInsert(statement);
             connection.commit();
         } catch (SQLException exc) {
@@ -129,13 +129,13 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
     }
 
     @Override
-    public void updateVisibilityById(String id, String visibility) throws SQLException {
+    public void updateVisibilityById(int id, String visibility) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         String sql = "UPDATE schedules SET schedule_visibility=? WHERE schedule_id=?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, visibility);
-            statement.setString(2, id);
+            statement.setInt(2, id);
             executeInsert(statement);
             connection.commit();
         } catch (SQLException exc) {

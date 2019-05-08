@@ -110,13 +110,13 @@ public final class DatabaseUserDao extends AbstractDao implements UserDao {
     }
 
     @Override
-    public void updateUserNameById(String id, String name) throws SQLException {
+    public void updateUserNameById(int id, String name) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         String sql = "update users set user_name=? where user_id=?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, name);
-            statement.setString(2, id);
+            statement.setInt(2, id);
             executeInsert(statement);
             connection.commit();
         } catch (SQLException ex) {
@@ -128,13 +128,13 @@ public final class DatabaseUserDao extends AbstractDao implements UserDao {
     }
 
     @Override
-    public void updateUserEmailById(String id, String email) throws SQLException {
+    public void updateUserEmailById(int id, String email) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         String sql = "update users set user_email=? where user_id=?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, email);
-            statement.setString(2, id);
+            statement.setInt(2, id);
             executeInsert(statement);
             connection.commit();
         } catch (SQLException ex) {
@@ -146,13 +146,13 @@ public final class DatabaseUserDao extends AbstractDao implements UserDao {
     }
 
     @Override
-    public void updateUserPasswordById(String id, String password) throws SQLException {
+    public void updateUserPasswordById(int id, String password) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         String sql = "update users set user_password=? where user_id=?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1,password);
-            statement.setString(2, id);
+            statement.setInt(2, id);
             executeInsert(statement);
             connection.commit();
         } catch (SQLException ex) {
