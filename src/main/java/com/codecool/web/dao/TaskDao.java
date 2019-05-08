@@ -21,8 +21,8 @@ public interface TaskDao {
 
     void updateContentById(int id, String content) throws SQLException;
 
-    void updateStartByID(int id, String start) throws SQLException;
+    void updateStartByID(int id, int start) throws SQLException;
 
-    void updateEndByID(int id, String end) throws SQLException;
+    void updateEndByID(int id, int end) throws SQLException;
 
 }
