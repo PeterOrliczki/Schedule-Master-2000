@@ -44,15 +44,15 @@ public class TasksServlet extends AbstractServlet {
             TaskService taskService = new SimpleTaskService(taskDao, scheduleDao);
 
             User user = (User) request.getSession().getAttribute("user");
-
             int userId = user.getId();
+
             String taskTitle = request.getParameter("task-title");
             String taskContent = request.getParameter("task-content");
             int taskStart = Integer.valueOf(request.getParameter("task-start"));
             int taskEnd = Integer.valueOf(request.getParameter("task-end"));
 
-            taskService.addTask(userId, taskTitle, taskContent, taskStart, taskEnd);
-
+            Task task = taskService.addTask(userId, taskTitle, taskContent, taskStart, taskEnd);
+            sendMessage(response, HttpServletResponse.SC_OK, task);
         } catch (SQLException exc) {
             handleSqlError(response, exc);
         }
