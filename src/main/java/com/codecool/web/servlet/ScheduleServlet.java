@@ -45,11 +45,11 @@ public class ScheduleServlet extends AbstractServlet {
 
             ScheduleService scheduleService = new SimpleScheduleService(scheduleDao);
             User user = (User)request.getSession().getAttribute("user");
-            String title = request.getParameter("schedule-title");
-            int duration = Integer.valueOf(request.getParameter("schedule-duration"));
+            String title = request.getParameter("title");
+            int duration = Integer.valueOf(request.getParameter("duration"));
 
             scheduleService.addSchedule(user.getId(), title, duration);
-
+            sendMessage(response, HttpServletResponse.SC_OK, "Schedule added.");
         } catch (SQLException exc) {
             handleSqlError(response, exc);
         }

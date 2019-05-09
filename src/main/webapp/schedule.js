@@ -219,7 +219,7 @@ function createNewScheduleForm() {
     }
 
     const buttonEl = createNewScheduleButton();
-    // TODO: buttonEl.addEventListener('click', onCreateNewButtonClicked);
+    buttonEl.addEventListener('click', onCreateNewButtonClicked);
 
     formEl.appendChild(titleEl);
     formEl.appendChild(durationEl);
@@ -227,4 +227,35 @@ function createNewScheduleForm() {
     formEl.appendChild(buttonEl);
 
     mySchedulesDivEl.appendChild(formEl);
+}
+
+function onCreateNewButtonClicked() {
+    debugger;
+    const newScheduleFormEl = document.forms['new-schedule-form'];
+
+    const titleInputEl = newScheduleFormEl.querySelector('input[name="title"]');
+    const durationInputEl = newScheduleFormEl.querySelector('select[name="duration"]');
+
+    removeAllChildren(mySchedulesDivEl);
+    const title = titleInputEl.value;
+    const duration = durationInputEl.value;
+    const params = new URLSearchParams();
+    params.append('title', title);
+    params.append('duration', duration);
+
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onNewScheduleResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('POST', 'protected/my-schedules');
+    xhr.send(params);
+}
+
+function onNewScheduleResponse() {
+    if (this.status === OK) {
+        const response = JSON.parse(this.responseText);
+        alert(response.message)
+        onSchedulesClicked();
+    } else {
+        onOtherResponse(mySchedulesDivEl, this);
+    }
 }

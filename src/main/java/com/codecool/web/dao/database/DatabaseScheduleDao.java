@@ -1,7 +1,9 @@
 package com.codecool.web.dao.database;
 
 import com.codecool.web.dao.ScheduleDao;
+import com.codecool.web.dto.ScheduleDto;
 import com.codecool.web.model.Schedule;
+import com.codecool.web.model.Task;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -78,6 +80,22 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
             }
         }
         return null;
+    }
+
+    public ScheduleDto findUserSchedulesWithTaskRelation(int userId, int scheduleId) throws SQLException {
+        List<Task> tasks = new ArrayList<>();
+        String sql = "SELECT * FROM tasks JOIN (SELECT schedules.schedule_id, schedule_title, schedule_duration, schedule_visibility, task_id\n" +
+            "FROM schedules JOIN schedule_tasks ON schedules.schedule_id = schedule_tasks.schedule_id) AS temp_table ON tasks.task_id = temp_table.task_id\n" +
+            "WHERE tasks.user_id = ? AND temp_table.schedule_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, userId);
+            statement.setInt(2, scheduleId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    //tasks.add()
+                }
+            }
+        }
     }
 
     @Override
@@ -179,5 +197,15 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
         boolean scheduleVisibility = resultSet.getBoolean("schedule_visibility");
 
         return new Schedule(scheduleId, userId, scheduleTitle, scheduleDuration, scheduleVisibility);
+    }
+
+    private ScheduleDto fetchScheduleDto(ResultSet resultSet) throws SQLException {
+        int scheduleId = resultSet.getInt("schedule_id");
+        int userId = resultSet.getInt("user_id");
+        String scheduleTitle = resultSet.getString("schedule_title");
+        int scheduleDuration = resultSet.getInt("schedule_duration");
+        boolean scheduleVisibility = resultSet.getBoolean("schedule_visibility");
+
+        return new ScheduleDto();
     }
 }
