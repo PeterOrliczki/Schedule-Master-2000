@@ -1,17 +1,12 @@
 package com.codecool.web.servlet;
 
 import com.codecool.web.dao.ScheduleDao;
-import com.codecool.web.dao.UserDao;
 import com.codecool.web.dao.database.DatabaseScheduleDao;
-import com.codecool.web.dao.database.DatabaseUserDao;
-import com.codecool.web.model.Role;
 import com.codecool.web.model.Schedule;
 import com.codecool.web.model.User;
 import com.codecool.web.service.ScheduleService;
-import com.codecool.web.service.UserService;
-import com.codecool.web.service.exception.ServiceException;
 import com.codecool.web.service.simple.SimpleScheduleService;
-import com.codecool.web.service.simple.SimpleUserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,8 +17,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet("/protected/my-schedules")
+@WebServlet("/protected/schedule")
 public class ScheduleServlet extends AbstractServlet {
+
+    private final ObjectMapper om = new ObjectMapper();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -52,6 +49,36 @@ public class ScheduleServlet extends AbstractServlet {
             sendMessage(response, HttpServletResponse.SC_OK, "Schedule added.");
         } catch (SQLException exc) {
             handleSqlError(response, exc);
+        }
+    }
+
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try (Connection connection = getConnection(req.getServletContext())) {
+            ScheduleDao scheduleDao = new DatabaseScheduleDao(connection);
+            ScheduleService scheduleService = new SimpleScheduleService(scheduleDao);
+
+            Schedule schedule = om.readValue(req.getInputStream(), Schedule.class);
+            scheduleService.updateDurationById(schedule.getId(), schedule.getDuration());
+            scheduleService.updateTitleById(schedule.getId(), schedule.getTitle());
+            scheduleService.updateVisibilityById(schedule.getId(), schedule.isVisibility());
+
+            sendMessage(resp, HttpServletResponse.SC_OK, "Schedule updated.");
+        } catch (SQLException exc) {
+            handleSqlError(resp, exc);
+        }
+    }
+
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try (Connection connection = getConnection(req.getServletContext())) {
+            ScheduleDao scheduleDao = new DatabaseScheduleDao(connection);
+            ScheduleService scheduleService = new SimpleScheduleService(scheduleDao);
+
+            Schedule schedule = om.readValue(req.getInputStream(), Schedule.class);
+            scheduleService.deleteByScheduleId(schedule.getId());
+
+            sendMessage(resp, HttpServletResponse.SC_OK, "Schedule deleted.");
+        } catch (SQLException exc) {
+            handleSqlError(resp, exc);
         }
     }
 }
