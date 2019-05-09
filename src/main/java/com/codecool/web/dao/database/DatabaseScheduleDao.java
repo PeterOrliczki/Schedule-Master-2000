@@ -97,7 +97,9 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
             statement.setInt(2, scheduleId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    tasks.add(taskDao.fetchTask(resultSet));
+                    Task task = taskDao.fetchTask(resultSet);
+                    task.setColumnNumber(resultSet.getInt("column_number"));
+                    tasks.add(task);
                     schedule = fetchSchedule(resultSet);
                 }
             }

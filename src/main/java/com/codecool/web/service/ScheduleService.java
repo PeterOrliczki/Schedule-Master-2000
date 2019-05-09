@@ -1,5 +1,6 @@
 package com.codecool.web.service;
 
+import com.codecool.web.dto.ScheduleDto;
 import com.codecool.web.model.Schedule;
 import com.codecool.web.model.User;
 import com.codecool.web.service.exception.ServiceException;
@@ -16,6 +17,8 @@ public interface ScheduleService {
     Schedule findByScheduleId(int id) throws SQLException;
 
     Schedule findByUserId(int id) throws SQLException;
+
+    ScheduleDto findUserSchedulesWithTaskRelation(int userId, int scheduleId) throws SQLException;
 
     Schedule addSchedule(int userId, String scheduleTitle, int scheduleDuration) throws SQLException;
 

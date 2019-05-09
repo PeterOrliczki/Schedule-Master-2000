@@ -2,13 +2,14 @@ function onSchedulesClicked() {
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onSchedulesLoad);
     xhr.addEventListener('error', onNetworkError);
-    xhr.open('GET', 'protected/my-schedules');
+    xhr.open('GET', 'protected/schedules');
     xhr.send();
 }
 
 function onSchedulesLoad() {
     if (this.status === OK) {
-        const schedules = JSON.parse(this.responseText);
+        const schedulesDto = JSON.parse(this.responseText);
+        const schedules = schedulesDto.mySchedules;
         createSchedulesDisplay(schedules);
         showContents(['my-schedules-content']);
     } else {
@@ -125,24 +126,26 @@ function onScheduleTitleClicked() {
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onScheduleResponse);
     xhr.addEventListener('error', onNetworkError);
-    xhr.open('GET', 'protected/edit-schedule?' + params.toString());
+    xhr.open('GET', 'protected/schedule?' + params.toString());
     xhr.send();
 }
 
 function onScheduleResponse() {
     if (this.status === OK) {
-        const schedule = JSON.parse(this.responseText);
-        onScheduleLoad(schedule);
+        const scheduleDto = JSON.parse(this.responseText);
+        const schedule = scheduleDto.schedule;
+        const tasks = scheduleDto.tasks;
+        onScheduleLoad(schedule, tasks);
     } else {
         onOtherResponse(mySchedulesDivEl, this);
     }
 }
 
-function onScheduleLoad(schedule) {
+function onScheduleLoad(schedule, tasks) {
     const tableEl = document.createElement('table');
     tableEl.setAttribute('id', 'schedules-table');
     const theadEl = createScheduleTableHeader(schedule);
-    const tbodyEl = createScheduleTableBody(schedule);
+    const tbodyEl = createScheduleTableBody(schedule, tasks);
     tableEl.appendChild(theadEl);
     tableEl.appendChild(tbodyEl);
     removeAllChildren(mySchedulesDivEl);
@@ -166,7 +169,7 @@ function createScheduleTableHeader(schedule) {
     return theadEl;
 }
 
-function createScheduleTableBody(schedule) {
+function createScheduleTableBody(schedule, tasks) {
     const tbodyEl = document.createElement('tbody');
     const duration = schedule.duration;
     for (let i = 0; i < 24; i++) {
@@ -177,7 +180,7 @@ function createScheduleTableBody(schedule) {
         for (let j = 0; j < duration; j++) {
             const tdEl = document.createElement('td');
             tdEl.classList.add('schedule-cell');
-            tdEl.setAttribute('id', i)
+            tdEl.setAttribute('id', j + 1 + ':' + i);
             trEl.appendChild(tdEl);
         }
         tbodyEl.appendChild(trEl);
@@ -246,7 +249,7 @@ function onCreateNewButtonClicked() {
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onNewScheduleResponse);
     xhr.addEventListener('error', onNetworkError);
-    xhr.open('POST', 'protected/my-schedules');
+    xhr.open('POST', 'protected/schedule');
     xhr.send(params);
 }
 

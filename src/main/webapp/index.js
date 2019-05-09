@@ -112,7 +112,7 @@ function hideContentById(id) {
 function hasAuthorization() {
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('error', onNetworkError);
-    xhr.open('GET', 'protected/my-schedules');
+    xhr.open('GET', 'protected/schedule');
     xhr.send();
     if (xhr.status === OK) {
       return true;

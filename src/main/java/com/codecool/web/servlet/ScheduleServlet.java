@@ -2,6 +2,7 @@ package com.codecool.web.servlet;
 
 import com.codecool.web.dao.ScheduleDao;
 import com.codecool.web.dao.database.DatabaseScheduleDao;
+import com.codecool.web.dto.ScheduleDto;
 import com.codecool.web.model.Schedule;
 import com.codecool.web.model.User;
 import com.codecool.web.service.ScheduleService;
@@ -15,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
 
 @WebServlet("/protected/schedule")
 public class ScheduleServlet extends AbstractServlet {
@@ -26,13 +26,15 @@ public class ScheduleServlet extends AbstractServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             ScheduleDao scheduleDao = new DatabaseScheduleDao(connection);
+            User user = (User) req.getSession().getAttribute("user");
             ScheduleService scheduleService = new SimpleScheduleService(scheduleDao);
 
-            User user = (User)req.getSession().getAttribute("user");
-            List<Schedule> schedules = scheduleService.findAllById(user.getId());
-            sendMessage(resp, HttpServletResponse.SC_OK, schedules);
-        } catch (SQLException ex) {
-            handleSqlError(resp, ex);
+            int id = Integer.parseInt(req.getParameter("schedule-id"));
+            ScheduleDto schedule = scheduleService.findUserSchedulesWithTaskRelation(user.getId(), id);
+
+            sendMessage(resp, HttpServletResponse.SC_OK, schedule);
+        } catch (SQLException exc) {
+            handleSqlError(resp, exc);
         }
     }
 
@@ -73,8 +75,8 @@ public class ScheduleServlet extends AbstractServlet {
             ScheduleDao scheduleDao = new DatabaseScheduleDao(connection);
             ScheduleService scheduleService = new SimpleScheduleService(scheduleDao);
 
-            Schedule schedule = om.readValue(req.getInputStream(), Schedule.class);
-            scheduleService.deleteByScheduleId(schedule.getId());
+            int id = Integer.parseInt(req.getParameter("schedule-id"));
+            scheduleService.deleteByScheduleId(id);
 
             sendMessage(resp, HttpServletResponse.SC_OK, "Schedule deleted.");
         } catch (SQLException exc) {
