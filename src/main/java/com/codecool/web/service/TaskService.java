@@ -21,6 +21,8 @@ public interface TaskService {
 
     void deleteRelationRecordByTaskId(int id) throws SQLException;
 
+    boolean doesRelationExistsTaskId(int id) throws SQLException;
+
     void updateTitleById(int id, String title) throws SQLException;
 
     void updateContentById(int id, String content) throws SQLException;

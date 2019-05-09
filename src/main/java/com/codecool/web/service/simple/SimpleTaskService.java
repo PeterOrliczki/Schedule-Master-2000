@@ -54,6 +54,11 @@ public final class SimpleTaskService implements TaskService {
     }
 
     @Override
+    public boolean doesRelationExistsTaskId(int id) throws SQLException {
+        return taskDao.doesRelationExistsTaskId(id);
+    }
+
+    @Override
     public void updateTitleById(int id, String title) throws SQLException {
         taskDao.updateTitleById(id, title);
     }

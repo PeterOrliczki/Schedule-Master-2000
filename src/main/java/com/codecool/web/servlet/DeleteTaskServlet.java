@@ -31,7 +31,11 @@ public class DeleteTaskServlet extends AbstractServlet {
             User user = (User) request.getSession().getAttribute("user");
 
             int id = Integer.valueOf(request.getParameter("id"));
-            taskService.deleteRelationRecordByTaskId(id);
+
+            if (taskService.doesRelationExistsTaskId(id)) {
+                taskService.deleteRelationRecordByTaskId(id);
+            }
+
             taskService.deleteTaskById(id);
             List<Task> tasks = taskService.findAllByTaskId(user.getId());
 

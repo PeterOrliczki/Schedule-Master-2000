@@ -126,6 +126,22 @@ public final class DatabaseTaskDao extends AbstractDao implements TaskDao {
     }
 
     @Override
+    public boolean doesRelationExistsTaskId(int id) throws SQLException {
+        boolean autoCommit = connection.getAutoCommit();
+        connection.setAutoCommit(false);
+        String sql = "SELECT * FROM schedule_tasks WHERE task_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
     public void updateTitleById(int id, String title) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
