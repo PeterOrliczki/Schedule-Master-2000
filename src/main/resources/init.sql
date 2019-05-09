@@ -50,7 +50,7 @@ CREATE TABLE all_audit(
 	event_counter integer UNIQUE PRIMARY KEY,
 	event_name varchar(100),
 	table_name varchar(100),
-	user_id varchar(40),
+	user_id integer,
 	event_date timestamp
 );
 
