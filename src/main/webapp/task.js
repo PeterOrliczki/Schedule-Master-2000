@@ -351,9 +351,9 @@ function createEditTaskBody(task) {
 
         const buttonEditEl = document.createElement('i');
         buttonEditEl.classList.add('icon-edit');
-        buttonEditEl.setAttribute('id', task.id);
+        buttonEditEl.setAttribute('id', 'task' + task.id);
         buttonEditEl.dataset.taskEditId = task.id;
-        //buttonEditEl.addEventListener('click', onTaskEditClicked);
+        buttonEditEl.addEventListener('click', onTaskEditClicked);
 
 
         const buttonOneTdEl = document.createElement('td');
@@ -368,4 +368,10 @@ function createEditTaskBody(task) {
         tbodyEl.appendChild(trEl);
 	}
 	return tbodyEl;
+}
+
+
+function onTaskFieldEdit() {
+    const oldValueEl = document.getElementById('1');
+    console.log(oldValueEl);
 }
