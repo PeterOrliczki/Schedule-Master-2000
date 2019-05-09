@@ -39,7 +39,6 @@ function createActivitiesTableBody(activities) {
   const tbodyEl = document.createElement('tbody');
 
   for (let i = 0; i < activities.length; i++) {
-    const trEl = document.createElement('tr');
     const activity = activities[i];
 
     const titleTdEl = document.createElement('td');
@@ -49,11 +48,12 @@ function createActivitiesTableBody(activities) {
     tableTdEl.textContent = activity.tableName;
 
     const userTdEl = document.createElement('td');
-    tableTdEl.textContent = activity.userName;
+    userTdEl.textContent = activity.userName;
 
     const dateTdEl = document.createElement('td');
-    tableTdEl.textContent = activity.eventDate;
+    dateTdEl.textContent = activity.eventDate;
 
+    const trEl = document.createElement('tr');
     trEl.appendChild(titleTdEl);
     trEl.appendChild(tableTdEl);
     trEl.appendChild(userTdEl);
