@@ -267,7 +267,7 @@ function createNewScheduleForm() {
 }
 
 function onCreateNewButtonClicked() {
-    debugger;
+
     const newScheduleFormEl = document.forms['new-schedule-form'];
 
     const titleInputEl = newScheduleFormEl.querySelector('input[name="title"]');
