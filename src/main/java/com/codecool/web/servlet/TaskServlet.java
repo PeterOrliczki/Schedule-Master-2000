@@ -28,8 +28,9 @@ public class TaskServlet extends AbstractServlet {
             TaskService taskService = new SimpleTaskService(taskDao, scheduleDao);
 
             int id = Integer.valueOf(request.getParameter("id"));
+            Task task = taskService.findTaskById(id);
 
-            //sendMessage(response, HttpServletResponse.SC_OK, task);
+            sendMessage(response, HttpServletResponse.SC_OK, task);
         } catch (SQLException exc) {
             handleSqlError(response, exc);
         }

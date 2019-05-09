@@ -92,8 +92,10 @@ function createTasksTableBody(tasks) {
         const buttonEditEl = document.createElement('i');
         buttonEditEl.classList.add('icon-edit');
         buttonEditEl.setAttribute('id', task.id);
+        buttonEditEl.dataset.taskEditId = task.id;
         buttonEditEl.addEventListener('click', onTaskEditClicked);
 
+    debugger;
         const buttonDeleteEl = document.createElement('i');
         buttonDeleteEl.classList.add('icon-trash');
         buttonDeleteEl.setAttribute('id', task.id);
@@ -281,4 +283,49 @@ function onDeleteResponse() {
 
 function onTaskEditClicked() {
     removeAllChildren(myTasksDivEl);
+    removeAllChildren(myTasksDivEl);
+    const taskId = this.dataset.taskEditId;
+    console.log(taskId);
+    const params = new URLSearchParams();
+    params.append('id', taskId);
+
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onTaskEditResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('GET', 'protected/task?' + params.toString());
+    xhr.send();
+
+}
+
+function onTaskEditResponse() {
+    if (this.status === OK) {
+        onTaskTitleEditLoad(JSON.parse(this.responseText));
+    } else {
+        onOtherResponse(myTasksDivEl, this);
+    }
+}
+
+function onTaskTitleEditLoad(task) {
+    removeAllChildren(myTasksDivEl);
+    const pTiEl = document.createElement('p');
+    pTiEl.textContent = "Task title: " + task.title;
+    const buttonEditEl = document.createElement('i');
+    buttonEditEl.classList.add('icon-edit');
+    buttonEditEl.setAttribute('id', task.id);
+    buttonEditEl.addEventListener('click', onTaskEditClicked);
+    pTiEl.appendChild(buttonEditEl);
+
+    const pCoEl = document.createElement('p');
+    pCoEl.textContent = "Task content: " + task.content;
+
+    const pStEl = document.createElement('p');
+    pStEl.textContent = "Task start: " + task.start;
+
+    const pEnEl = document.createElement('p');
+    pEnEl.textContent = "Task end: " + task.end;
+
+    myTasksDivEl.appendChild(pTiEl);
+    myTasksDivEl.appendChild(pCoEl);
+    myTasksDivEl.appendChild(pStEl);
+    myTasksDivEl.appendChild(pEnEl);
 }
