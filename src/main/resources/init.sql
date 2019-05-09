@@ -132,22 +132,22 @@ create trigger schedule_task_check
     INSERT INTO users(user_name, user_email, user_password, user_role)  VALUES('berta', 'berta', '1000:6092951cee335fec6f8e436ba995476b:c98729fb8912dc85e8d2233b0cb3b3856a8cfa611991716ff8236b90a148b57def3b233ba65698e8b8d719e366659e89e91d9fb9a0138f415eef3a8713dc89e0', 'ADMIN');
 
    -- schedules
-    INSERT INTO schedules(user_id, schedule_title, schedule_duration) VALUES (1, 'schedule11', 3);
-    INSERT INTO schedules(user_id, schedule_title, schedule_duration) VALUES (1, 'schedule12', 4);
-    INSERT INTO schedules(user_id, schedule_title, schedule_duration) VALUES (2, 'schedule2', 4);
-    INSERT INTO schedules(user_id, schedule_title, schedule_duration) VALUES (3, 'schedule3', 5);
-    INSERT INTO schedules(user_id, schedule_title, schedule_duration) VALUES (4, 'schedule4', 6);
-    INSERT INTO schedules(user_id, schedule_title, schedule_duration) VALUES (5, 'schedule5', 2);
+    INSERT INTO schedules(user_id, schedule_title, schedule_duration) VALUES (1, 'schedule1', 3);
+    INSERT INTO schedules(user_id, schedule_title, schedule_duration) VALUES (1, 'schedule2', 4);
+    INSERT INTO schedules(user_id, schedule_title, schedule_duration) VALUES (2, 'schedule3', 4);
+    INSERT INTO schedules(user_id, schedule_title, schedule_duration) VALUES (3, 'schedule4', 5);
+    INSERT INTO schedules(user_id, schedule_title, schedule_duration) VALUES (4, 'schedule5', 6);
+    INSERT INTO schedules(user_id, schedule_title, schedule_duration) VALUES (5, 'schedule6', 2);
 
     -- tasks
-    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'task111', 'taask121 content', 2, 4);
-    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'task121', 'taask122 content', 6, 7);
-    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (2, 'task111', 'taask121 content', 8, 9);
-    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (3, 'task21', 'taask21 content', 3, 4);
-    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (3, 'task22', 'taask22 content', 5, 10);
-    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (4, 'task3', 'taask3 content', 1, 2);
-    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (5, 'task2', 'taask2 content', 6, 8);
-    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (5, 'task3', 'taask3 content', 10, 12);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'cleaning', 'cleaning the kitchen', 3, 4);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'jogging', 'morning jogging', 6, 7);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (2, 'cleaning', 'cleaning the livingroom', 8, 9);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (3, 'watering plants', 'watering plants in the garden', 3, 4);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (3, 'going out', 'going to concert', 16, 21);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (4, 'going out', 'shopping', 9, 10);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (5, 'jogging', 'jogging to the nearby park and back', 6, 8);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (5, 'cooking', 'cooking dinner', 11, 12);
 
     -- schedule_tasks
     INSERT INTO schedule_tasks(schedule_id, task_id, column_number) VALUES
