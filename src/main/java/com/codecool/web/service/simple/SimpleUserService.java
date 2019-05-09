@@ -1,6 +1,7 @@
 package com.codecool.web.service.simple;
 
 import com.codecool.web.dao.UserDao;
+import com.codecool.web.model.Activity;
 import com.codecool.web.model.Role;
 import com.codecool.web.model.User;
 import com.codecool.web.service.PasswordService;
@@ -63,6 +64,11 @@ public final class SimpleUserService implements UserService {
     @Override
     public void updateUserPasswordById(int id, String password) throws SQLException {
         userDao.updateUserPasswordById(id, password);
+    }
+
+    @Override
+    public List<Activity> findAllActivity() throws SQLException {
+        return userDao.findAllActivity();
     }
 
     @Override
