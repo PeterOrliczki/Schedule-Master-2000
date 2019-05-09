@@ -49,6 +49,11 @@ public final class SimpleTaskService implements TaskService {
     }
 
     @Override
+    public  void deleteRelationRecordByTaskId(int id) throws SQLException {
+        taskDao.deleteRelationRecordByTaskId(id);
+    }
+
+    @Override
     public void updateTitleById(int id, String title) throws SQLException {
         taskDao.updateTitleById(id, title);
     }

@@ -16,10 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 
-@WebServlet("/protected/task")
-public class TaskServlet extends AbstractServlet {
+@WebServlet("/protected/deletetask")
+public class DeleteTaskServlet extends AbstractServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try (Connection connection = getConnection(request.getServletContext())) {
@@ -27,9 +28,14 @@ public class TaskServlet extends AbstractServlet {
             ScheduleDao scheduleDao = new DatabaseScheduleDao(connection);
             TaskService taskService = new SimpleTaskService(taskDao, scheduleDao);
 
+            User user = (User) request.getSession().getAttribute("user");
+
             int id = Integer.valueOf(request.getParameter("id"));
+            taskService.deleteRelationRecordByTaskId(id);
             taskService.deleteTaskById(id);
-            //sendMessage(response, HttpServletResponse.SC_OK, task);
+            List<Task> tasks = taskService.findAllByTaskId(user.getId());
+
+            sendMessage(response, HttpServletResponse.SC_OK, "Task succesfully deleted");
         } catch (SQLException exc) {
             handleSqlError(response, exc);
         }

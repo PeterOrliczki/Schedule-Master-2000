@@ -19,6 +19,8 @@ public interface TaskDao {
 
     void deleteByTaskId(int id) throws SQLException;
 
+    void deleteRelationRecordByTaskId(int id) throws SQLException;
+
     void updateTitleById(int id, String title) throws SQLException;
 
     void updateContentById(int id, String content) throws SQLException;
