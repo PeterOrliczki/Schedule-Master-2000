@@ -69,12 +69,12 @@ function createSchedulesTableBody(schedules) {
 
     const buttonEditEl = document.createElement('i');
     buttonEditEl.classList.add('icon-edit');
-    buttonEditEl.setAttribute('id', schedule.id);
+    buttonEditEl.dataset.scheduleId = schedule.id;
     buttonEditEl.addEventListener('click', onScheduleEditClicked);
 
     const buttonDeleteEl = document.createElement('i');
     buttonDeleteEl.classList.add('icon-trash');
-    buttonDeleteEl.setAttribute('id', schedule.id);
+    buttonDeleteEl.dataset.scheduleId = schedule.id;
     buttonDeleteEl.addEventListener('click', onScheduleDeleteClicked);
 
     const buttonOneTdEl = document.createElement('td');
@@ -206,7 +206,28 @@ function onScheduleEditClicked() {
 }
 
 function onScheduleDeleteClicked() {
-// TODO: function
+    const result = confirm('Click OK to confirm.');
+    if (result) {
+        const scheduleId = this.dataset.scheduleId;
+        const params = new URLSearchParams();
+        params.append('schedule-id', scheduleId);
+        const xhr = new XMLHttpRequest();
+        xhr.addEventListener('load', onScheduleDeleteResponse);
+        xhr.addEventListener('error', onNetworkError);
+        xhr.open('DELETE', 'protected/schedule?' + params.toString());
+        xhr.send();
+    } else {
+        return;
+    }
+}
+
+function onScheduleDeleteResponse() {
+    if(this.status === OK) {
+        alert(JSON.parse(this.responseText).message);
+        onSchedulesClicked();
+    } else {
+        onOtherResponse(mySchedulesDivEl, this);
+    }
 }
 
 function addNewSchedule() {

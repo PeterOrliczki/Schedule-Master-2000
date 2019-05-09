@@ -108,6 +108,38 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
     }
 
     @Override
+    public boolean doesRelationExistToScheduleId(int id) throws SQLException {
+        connection.setAutoCommit(false);
+        String sql = "SELECT * FROM schedule_tasks WHERE schedule_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void deleteRelationRecordByScheduleId(int id) throws SQLException {
+        boolean autoCommit = connection.getAutoCommit();
+        connection.setAutoCommit(false);
+        String sql = "DELETE FROM schedule_tasks WHERE schedule_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setInt(1, id);
+            executeInsert(statement);
+            connection.commit();
+        } catch (SQLException exc) {
+            connection.rollback();
+            throw exc;
+        } finally {
+            connection.setAutoCommit(autoCommit);
+        }
+    }
+
+    @Override
     public Schedule addSchedule(int userId, String scheduleTitle, int scheduleDuration) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);

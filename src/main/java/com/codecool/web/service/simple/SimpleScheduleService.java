@@ -57,6 +57,16 @@ public final class SimpleScheduleService implements ScheduleService {
     }
 
     @Override
+    public boolean doesRelationExistToScheduleId(int id) throws SQLException {
+        return scheduleDao.doesRelationExistToScheduleId(id);
+    }
+
+    @Override
+    public void deleteRelationRecordByScheduleId(int id) throws SQLException {
+        scheduleDao.deleteRelationRecordByScheduleId(id);
+    }
+
+    @Override
     public Schedule addSchedule(int userId, String scheduleTitle, int scheduleDuration) throws SQLException {
         return scheduleDao.addSchedule(userId, scheduleTitle, scheduleDuration);
     }

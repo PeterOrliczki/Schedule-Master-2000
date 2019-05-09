@@ -21,6 +21,10 @@ public interface ScheduleDao {
 
     ScheduleDto findUserSchedulesWithTaskRelation(int userId, int scheduleId) throws SQLException;
 
+    boolean doesRelationExistToScheduleId(int id) throws SQLException;
+
+    void deleteRelationRecordByScheduleId(int id) throws SQLException;
+
     Schedule addSchedule(int userId, String scheduleTitle, int scheduleDuration) throws SQLException;
 
     void deleteByScheduleId(int id) throws SQLException;

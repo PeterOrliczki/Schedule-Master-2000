@@ -76,6 +76,10 @@ public class ScheduleServlet extends AbstractServlet {
             ScheduleService scheduleService = new SimpleScheduleService(scheduleDao);
 
             int id = Integer.parseInt(req.getParameter("schedule-id"));
+
+            if (scheduleService.doesRelationExistToScheduleId(id)) {
+                scheduleService.deleteRelationRecordByScheduleId(id);
+            }
             scheduleService.deleteByScheduleId(id);
 
             sendMessage(resp, HttpServletResponse.SC_OK, "Schedule deleted.");
