@@ -46,17 +46,17 @@ function createNewTaskButton() {
 }
 
 function createTasksTableHeader() {
-    const titleTdEl = document.createElement('td');
+    const titleTdEl = document.createElement('th');
     titleTdEl.textContent = 'Title';
 
-    const visibilityTdEl = document.createElement('td');
+    const visibilityTdEl = document.createElement('th');
     visibilityTdEl.textContent = 'Content';
 
-    const buttonOneTdEl = document.createElement('td');
-    buttonOneTdEl.textContent = '';
+    const buttonOneTdEl = document.createElement('th');
+    buttonOneTdEl.textContent = 'Edit';
 
-    const buttonTwoTdEl = document.createElement('td');
-    buttonTwoTdEl.textContent = '';
+    const buttonTwoTdEl = document.createElement('th');
+    buttonTwoTdEl.textContent = 'Delete';
 
     const trEl = document.createElement('tr');
     trEl.appendChild(titleTdEl);
@@ -167,7 +167,7 @@ function createNewTaskForm() {
     const formEl = document.createElement('form');
     formEl.setAttribute('id','new-task-form');
     formEl.classList.add('menu-form');
-    formEl.onSubmit = 'return false;';
+    //formEl.onSubmit = 'return false;';
 
     const inputTiEl = document.createElement("input"); //input element, text
     inputTiEl.setAttribute("type","text");
@@ -196,7 +196,6 @@ function createNewTaskForm() {
     const brEl = document.createElement("br");
 
     const sEl = createNewSubmitButton();
-    sEl.classList.add("form-button");
     sEl.addEventListener('click', onSubmitNewTask);
 
     formEl.appendChild(inputTiEl);
@@ -207,47 +206,53 @@ function createNewTaskForm() {
     formEl.appendChild(sEl);
 
     myTasksDivEl.appendChild(formEl);
+
+
 }
 
 function createNewSubmitButton() {
     const buttonEl = document.createElement('button');
     buttonEl.setAttribute('id', 'new-task-button');
-    buttonEl.classList.add('new-task-button');
+    buttonEl.setAttribute('type', 'button');
+    buttonEl.classList.add('form-button');
     buttonEl.textContent = 'Create new task';
 
     return buttonEl;
 }
 
 function onSubmitNewTask() {
-   const loginFormEl = document.forms['new-task-form'];
+    const loginFormEl = document.forms['new-task-form'];
 
     const titleInputEl = loginFormEl.querySelector('input[name="task-title"]');
     const contentInputEl = loginFormEl.querySelector('input[name="task-content"]');
     const beginInputEl = loginFormEl.querySelector('input[name="task-begin"]');
     const endInputEl = loginFormEl.querySelector('input[name="task-end"]');
+    console.log(contentInputEl.value);
 
+    removeAllChildren(myTasksDivEl);
     const title = titleInputEl.value;
     const content = contentInputEl.value;
     const begin = beginInputEl.value;
     const end = endInputEl.value;
-    console.log("Shit");
+
     const params = new URLSearchParams();
-    params.append('title', title);
-    params.append('content', content);
-    params.append('begin', begin);
-    params.append('end', end);
+    params.append('task-title', title);
+    params.append('task-content', content);
+    params.append('task-begin', begin);
+    params.append('task-end', end);
 
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onSubmissionResponse);
     xhr.addEventListener('error', onNetworkError);
-    xhr.open('POST', 'protected/task');
+    xhr.open('POST', 'protected/tasks');
     xhr.send(params);
 }
 
 function onSubmissionResponse() {
     if (this.status === OK) {
         const task = JSON.parse(this.responseText);
-        console.log(task);
+        alert(task.message);
+        onTasksClicked();
     } else {
         onOtherResponse(myTasksDivEl, this);
     }
