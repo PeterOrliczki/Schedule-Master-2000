@@ -150,6 +150,7 @@ function onScheduleLoad(schedule, tasks) {
     tableEl.appendChild(tbodyEl);
     removeAllChildren(mySchedulesDivEl);
     mySchedulesDivEl.appendChild(tableEl);
+    addTasksToSchedule(tasks);
 }
 
 function createScheduleTableHeader(schedule) {
@@ -169,7 +170,7 @@ function createScheduleTableHeader(schedule) {
     return theadEl;
 }
 
-function createScheduleTableBody(schedule, tasks) {
+function createScheduleTableBody(schedule) {
     const tbodyEl = document.createElement('tbody');
     const duration = schedule.duration;
     for (let i = 0; i < 24; i++) {
@@ -186,6 +187,18 @@ function createScheduleTableBody(schedule, tasks) {
         tbodyEl.appendChild(trEl);
     }
     return tbodyEl;
+}
+
+function addTasksToSchedule(tasks) {
+    for (let i = 0; i < tasks.length; i++) {
+        const task = tasks[i];
+        const duration = task.end - task.start;
+        for (let j = 0; j < duration; j++) {
+            const hour = task.start + j;
+            tdEl = document.getElementById(task.columnNumber + ':' + hour);
+            tdEl.textContent = task.title;
+        }
+    }
 }
 
 function onScheduleEditClicked() {
