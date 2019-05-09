@@ -16,7 +16,7 @@ let profileContentTitleDivEl;
 let mySchedulesDivEl;
 let allSchedulesDivEl;
 let myTasksDivEl;
-let activityDivEl;
+let myActivitiesDivEl;
 let footerDivEl;
 
 function newInfo(targetEl, message) {
@@ -155,7 +155,7 @@ function onLoad() {
 
     myTasksDivEl = document.getElementById('my-tasks-content');
 
-    activityDivEl = document.getElementById('activity-content');
+    myActivitiesDivEl = document.getElementById('activity-content');
 
     footerDivEl = document.getElementById('footer');
 
