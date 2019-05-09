@@ -231,6 +231,18 @@ table {
     color: #000;
 }
 
+select {
+    color: #444;
+    font: 16px/24px 'Lato', Helvetica, Arial, sans-serif, 'sans-serif';
+    letter-spacing: 1px;
+    border: none;
+    outline: none;
+    text-align: center;
+    width: 70%;
+    padding: 10px 5px 10px 5px;
+    background-color: transparent;
+}
+
 .form-button {
     background-color: #e57873;
     margin: 0 auto;
@@ -355,17 +367,37 @@ table {
   width: 100%;
 }
 
+caption {
+    font: bold 14px/30px "Montserrat", sans-serif;
+    letter-spacing: 1px;
+    margin: 5px auto;
+    text-transform: capitalize;
+    padding-bottom: 15px;
+    text-align: center
+}
+
 th {
-  padding: 8px;
+  padding: 10px;
   text-align: center;
   border-bottom: 1px solid #ddd;
   font-weight: bold;
 }
 td {
-  padding: 8px;
+  padding: 10px;
   text-align: center;
   vertical-align: middle;
   border-bottom: 1px solid #ddd;
+}
+
+.schedule-cell {
+  padding: 10px;
+  text-align: center;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+
+.schedule-cell:hover {
+  border-bottom: 1px solid #FA4646;
 }
 
 i {
