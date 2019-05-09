@@ -42,6 +42,7 @@ create TABLE tasks(
 create TABLE schedule_tasks(
 	task_id integer,
 	schedule_id integer,
+	column_number integer,
 	FOREIGN KEY(task_id) REFERENCES tasks(task_id),
 	FOREIGN KEY(schedule_id) REFERENCES schedules(schedule_id)
 );
@@ -149,15 +150,14 @@ create trigger schedule_task_check
     INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (5, 'task3', 'taask3 content', 10, 12);
 
     -- schedule_tasks
-    INSERT INTO schedule_tasks(schedule_id, task_id) VALUES
-        (1, 1),
-        (1, 2),
-        (2, 3),
-        (3, 4),
-        (3, 5),
-        (4, 5),
-        (5, 7),
-        (6, 8);
+    INSERT INTO schedule_tasks(schedule_id, task_id, column_number) VALUES
+        (1, 1, 1),
+        (1, 2, 3),
+        (2, 3, 2),
+        (3, 4, 4),
+        (3, 5, 3),
+        (4, 5, 5),
+        (5, 7, 1);
 
 
     -- INSERT INTO users VALUES(2, 'a', 'b', 'c', 'd');
