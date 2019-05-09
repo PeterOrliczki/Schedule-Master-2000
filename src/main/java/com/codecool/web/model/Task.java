@@ -9,6 +9,7 @@ public final class Task extends AbstractModel {
     private final int start;
     private final int end;
     private final int userId;
+    private int columnNumber;
 
     public Task(int id, int userId, String title, String content, int start, int end) {
         super(id);
@@ -37,6 +38,14 @@ public final class Task extends AbstractModel {
 
     public int getEnd() {
         return end;
+    }
+
+    public int getColumnNumber() {
+        return columnNumber;
+    }
+
+    public void setColumnNumber(int columnNumber) {
+        this.columnNumber = columnNumber;
     }
 
     @Override
