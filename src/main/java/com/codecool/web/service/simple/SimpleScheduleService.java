@@ -4,11 +4,13 @@ import com.codecool.web.dao.ScheduleDao;
 import com.codecool.web.dto.ScheduleDto;
 import com.codecool.web.model.Role;
 import com.codecool.web.model.Schedule;
+import com.codecool.web.model.Task;
 import com.codecool.web.model.User;
 import com.codecool.web.service.ScheduleService;
 import com.codecool.web.service.exception.ServiceException;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public final class SimpleScheduleService implements ScheduleService {
@@ -45,7 +47,13 @@ public final class SimpleScheduleService implements ScheduleService {
 
     @Override
     public ScheduleDto findUserSchedulesWithTaskRelation(int userId, int scheduleId) throws SQLException {
-        return scheduleDao.findUserSchedulesWithTaskRelation(userId, scheduleId);
+        ScheduleDto scheduleDto = scheduleDao.findUserSchedulesWithTaskRelation(userId, scheduleId);
+        if (scheduleDto.getSchedule() == null) {
+            Schedule schedule = findByScheduleId(scheduleId);
+            List<Task> tasks = new ArrayList<>();
+            scheduleDto = new ScheduleDto(schedule, tasks);
+        }
+        return scheduleDto;
     }
 
     @Override
