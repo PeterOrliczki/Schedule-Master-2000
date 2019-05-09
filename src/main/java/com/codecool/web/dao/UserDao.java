@@ -1,5 +1,6 @@
 package com.codecool.web.dao;
 
+import com.codecool.web.model.Activity;
 import com.codecool.web.model.Role;
 import com.codecool.web.model.User;
 
@@ -24,6 +25,8 @@ public interface UserDao {
     void updateUserEmailById(int id, String email) throws SQLException;
 
     void updateUserPasswordById(int id, String password) throws SQLException;
+
+    List<Activity> findAllActivity() throws SQLException;
 
     boolean doesUserExists(String email) throws SQLException;
 }

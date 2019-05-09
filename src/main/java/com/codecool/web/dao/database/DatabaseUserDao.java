@@ -1,6 +1,7 @@
 package com.codecool.web.dao.database;
 
 import com.codecool.web.dao.UserDao;
+import com.codecool.web.model.Activity;
 import com.codecool.web.model.Role;
 import com.codecool.web.model.User;
 
@@ -18,7 +19,7 @@ public final class DatabaseUserDao extends AbstractDao implements UserDao {
     public List<User> findAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM users";
-        try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery((sql)) ) {
+        try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery((sql))) {
             while (resultSet.next()) {
                 users.add(fetchUser(resultSet));
             }
@@ -67,7 +68,6 @@ public final class DatabaseUserDao extends AbstractDao implements UserDao {
         }
         return null;
     }
-
 
 
     @Override
@@ -151,7 +151,7 @@ public final class DatabaseUserDao extends AbstractDao implements UserDao {
         connection.setAutoCommit(false);
         String sql = "update users set user_password=? where user_id=?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1,password);
+            statement.setString(1, password);
             statement.setInt(2, id);
             executeInsert(statement);
             connection.commit();
@@ -178,6 +178,18 @@ public final class DatabaseUserDao extends AbstractDao implements UserDao {
         return false;
     }
 
+    @Override
+    public List<Activity> findAllActivity() throws SQLException {
+        List<Activity> activities = new ArrayList<>();
+        String sql = "SELECT event_name, table_name, event_date, users.user_name FROM all_audit JOIN users ON all_audit.user_id = users.user_id";
+        try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery((sql))) {
+            while (resultSet.next()) {
+                activities.add(fetchActivity(resultSet));
+            }
+        }
+        return activities;
+    }
+
 
     private User fetchUser(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("user_id");
@@ -187,5 +199,14 @@ public final class DatabaseUserDao extends AbstractDao implements UserDao {
         Role role = Role.valueOf(resultSet.getString("user_role").toUpperCase());
 
         return new User(id, name, email, password, role);
+    }
+
+    private Activity fetchActivity(ResultSet resultSet) throws SQLException {
+        String eventName = resultSet.getString("event_name");
+        String tableName = resultSet.getString("table_name");
+        String userName = resultSet.getString("user_name");
+        String eventDate = resultSet.getString("event_date");
+
+        return new Activity(eventName, tableName, userName, eventDate);
     }
 }
