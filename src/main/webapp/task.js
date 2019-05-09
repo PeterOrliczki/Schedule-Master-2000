@@ -320,15 +320,11 @@ function createEditTaskHeader() {
     titleTdEl.textContent = 'Title';
 
     const contentTdEl = document.createElement('th');
-    contentTdEl.textContent = 'Content';
-
-    const buttonOneTdEl = document.createElement('th');
-    buttonOneTdEl.textContent = 'Edit';
+    contentTdEl.textContent = 'Content / Edit';
 
     const trEl = document.createElement('tr');
     trEl.appendChild(titleTdEl);
     trEl.appendChild(contentTdEl);
-    trEl.appendChild(buttonOneTdEl);
 
     const theadEl = document.createElement('thead');
     theadEl.appendChild(trEl);
@@ -347,23 +343,13 @@ function createEditTaskBody(task) {
 
 
         const contentTdEl = document.createElement('td');
+        contentTdEl.setAttribute('id', 'task-content' + task.id);
         contentTdEl.textContent = contentList[i];
-
-        const buttonEditEl = document.createElement('i');
-        buttonEditEl.classList.add('icon-edit');
-        buttonEditEl.setAttribute('id', 'task' + task.id);
-        buttonEditEl.dataset.taskEditId = task.id;
-        buttonEditEl.addEventListener('click', onTaskEditClicked);
-
-
-        const buttonOneTdEl = document.createElement('td');
-        buttonOneTdEl.appendChild(buttonEditEl);
-
+        contentTdEl.addEventListener('click', onTaskFieldEdit);
 
         const trEl = document.createElement('tr');
         trEl.appendChild(titleTdEl);
         trEl.appendChild(contentTdEl);
-        trEl.appendChild(buttonOneTdEl);
 
         tbodyEl.appendChild(trEl);
 	}
@@ -372,6 +358,22 @@ function createEditTaskBody(task) {
 
 
 function onTaskFieldEdit() {
-    const oldValueEl = document.getElementById('1');
+    const oldValueEl = document.getElementById('task-content1');
     console.log(oldValueEl);
+    removeAllChildren(oldValueEl);
+    oldValueEl.removeEventListener('click', onTaskFieldEdit);
+
+    const inputEdEl = document.createElement("input"); //input element, text
+    inputEdEl.setAttribute("type","text");
+    inputEdEl.classList.add("text-input");
+    inputEdEl.placeholder = "New data";
+    inputEdEl.setAttribute("name","task-edit");
+
+    const buttonEditEl = document.createElement('i');
+    buttonEditEl.classList.add('icon-edit');
+    buttonEditEl.setAttribute('id', 'task-content-edit');
+    //buttonEditEl.addEventListener('click', onTaskFieldEdit);
+
+    oldValueEl.appendChild(inputEdEl);
+    oldValueEl.appendChild(buttonEditEl);
 }
