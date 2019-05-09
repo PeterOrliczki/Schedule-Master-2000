@@ -18,6 +18,7 @@ function onSchedulesLoad() {
 
 function createSchedulesDisplay(schedules) {
     const buttonEl = createNewScheduleButton();
+    buttonEl.addEventListener('click', addNewSchedule);
     if (schedules.length === 0) {
       removeAllChildren(mySchedulesDivEl);
       const pEl = document.createElement('p');
@@ -53,9 +54,9 @@ function createSchedulesTableBody(schedules) {
     const titleTdEl = document.createElement('td');
     const titleAEl = document.createElement('a');
     titleAEl.href = 'javascript:void(0)';
+    titleAEl.dataset.id = schedule.id;
     titleAEl.onclick = onScheduleTitleClicked;
     titleAEl.textContent = schedule.title;
-    titleAEl.setAttribute('id', schedule.id);
     titleTdEl.appendChild(titleAEl);
 
     const visibilityTdEl = document.createElement('td');
@@ -117,14 +118,15 @@ function createSchedulesTableHeader() {
 }
 
 function onScheduleTitleClicked() {
+    const id = this.dataset.id;
     const params = new URLSearchParams();
-    params.append('schedule-id', this.id);
+    params.append('schedule-id', id);
 
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onScheduleResponse);
     xhr.addEventListener('error', onNetworkError);
-    xhr.open('POST', 'protected/edit-schedule');
-    xhr.send(params);
+    xhr.open('GET', 'protected/edit-schedule?' + params.toString());
+    xhr.send();
 }
 
 function onScheduleResponse() {
@@ -137,9 +139,10 @@ function onScheduleResponse() {
 }
 
 function onScheduleLoad(schedule) {
+    const tableEl = document.createElement('table');
+    tableEl.setAttribute('id', 'schedules-table');
     const theadEl = createScheduleTableHeader(schedule);
     const tbodyEl = createScheduleTableBody(schedule);
-    const tableEl = document.createElement('table');
     tableEl.appendChild(theadEl);
     tableEl.appendChild(tbodyEl);
     removeAllChildren(mySchedulesDivEl);
@@ -148,10 +151,13 @@ function onScheduleLoad(schedule) {
 
 function createScheduleTableHeader(schedule) {
     const daysList = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-
+    const duration = schedule.duration;
     const theadEl = document.createElement('thead');
     const trEl = document.createElement('tr');
-    for (let i = 0; i < schedule.duration; i++) {
+    const timeThEl = document.createElement('th');
+    timeThEl.textContent = 'Time';
+    trEl.appendChild(timeThEl);
+    for (let i = 0; i < duration; i++) {
         const thEl = document.createElement('th');
         thEl.textContent = daysList[i];
         trEl.appendChild(thEl);
@@ -162,22 +168,63 @@ function createScheduleTableHeader(schedule) {
 
 function createScheduleTableBody(schedule) {
     const tbodyEl = document.createElement('tbody');
-
-    for (let i = 0; i < schedule.duration; i++) {
-      for (let j = 0; j < 24; i++) {
-          const trEl = document.createElement('tr');
-          const tdEl = document.createElement('td');
-          tdEl.textContent = '';
-          tdEl.setAttribute('id', i)
-          trEl.appendChild(tdEl);
-          tbodyEl.appendChild(trEl);
+    const duration = schedule.duration;
+    for (let i = 0; i < 24; i++) {
+        const trEl = document.createElement('tr');
+        const hourTdEl = document.createElement('td');
+        hourTdEl.textContent = i + ':00';
+        trEl.appendChild(hourTdEl);
+        for (let j = 0; j < duration; j++) {
+            const tdEl = document.createElement('td');
+            tdEl.classList.add('schedule-cell');
+            tdEl.setAttribute('id', i)
+            trEl.appendChild(tdEl);
         }
+        tbodyEl.appendChild(trEl);
     }
     return tbodyEl;
 }
 
 function onScheduleEditClicked() {
+ // TODO: function
 }
 
 function onScheduleDeleteClicked() {
+// TODO: function
+}
+
+function addNewSchedule() {
+    removeAllChildren(mySchedulesDivEl);
+    createNewScheduleForm();
+}
+
+function createNewScheduleForm() {
+    const formEl = document.createElement('form');
+    formEl.setAttribute('id', 'new-schedule-form');
+    formEl.classList.add('menu-form');
+    formEl.onSubmit = 'return false;';
+
+    const titleEl = document.createElement('input');
+    titleEl.classList.add('text-input');
+    titleEl.placeholder = 'Schedule title';
+    titleEl.setAttribute('name', 'title');
+
+    const durationEl = document.createElement('select');
+    durationEl.setAttribute('name', 'duration');
+    for (let i = 1; i < 8; i ++) {
+        const optionEl = document.createElement('option');
+        optionEl.value = i;
+        optionEl.textContent = i;
+        durationEl.appendChild(optionEl);
+    }
+
+    const buttonEl = createNewScheduleButton();
+    // TODO: buttonEl.addEventListener('click', onCreateNewButtonClicked);
+
+    formEl.appendChild(titleEl);
+    formEl.appendChild(durationEl);
+    formEl.appendChild(document.createElement('br'));
+    formEl.appendChild(buttonEl);
+
+    mySchedulesDivEl.appendChild(formEl);
 }
