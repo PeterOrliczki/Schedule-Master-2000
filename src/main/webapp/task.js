@@ -287,13 +287,15 @@ function onTaskDeleteClicked() {
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onDeleteResponse);
     xhr.addEventListener('error', onNetworkError);
-    xhr.open('GET', 'protected/deletetask?' + params.toString());
+    xhr.open('DELETE', 'protected/tasks?' + params.toString());
     xhr.send();
 }
 
 function onDeleteResponse() {
     if(this.status === OK) {
-        newInfo(myTasksDivEl, JSON.parse(this.responseText).message);
+        const response = JSON.parse(this.responseText);
+        alert(response.message);
+        onTasksClicked();
     } else {
         onOtherResponse(myTasksDivEl, this);
     }
@@ -301,9 +303,7 @@ function onDeleteResponse() {
 
 function onTaskEditClicked() {
     removeAllChildren(myTasksDivEl);
-    removeAllChildren(myTasksDivEl);
     const taskId = this.dataset.taskEditId;
-    console.log(taskId);
     const params = new URLSearchParams();
     params.append('id', taskId);
 

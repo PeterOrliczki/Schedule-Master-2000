@@ -79,4 +79,27 @@ public class TasksServlet extends AbstractServlet {
         }
     }
 
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try (Connection connection = getConnection(request.getServletContext())) {
+            TaskDao taskDao = new DatabaseTaskDao(connection);
+            ScheduleDao scheduleDao = new DatabaseScheduleDao(connection);
+            TaskService taskService = new SimpleTaskService(taskDao, scheduleDao);
+
+            User user = (User) request.getSession().getAttribute("user");
+
+            int id = Integer.valueOf(request.getParameter("id"));
+
+            if (taskService.doesRelationExistsTaskId(id)) {
+                taskService.deleteRelationRecordByTaskId(id);
+            }
+
+            taskService.deleteTaskById(id);
+            List<Task> tasks = taskService.findAllByTaskId(user.getId());
+
+            sendMessage(response, HttpServletResponse.SC_OK, "Task succesfully deleted");
+        } catch (SQLException exc) {
+            handleSqlError(response, exc);
+        }
+    }
+
 }
