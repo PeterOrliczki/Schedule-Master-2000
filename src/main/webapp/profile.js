@@ -1,3 +1,7 @@
+function onProfileClicked() {
+  onProfileLoad(getCurrentUser());
+}
+
 function onProfileLoad(user) {
     if (user.role === 'ADMIN') {
       showMenu();
