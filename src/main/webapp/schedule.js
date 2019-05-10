@@ -239,13 +239,14 @@ function onScheduleResponse() {
         const scheduleDto = JSON.parse(this.responseText);
         const schedule = scheduleDto.schedule;
         const tasks = scheduleDto.tasks;
-        onScheduleLoad(schedule, tasks);
+        const allTasks = scheduleDto.allTasks;
+        onScheduleLoad(schedule, tasks, allTasks);
     } else {
         onOtherResponse(mySchedulesDivEl, this);
     }
 }
 
-function onScheduleLoad(schedule, tasks) {
+function onScheduleLoad(schedule, tasks, allTasks) {
     const tableEl = document.createElement('table');
     tableEl.setAttribute('id', 'schedules-table');
     const theadEl = createScheduleTableHeader(schedule);
@@ -256,7 +257,7 @@ function onScheduleLoad(schedule, tasks) {
     mySchedulesDivEl.appendChild(tableEl);
     addSchedulesToSchedule(tasks);
     debugger;
-    const formEl = createNewTaskAddForm(schedule, tasks);
+    const formEl = createNewTaskAddForm(schedule, tasks, allTasks);
     formEl.setAttribute('id', 'new-task-add-form');
     formEl.classList.add('menu-form');
     formEl.onSubmit = 'return false;';
@@ -395,7 +396,7 @@ function onCreateNewButtonClicked() {
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onNewScheduleResponse);
     xhr.addEventListener('error', onNetworkError);
-    xhr.open('POST', 'protected/schedule');
+    xhr.open('POST', 'protected/schedules');
     xhr.send(params);
 }
 
@@ -471,7 +472,7 @@ function onScheduleEditSubmitResponse() {
    }
 }
 
-function createNewTaskAddForm(schedule, tasks) {
+function createNewTaskAddForm(schedule, tasks, allTasks) {
     const formEl = document.createElement('form');
 
     const pEl = document.createElement('p');
@@ -485,11 +486,11 @@ function createNewTaskAddForm(schedule, tasks) {
     const tableEl = document.getElementById('schedules-table');
     const cells = tableEl.rows.namedItem('row-schedule-header').cells;
 
-    for (let i = 0; i < tasks.length; i++) {
-        const task = tasks[i];
+    for (let i = 0; i < allTasks.length; i++) {
+        const task = allTasks[i];
         const optionEl = document.createElement('option');
         optionEl.value = task.id;
-        optionEl.textContent = task.title;
+        optionEl.textContent = task.title + ' (' + task.start + ':00' + ' - ' + task.end + ':00' + ')';
         taskSelectEl.appendChild(optionEl);
     }
 
@@ -510,16 +511,21 @@ function createNewTaskAddForm(schedule, tasks) {
     buttonEl.dataset.scheduleId = schedule.id;
 
     formEl.appendChild(taskSelectEl);
+    formEl.appendChild(document.createElement('br'));
     formEl.appendChild(daySelectEl);
     formEl.appendChild(document.createElement('br'));
     formEl.appendChild(buttonEl);
+    formEl.appendChild(document.createElement('br'));
     return formEl;
 }
 
 function onAddTaskToScheduleClicked() {
+    debugger;
     const formEl = document.forms['new-task-add-form'];
     const taskSelectEl = formEl.querySelector('select[name="task-select"]');
     const daySelectEl = formEl.querySelector('select[name="day-select"]');
+
+    removeAllChildren(mySchedulesDivEl);
 
     const taskId = taskSelectEl.value;
     const columnNumber = daySelectEl.value;
@@ -529,17 +535,20 @@ function onAddTaskToScheduleClicked() {
     params.append('scheduleId', this.dataset.scheduleId);
 
     const xhr = new XMLHttpRequest();
-    xhr.addEventListener('load', onNewScheduleResponse);
+    xhr.addEventListener('load', onAddTaskToScheduleResponse);
     xhr.addEventListener('error', onNetworkError);
-    xhr.open('POST', 'protected/schedules');
+    xhr.open('POST', 'protected/schedule');
     xhr.send(params);
 }
 
 function onAddTaskToScheduleResponse() {
     if (this.status === OK) {
-      const response = JSON.parse(this.responseText);
-      alert(response.message);
-      return;
+       alert('Task added.');
+       const scheduleDto = JSON.parse(this.responseText);
+       const schedule = scheduleDto.schedule;
+       const tasks = scheduleDto.tasks;
+       const allTasks = scheduleDto.allTasks;
+       onScheduleLoad(schedule, tasks, allTasks);
    } else {
        onOtherResponse(mySchedulesDivEl, this);
    }

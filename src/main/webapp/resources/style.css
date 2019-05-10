@@ -263,7 +263,7 @@ select {
     margin: 0 auto;
     margin-top: 20px;
     border: 1px solid transparent;
-    padding: 5px 15px;
+    padding: 15px 15px;
     color: #ffffff;
     text-decoration: none;
     cursor: pointer;
@@ -355,6 +355,7 @@ p {
 
 .error {
     color: red;
+    padding: 10px;
     font-weight: bold
 }
 

@@ -1,6 +1,7 @@
 package com.codecool.web.service.simple;
 
 import com.codecool.web.dao.ScheduleDao;
+import com.codecool.web.dao.database.DatabaseTaskDao;
 import com.codecool.web.dto.ScheduleDto;
 import com.codecool.web.model.Role;
 import com.codecool.web.model.Schedule;
@@ -51,7 +52,8 @@ public final class SimpleScheduleService implements ScheduleService {
         if (scheduleDto.getSchedule() == null) {
             Schedule schedule = findByScheduleId(scheduleId);
             List<Task> tasks = new ArrayList<>();
-            scheduleDto = new ScheduleDto(schedule, tasks);
+            List<Task> allTasks = scheduleDto.getAllTasks();
+            scheduleDto = new ScheduleDto(schedule, tasks, allTasks);
         }
         return scheduleDto;
     }

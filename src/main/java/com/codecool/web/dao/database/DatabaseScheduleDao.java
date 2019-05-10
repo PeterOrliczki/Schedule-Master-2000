@@ -88,6 +88,7 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
     @Override
     public ScheduleDto findUserSchedulesWithTaskRelation(int userId, int scheduleId) throws SQLException {
         List<Task> tasks = new ArrayList<>();
+        List<Task> allTasks = taskDao.findAllByUserId(userId);
         Schedule schedule = null;
         String sql = "SELECT * FROM tasks JOIN (SELECT schedules.schedule_id, schedule_title, schedule_duration, schedule_visibility, column_number, task_id\n" +
             "FROM schedules JOIN schedule_tasks ON schedules.schedule_id = schedule_tasks.schedule_id) AS temp_table ON tasks.task_id = temp_table.task_id\n" +
@@ -104,7 +105,7 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
                 }
             }
         }
-        return new ScheduleDto(schedule, tasks);
+        return new ScheduleDto(schedule, tasks, allTasks);
     }
 
     @Override
@@ -166,8 +167,8 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
         connection.setAutoCommit(false);
         String sql = "INSERT INTO schedule_tasks(schedule_id, task_id, column_number) VALUES (?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setInt(1, taskId);
-            statement.setInt(2, scheduleId);
+            statement.setInt(1, scheduleId);
+            statement.setInt(2, taskId);
             statement.setInt(3, columnNumber);
             executeInsert(statement);
             connection.commit();

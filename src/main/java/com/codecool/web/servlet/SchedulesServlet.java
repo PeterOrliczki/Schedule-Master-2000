@@ -3,6 +3,7 @@ package com.codecool.web.servlet;
 import com.codecool.web.dao.ScheduleDao;
 import com.codecool.web.dao.database.DatabaseScheduleDao;
 import com.codecool.web.dto.ScheduleListDto;
+import com.codecool.web.model.Schedule;
 import com.codecool.web.model.User;
 import com.codecool.web.service.ScheduleService;
 import com.codecool.web.service.exception.ServiceException;
@@ -19,7 +20,6 @@ import java.sql.SQLException;
 @WebServlet("/protected/schedules")
 public class SchedulesServlet extends AbstractServlet {
 
-    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             ScheduleDao scheduleDao = new DatabaseScheduleDao(connection);
@@ -36,24 +36,19 @@ public class SchedulesServlet extends AbstractServlet {
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try (Connection connection = getConnection(req.getServletContext())) {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try (Connection connection = getConnection(request.getServletContext())) {
             ScheduleDao scheduleDao = new DatabaseScheduleDao(connection);
-            User user = (User) req.getSession().getAttribute("user");
+
             ScheduleService scheduleService = new SimpleScheduleService(scheduleDao);
+            User user = (User)request.getSession().getAttribute("user");
+            String title = request.getParameter("title");
+            int duration = Integer.valueOf(request.getParameter("duration"));
 
-            int taskId = Integer.parseInt(req.getParameter("task-id"));
-            int columnNumber = Integer.parseInt(req.getParameter("columnNumber"));
-            int scheduleId = Integer.parseInt(req.getParameter("scheduleId"));
-
-
-
-            sendMessage(resp, HttpServletResponse.SC_OK, "Task added.");
+            scheduleService.addSchedule(user.getId(), title, duration);
+            sendMessage(response, HttpServletResponse.SC_OK, "Schedule added.");
         } catch (SQLException exc) {
-            handleSqlError(resp, exc);
-        /*} catch (ServiceException e) {
-            sendMessage(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());*/
+            handleSqlError(response, exc);
         }
     }
 }

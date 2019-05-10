@@ -38,19 +38,22 @@ public class ScheduleServlet extends AbstractServlet {
         }
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try (Connection connection = getConnection(request.getServletContext())) {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try (Connection connection = getConnection(req.getServletContext())) {
             ScheduleDao scheduleDao = new DatabaseScheduleDao(connection);
-
+            User user = (User) req.getSession().getAttribute("user");
             ScheduleService scheduleService = new SimpleScheduleService(scheduleDao);
-            User user = (User)request.getSession().getAttribute("user");
-            String title = request.getParameter("title");
-            int duration = Integer.valueOf(request.getParameter("duration"));
 
-            scheduleService.addSchedule(user.getId(), title, duration);
-            sendMessage(response, HttpServletResponse.SC_OK, "Schedule added.");
+            int taskId = Integer.parseInt(req.getParameter("task-id"));
+            int columnNumber = Integer.parseInt(req.getParameter("columnNumber"));
+            int scheduleId = Integer.parseInt(req.getParameter("scheduleId"));
+
+            scheduleService.addTaskToSchedule(taskId, columnNumber, scheduleId);
+            ScheduleDto schedule = scheduleService.findUserSchedulesWithTaskRelation(user.getId(), scheduleId);
+
+            sendMessage(resp, HttpServletResponse.SC_OK, schedule);
         } catch (SQLException exc) {
-            handleSqlError(response, exc);
+            handleSqlError(resp, exc);
         }
     }
 
