@@ -57,6 +57,11 @@ public final class SimpleScheduleService implements ScheduleService {
     }
 
     @Override
+    public void addTaskToSchedule(int taskId, int scheduleId, int columnNumber) throws SQLException {
+        scheduleDao.addTaskToSchedule(taskId, scheduleId, columnNumber);
+    }
+
+    @Override
     public boolean doesRelationExistToScheduleId(int id) throws SQLException {
         return scheduleDao.doesRelationExistToScheduleId(id);
     }

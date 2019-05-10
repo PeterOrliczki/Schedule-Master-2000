@@ -2,7 +2,6 @@ package com.codecool.web.dao;
 
 import com.codecool.web.dto.ScheduleDto;
 import com.codecool.web.model.Schedule;
-import com.codecool.web.model.User;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -20,6 +19,8 @@ public interface ScheduleDao {
     Schedule findByUserId(int id) throws SQLException;
 
     ScheduleDto findUserSchedulesWithTaskRelation(int userId, int scheduleId) throws SQLException;
+
+    void addTaskToSchedule(int taskId, int scheduleId, int columnNumber) throws SQLException;
 
     boolean doesRelationExistToScheduleId(int id) throws SQLException;
 
