@@ -10,6 +10,9 @@ abstract class AbstractModel {
         this.id = id;
     }
 
+    protected AbstractModel() {
+    }
+
     public int getId() {
         return id;
     }

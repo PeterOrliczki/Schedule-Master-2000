@@ -25,6 +25,10 @@ public final class Schedule extends AbstractModel {
         this.visibility = visibility;
     }
 
+    public Schedule() {
+
+    }
+
     public String getTitle() {
         return title;
     }
