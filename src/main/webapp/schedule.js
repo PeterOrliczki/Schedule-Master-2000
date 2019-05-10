@@ -1,3 +1,94 @@
+function onAllSchedulesClicked() {
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onAllSchedulesLoad);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('GET', 'protected/schedules');
+    xhr.send();
+}
+
+function onAllSchedulesLoad() {
+    if (this.status === OK) {
+        const schedulesDto = JSON.parse(this.responseText);
+        const schedules = schedulesDto.publicSchedules;
+        createAllSchedulesDisplay(schedules);
+        showContents(['all-schedules-content']);
+    } else {
+        onOtherResponse(allSchedulesDivEl, this);
+    }
+}
+
+function createAllSchedulesDisplay(schedules) {
+    if (schedules.length === 0) {
+      removeAllChildren(allSchedulesDivEl);
+      const pEl = document.createElement('p');
+      pEl.setAttribute('id', 'schedule-info');
+      pEl.textContent = 'There are no public schedules yet.'
+      allSchedulesDivEl.appendChild(pEl);
+    } else {
+      removeAllChildren(allSchedulesDivEl);
+      const tableEl = document.createElement('table');
+      tableEl.setAttribute('id', 'edit-schedule-table');
+      const theadEl = createAllSchedulesTableHeader();
+      const tbodyEl = createAllSchedulesTableBody(schedules);
+      tableEl.appendChild(theadEl);
+      tableEl.appendChild(tbodyEl);
+      allSchedulesDivEl.appendChild(tableEl);
+    }
+}
+
+function createAllSchedulesTableHeader() {
+    const titleThEl = document.createElement('th');
+    titleThEl.textContent = 'Title';
+
+    const durationThEl = document.createElement('th');
+    durationThEl.textContent = 'Duration';
+
+    const visibilityThEl = document.createElement('th');
+    visibilityThEl.textContent = 'Published';
+
+    const trEl = document.createElement('tr');
+    trEl.appendChild(titleThEl);
+    trEl.appendChild(durationThEl);
+    trEl.appendChild(visibilityThEl);
+
+    const theadEl = document.createElement('thead');
+    theadEl.appendChild(trEl);
+    return theadEl;
+}
+
+function createAllSchedulesTableBody(schedules) {
+  const tbodyEl = document.createElement('tbody');
+
+  for (let i = 0; i < schedules.length; i++) {
+    const schedule = schedules[i];
+
+    const trEl = document.createElement('tr');
+    trEl.setAttribute('id', 'row-schedule-id-' + schedule.id);
+
+    const titleTdEl = document.createElement('td');
+    const titleAEl = document.createElement('a');
+    titleAEl.href = 'javascript:void(0)';
+    titleAEl.dataset.id = schedule.id;
+    titleAEl.onclick = onScheduleTitleClicked;
+    titleAEl.textContent = schedule.title;
+    titleTdEl.appendChild(titleAEl);
+
+    const durationTdEl = document.createElement('td');
+    durationTdEl.textContent = schedule.duration;
+
+    const visibilityTdEl = document.createElement('td');
+    visibilityTdEl.textContent = schedule.visibility;
+
+    trEl.appendChild(titleTdEl);
+    trEl.appendChild(durationTdEl);
+    trEl.appendChild(visibilityTdEl);
+
+    tbodyEl.appendChild(trEl);
+  }
+
+  return tbodyEl;
+}
+
 function onSchedulesClicked() {
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onSchedulesLoad);
@@ -119,6 +210,7 @@ function createSchedulesTableHeader() {
     buttonTwoThEl.textContent = 'Delete';
 
     const trEl = document.createElement('tr');
+
     trEl.appendChild(titleThEl);
     trEl.appendChild(durationThEl);
     trEl.appendChild(visibilityThEl);
@@ -163,6 +255,13 @@ function onScheduleLoad(schedule, tasks) {
     removeAllChildren(mySchedulesDivEl);
     mySchedulesDivEl.appendChild(tableEl);
     addSchedulesToSchedule(tasks);
+    debugger;
+    const formEl = createNewTaskAddForm(schedule, tasks);
+    formEl.setAttribute('id', 'new-task-add-form');
+    formEl.classList.add('menu-form');
+    formEl.onSubmit = 'return false;';
+    mySchedulesDivEl.insertBefore(formEl, tableEl);
+    showContents(['my-schedules-content'])
 }
 
 function createScheduleTableHeader(schedule) {
@@ -170,6 +269,7 @@ function createScheduleTableHeader(schedule) {
     const duration = schedule.duration;
     const theadEl = document.createElement('thead');
     const trEl = document.createElement('tr');
+    trEl.setAttribute('id', 'row-schedule-header');
     const timeThEl = document.createElement('th');
     timeThEl.classList.add('schedule-th');
     timeThEl.textContent = 'Time';
@@ -370,3 +470,78 @@ function onScheduleEditSubmitResponse() {
        onOtherResponse(mySchedulesDivEl, this);
    }
 }
+
+function createNewTaskAddForm(schedule, tasks) {
+    const formEl = document.createElement('form');
+
+    const pEl = document.createElement('p');
+    pEl.textContent = 'Select a task to add: ';
+    formEl.appendChild(pEl);
+
+    const taskSelectEl = document.createElement('select');
+    taskSelectEl.setAttribute('name', 'task-select');
+    taskSelectEl.classList.add('task-select');
+
+    const tableEl = document.getElementById('schedules-table');
+    const cells = tableEl.rows.namedItem('row-schedule-header').cells;
+
+    for (let i = 0; i < tasks.length; i++) {
+        const task = tasks[i];
+        const optionEl = document.createElement('option');
+        optionEl.value = task.id;
+        optionEl.textContent = task.title;
+        taskSelectEl.appendChild(optionEl);
+    }
+
+    const daySelectEl = document.createElement('select');
+    daySelectEl.setAttribute('name', 'day-select');
+    daySelectEl.classList.add('task-select');
+    for (let i = 1; i < cells.length; i ++) {
+        const optionEl = document.createElement('option');
+        optionEl.value = i;
+        optionEl.textContent = cells[i].textContent;
+        daySelectEl.appendChild(optionEl);
+    }
+
+    const buttonEl = document.createElement('button');
+    buttonEl.textContent = 'Add to schedule';
+    buttonEl.classList.add('form-button');
+    buttonEl.addEventListener('click', onAddTaskToScheduleClicked);
+    buttonEl.dataset.scheduleId = schedule.id;
+
+    formEl.appendChild(taskSelectEl);
+    formEl.appendChild(daySelectEl);
+    formEl.appendChild(document.createElement('br'));
+    formEl.appendChild(buttonEl);
+    return formEl;
+}
+
+function onAddTaskToScheduleClicked() {
+    const formEl = document.forms['new-task-add-form'];
+    const taskSelectEl = formEl.querySelector('select[name="task-select"]');
+    const daySelectEl = formEl.querySelector('select[name="day-select"]');
+
+    const taskId = taskSelectEl.value;
+    const columnNumber = daySelectEl.value;
+    const params = new URLSearchParams();
+    params.append('task-id', taskId);
+    params.append('columnNumber', columnNumber);
+    params.append('scheduleId', this.dataset.scheduleId);
+
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onNewScheduleResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('POST', 'protected/schedules');
+    xhr.send(params);
+}
+
+function onAddTaskToScheduleResponse() {
+    if (this.status === OK) {
+      const response = JSON.parse(this.responseText);
+      alert(response.message);
+      return;
+   } else {
+       onOtherResponse(mySchedulesDivEl, this);
+   }
+}
+

@@ -243,6 +243,21 @@ select {
     background-color: transparent;
 }
 
+.task-select {
+    color: #444;
+    font: 14px/24px 'Lato', Helvetica, Arial, sans-serif, 'sans-serif';
+    border: none;
+    outline: none;
+    text-align: center;
+    width: 40%;
+    padding: 10px 5px 10px 5px;
+    background-color: transparent;
+}
+
+.task-select:focus {
+    color: #000;
+}
+
 .form-button {
     background-color: #e57873;
     margin: 0 auto;
