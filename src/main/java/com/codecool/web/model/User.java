@@ -4,10 +4,10 @@ import java.util.Objects;
 
 public final class User extends AbstractModel {
 
-    private final String name;
-    private final String email;
-    private final String password;
-    private final Role role;
+    private String name;
+    private String email;
+    private String password;
+    private Role role;
 
     public User(int id, String name, String email, String password, Role role) {
         super(id);
@@ -15,6 +15,10 @@ public final class User extends AbstractModel {
         this.email = email;
         this.password = password;
         this.role = role;
+    }
+
+    public User() {
+
     }
 
     public String getName() {
