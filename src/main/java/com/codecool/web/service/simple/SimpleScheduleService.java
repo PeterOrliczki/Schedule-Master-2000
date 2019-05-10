@@ -73,6 +73,9 @@ public final class SimpleScheduleService implements ScheduleService {
 
     @Override
     public void deleteByScheduleId(int id) throws SQLException {
+        while (doesRelationExistToScheduleId(id)) {
+            deleteRelationRecordByScheduleId(id);
+        }
         scheduleDao.deleteByScheduleId(id);
     }
 
