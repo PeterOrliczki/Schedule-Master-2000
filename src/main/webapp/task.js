@@ -29,6 +29,7 @@ function createTasksDisplay(tasks) {
     } else {
         removeAllChildren(myTasksDivEl);
         const tableEl = document.createElement('table');
+        tableEl.setAttribute('id', 'edit-task-table');
         const theadEl = createTasksTableHeader();
         const tbodyEl = createTasksTableBody(tasks);
         tableEl.appendChild(theadEl);
@@ -52,6 +53,12 @@ function createTasksTableHeader() {
     const visibilityTdEl = document.createElement('th');
     visibilityTdEl.textContent = 'Content';
 
+    const startTdEl = document.createElement('th');
+    startTdEl.textContent = 'Start';
+
+    const endTdEl = document.createElement('th');
+    endTdEl.textContent = 'End';
+
     const buttonOneTdEl = document.createElement('th');
     buttonOneTdEl.textContent = 'Edit';
 
@@ -61,6 +68,8 @@ function createTasksTableHeader() {
     const trEl = document.createElement('tr');
     trEl.appendChild(titleTdEl);
     trEl.appendChild(visibilityTdEl);
+    trEl.appendChild(startTdEl);
+    trEl.appendChild(endTdEl);
     trEl.appendChild(buttonOneTdEl);
     trEl.appendChild(buttonTwoTdEl);
 
@@ -84,16 +93,22 @@ function createTasksTableBody(tasks) {
         titleTdEl.appendChild(titleAEl);
 
         const contentTdEl = document.createElement('td');
-        const contentAEl = document.createElement('a');
-        contentAEl.textContent = task.content;
-        contentAEl.setAttribute('id', task.id);
-        contentTdEl.appendChild(contentAEl);
+        contentTdEl.textContent = task.content;
+        contentTdEl.setAttribute('id', task.id);
+
+        const startTdEl = document.createElement('td');
+        startTdEl.textContent = task.start;
+        startTdEl.setAttribute('id', task.id);
+
+        const endTdEl = document.createElement('td');
+        endTdEl.textContent = task.end;
+        endTdEl.setAttribute('id', task.id);
 
         const buttonEditEl = document.createElement('i');
         buttonEditEl.classList.add('icon-edit');
-        buttonEditEl.setAttribute('id', task.id);
+
         buttonEditEl.dataset.taskEditId = task.id;
-        buttonEditEl.addEventListener('click', onTaskEditClicked);
+        buttonEditEl.addEventListener('click', onTaskEditButtonClicked);
 
         const buttonDeleteEl = document.createElement('i');
         buttonDeleteEl.classList.add('icon-trash');
@@ -103,12 +118,16 @@ function createTasksTableBody(tasks) {
 
         const buttonOneTdEl = document.createElement('td');
         buttonOneTdEl.appendChild(buttonEditEl);
+        buttonOneTdEl.setAttribute('id', 'task-edit-button-' + task.id);
         const buttonTwoTdEl = document.createElement('td');
         buttonTwoTdEl.appendChild(buttonDeleteEl);
 
         const trEl = document.createElement('tr');
+        trEl.setAttribute('id', 'row-task-id-' + task.id);
         trEl.appendChild(titleTdEl);
         trEl.appendChild(contentTdEl);
+        trEl.appendChild(startTdEl);
+        trEl.appendChild(endTdEl);
         trEl.appendChild(buttonOneTdEl);
         trEl.appendChild(buttonTwoTdEl);
 
@@ -305,75 +324,66 @@ function onTaskEditResponse() {
 }
 
 
-function onTaskTitleEditLoad(task) {
-    removeAllChildren(myTasksDivEl);
-    const tableEl = document.createElement('table');
-    const theadEl = createEditTaskHeader();
-    const tbodyEl = createEditTaskBody(task);
-    tableEl.appendChild(theadEl);
-    tableEl.appendChild(tbodyEl);
-    myTasksDivEl.appendChild(tableEl);
+function onTaskEditButtonClicked() {
+    const id = this.dataset.taskEditId;
+    const tableEl = document.getElementById('edit-task-table');
+    const cells = tableEl.rows.namedItem('row-task-id-' + id).cells;
+
+    for (let i = 0; i < cells.length - 2; i++) {
+        const tdEl = cells[i];
+        const oldValue = tdEl.textContent;
+        tdEl.textContent = '';
+        tdEl.appendChild(createPopUpInput(i, oldValue));
+    }
+
+    const buttonEditTdEl = document.getElementById('task-edit-button-' + id);
+    const saveButtonEl = document.createElement('i');
+    saveButtonEl.classList.add('icon-save');
+    saveButtonEl.dataset.taskId = id;
+    saveButtonEl.addEventListener('click', onSaveButtonClicked);
+    buttonEditTdEl.innerHTML = '';
+    buttonEditTdEl.appendChild(saveButtonEl);
 }
 
-function createEditTaskHeader() {
-    const titleTdEl = document.createElement('th');
-    titleTdEl.textContent = 'Title';
-
-    const contentTdEl = document.createElement('th');
-    contentTdEl.textContent = 'Content / Edit';
-
-    const trEl = document.createElement('tr');
-    trEl.appendChild(titleTdEl);
-    trEl.appendChild(contentTdEl);
-
-    const theadEl = document.createElement('thead');
-    theadEl.appendChild(trEl);
-    return theadEl;
+function createPopUpInput(id, textContent) {
+    const inputEl = document.createElement('input');
+    inputEl.classList.add('pop-up-box');
+    inputEl.name = 'input-task-id-' + id;
+    inputEl.setAttribute('id', 'task-input-' + id);
+    inputEl.value = textContent;
+    return inputEl;
 }
 
-function createEditTaskBody(task) {
-	const titleList = ['Task title:', 'Task content:', 'Task beginning:', 'Task ending:'];
-	const contentList = [task.title, task.content, task.start, task.end];
+function onSaveButtonClicked() {
+    const id = this.dataset.taskId;
+    const user = getCurrentUser();
 
-	const tbodyEl = document.createElement('tbody');
-	for (let i = 0; i < 4; i++) {
+    const inputs = document.getElementsByClassName('pop-up-box');
 
-        const titleTdEl = document.createElement('td');
-        titleTdEl.textContent = titleList[i];
+    const data = {};
+    data.id = id;
+    data.title = inputs[0].value;
+    data.content = inputs[1].value;
+    data.start = inputs[2].value;
+    data.end = inputs[3].value
+    data.userId = user.id;
+    const json = JSON.stringify(data);
 
-
-        const contentTdEl = document.createElement('td');
-        contentTdEl.setAttribute('id', 'task-content' + task.id);
-        contentTdEl.textContent = contentList[i];
-        contentTdEl.addEventListener('click', onTaskFieldEdit);
-
-        const trEl = document.createElement('tr');
-        trEl.appendChild(titleTdEl);
-        trEl.appendChild(contentTdEl);
-
-        tbodyEl.appendChild(trEl);
-	}
-	return tbodyEl;
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onTaskEditSubmitResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('PUT', 'protected/tasks');
+    xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhr.send(json);
 }
 
 
-function onTaskFieldEdit() {
-    const oldValueEl = document.getElementById('task-content1');
-    console.log(oldValueEl);
-    removeAllChildren(oldValueEl);
-    oldValueEl.removeEventListener('click', onTaskFieldEdit);
-
-    const inputEdEl = document.createElement("input"); //input element, text
-    inputEdEl.setAttribute("type","text");
-    inputEdEl.classList.add("text-input");
-    inputEdEl.placeholder = "New data";
-    inputEdEl.setAttribute("name","task-edit");
-
-    const buttonEditEl = document.createElement('i');
-    buttonEditEl.classList.add('icon-edit');
-    buttonEditEl.setAttribute('id', 'task-content-edit');
-    //buttonEditEl.addEventListener('click', onTaskFieldEdit);
-
-    oldValueEl.appendChild(inputEdEl);
-    oldValueEl.appendChild(buttonEditEl);
+function onTaskEditSubmitResponse() {
+   if (this.status === OK) {
+      const response = JSON.parse(this.responseText);
+      alert(response.message);
+      onTasksClicked();
+   } else {
+       onOtherResponse(mySchedulesDivEl, this);
+   }
 }

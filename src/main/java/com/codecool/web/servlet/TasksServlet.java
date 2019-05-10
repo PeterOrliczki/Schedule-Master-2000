@@ -4,12 +4,9 @@ import com.codecool.web.dao.ScheduleDao;
 import com.codecool.web.dao.TaskDao;
 import com.codecool.web.dao.database.DatabaseScheduleDao;
 import com.codecool.web.dao.database.DatabaseTaskDao;
-import com.codecool.web.model.Schedule;
 import com.codecool.web.model.Task;
 import com.codecool.web.model.User;
-import com.codecool.web.service.ScheduleService;
 import com.codecool.web.service.TaskService;
-import com.codecool.web.service.simple.SimpleScheduleService;
 import com.codecool.web.service.simple.SimpleTaskService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -76,7 +73,7 @@ public class TasksServlet extends AbstractServlet {
             taskService.updateStartById(task.getId(), task.getStart());
             taskService.updateEndById(task.getId(), task.getEnd());
 
-            sendMessage(resp, HttpServletResponse.SC_OK, "Schedule updated.");
+            sendMessage(resp, HttpServletResponse.SC_OK, "Task updated.");
         } catch (SQLException exc) {
             handleSqlError(resp, exc);
         }

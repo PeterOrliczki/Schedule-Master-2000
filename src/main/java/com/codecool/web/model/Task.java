@@ -4,11 +4,11 @@ import java.util.Objects;
 
 public final class Task extends AbstractModel {
 
-    private final String title;
-    private final String content;
-    private final int start;
-    private final int end;
-    private final int userId;
+    private String title;
+    private String content;
+    private int start;
+    private int end;
+    private int userId;
     private int columnNumber;
 
     public Task(int id, int userId, String title, String content, int start, int end) {
@@ -18,6 +18,10 @@ public final class Task extends AbstractModel {
         this.content = content;
         this.start = start;
         this.end = end;
+    }
+
+    public Task() {
+
     }
 
     public String getTitle() {
