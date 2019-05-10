@@ -30,11 +30,16 @@ function createSchedulesDisplay(schedules) {
     } else {
       removeAllChildren(mySchedulesDivEl);
       const tableEl = document.createElement('table');
+      tableEl.setAttribute('id', 'edit-schedule-table');
       const theadEl = createSchedulesTableHeader();
       const tbodyEl = createSchedulesTableBody(schedules);
       tableEl.appendChild(theadEl);
       tableEl.appendChild(tbodyEl);
-      mySchedulesDivEl.appendChild(tableEl);
+      const hiddenFormEl = document.createElement('form');
+      hiddenFormEl.onSubmit = 'return false';
+      hiddenFormEl.setAttribute('id', 'schedule-edit-form');
+      hiddenFormEl.appendChild(tableEl);
+      mySchedulesDivEl.appendChild(hiddenFormEl);
       mySchedulesDivEl.appendChild(buttonEl);
     }
 }
@@ -52,6 +57,9 @@ function createSchedulesTableBody(schedules) {
   for (let i = 0; i < schedules.length; i++) {
     const schedule = schedules[i];
 
+    const trEl = document.createElement('tr');
+    trEl.setAttribute('id', 'row-schedule-id-' + schedule.id);
+
     const titleTdEl = document.createElement('td');
     const titleAEl = document.createElement('a');
     titleAEl.href = 'javascript:void(0)';
@@ -60,33 +68,33 @@ function createSchedulesTableBody(schedules) {
     titleAEl.textContent = schedule.title;
     titleTdEl.appendChild(titleAEl);
 
+    const durationTdEl = document.createElement('td');
+    durationTdEl.textContent = schedule.duration;
+
     const visibilityTdEl = document.createElement('td');
-    if (schedule.visibility === 'true') {
-      visibilityTdEl.textContent = 'Public';
-    } else {
-      visibilityTdEl.textContent = 'Private';
-    }
+    visibilityTdEl.textContent = schedule.visibility;
 
     const buttonEditEl = document.createElement('i');
     buttonEditEl.classList.add('icon-edit');
     buttonEditEl.dataset.scheduleId = schedule.id;
-    buttonEditEl.addEventListener('click', onScheduleEditClicked);
+    buttonEditEl.addEventListener('click', onScheduleEditButtonClicked);
 
     const buttonDeleteEl = document.createElement('i');
     buttonDeleteEl.classList.add('icon-trash');
     buttonDeleteEl.dataset.scheduleId = schedule.id;
     buttonDeleteEl.addEventListener('click', onScheduleDeleteClicked);
 
-    const buttonOneTdEl = document.createElement('td');
-    buttonOneTdEl.appendChild(buttonEditEl);
-    const buttonTwoTdEl = document.createElement('td');
-    buttonTwoTdEl.appendChild(buttonDeleteEl);
+    const buttonEditTdEl = document.createElement('td');
+    buttonEditTdEl.appendChild(buttonEditEl);
+    buttonEditTdEl.setAttribute('id', 'schedule-edit-button-' + schedule.id);
+    const buttonDelTdEl = document.createElement('td');
+    buttonDelTdEl.appendChild(buttonDeleteEl);
 
-    const trEl = document.createElement('tr');
     trEl.appendChild(titleTdEl);
+    trEl.appendChild(durationTdEl);
     trEl.appendChild(visibilityTdEl);
-    trEl.appendChild(buttonOneTdEl);
-    trEl.appendChild(buttonTwoTdEl);
+    trEl.appendChild(buttonEditTdEl);
+    trEl.appendChild(buttonDelTdEl);
 
     tbodyEl.appendChild(trEl);
   }
@@ -98,8 +106,11 @@ function createSchedulesTableHeader() {
     const titleThEl = document.createElement('th');
     titleThEl.textContent = 'Title';
 
+    const durationThEl = document.createElement('th');
+    durationThEl.textContent = 'Duration';
+
     const visibilityThEl = document.createElement('th');
-    visibilityThEl.textContent = 'Visibility';
+    visibilityThEl.textContent = 'Published';
 
     const buttonOneThEl = document.createElement('th');
     buttonOneThEl.textContent = 'Edit';
@@ -109,6 +120,7 @@ function createSchedulesTableHeader() {
 
     const trEl = document.createElement('tr');
     trEl.appendChild(titleThEl);
+    trEl.appendChild(durationThEl);
     trEl.appendChild(visibilityThEl);
     trEl.appendChild(buttonOneThEl);
     trEl.appendChild(buttonTwoThEl);
@@ -150,7 +162,7 @@ function onScheduleLoad(schedule, tasks) {
     tableEl.appendChild(tbodyEl);
     removeAllChildren(mySchedulesDivEl);
     mySchedulesDivEl.appendChild(tableEl);
-    addTasksToSchedule(tasks);
+    addSchedulesToSchedule(tasks);
 }
 
 function createScheduleTableHeader(schedule) {
@@ -189,7 +201,7 @@ function createScheduleTableBody(schedule) {
     return tbodyEl;
 }
 
-function addTasksToSchedule(tasks) {
+function addSchedulesToSchedule(tasks) {
     for (let i = 0; i < tasks.length; i++) {
         const task = tasks[i];
         const duration = task.end - task.start;
@@ -201,9 +213,6 @@ function addTasksToSchedule(tasks) {
     }
 }
 
-function onScheduleEditClicked() {
- // TODO: function
-}
 
 function onScheduleDeleteClicked() {
     const result = confirm('Click OK to confirm.');
@@ -295,4 +304,66 @@ function onNewScheduleResponse() {
     } else {
         onOtherResponse(mySchedulesDivEl, this);
     }
+}
+
+function onScheduleEditButtonClicked() {
+    const id = this.dataset.scheduleId;
+    const tableEl = document.getElementById('edit-schedule-table');
+    const cells = tableEl.rows.namedItem('row-schedule-id-' + id).cells;
+
+    for (let i = 0; i < cells.length - 2; i++) {
+        const tdEl = cells[i];
+        const oldValue = tdEl.textContent;
+        tdEl.textContent = '';
+        tdEl.appendChild(createPopUpInput(i, oldValue));
+    }
+
+    const buttonEditTdEl = document.getElementById('schedule-edit-button-' + id);
+    const saveButtonEl = document.createElement('i');
+    saveButtonEl.classList.add('icon-save');
+    saveButtonEl.dataset.scheduleId = id;
+    saveButtonEl.addEventListener('click', onSaveButtonClicked);
+    buttonEditTdEl.innerHTML = '';
+    buttonEditTdEl.appendChild(saveButtonEl);
+}
+
+function createPopUpInput(id, textContent) {
+    const inputEl = document.createElement('input');
+    inputEl.classList.add('pop-up-box');
+    inputEl.name = 'input-schedule-id-' + id;
+    inputEl.setAttribute('id', 'schedule-input-' + id);
+    inputEl.value = textContent;
+    return inputEl;
+}
+
+function onSaveButtonClicked() {
+    const id = this.dataset.scheduleId;
+    const user = getCurrentUser();
+
+    const inputs = document.getElementsByClassName('pop-up-box');
+
+    const data = {};
+    data.id = id;
+    data.title = inputs[0].value;
+    data.duration = inputs[1].value;
+    data.visibility = inputs[2].value;
+    data.userId = user.id;
+    const json = JSON.stringify(data);
+
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onScheduleEditSubmitResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('PUT', 'protected/schedule');
+    xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+    xhr.send(json);
+}
+
+function onScheduleEditSubmitResponse() {
+   if (this.status === OK) {
+      const response = JSON.parse(this.responseText);
+      alert(response.message);
+      onSchedulesClicked();
+   } else {
+       onOtherResponse(mySchedulesDivEl, this);
+   }
 }

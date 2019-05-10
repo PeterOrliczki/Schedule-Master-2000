@@ -377,16 +377,35 @@ caption {
 }
 
 th {
-  padding: 10px;
-  text-align: center;
-  border-bottom: 1px solid #ddd;
-  font-weight: bold;
+    display: inline-block;
+    padding: 10px;
+    width: 150px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    margin: 0 auto;
+    font-weight: bold;
 }
 td {
-  padding: 10px;
-  text-align: center;
-  vertical-align: middle;
-  border-bottom: 1px solid #ddd;
+    display: inline-block;
+    padding: 10px;
+    width: 150px;
+    text-align: center;
+    vertical-align: middle;
+    margin: 0 auto;
+    border-bottom: 1px solid #ddd;
+}
+
+td input {
+    width: 100%;
+    max-width: 100%;
+    z-index: 1;
+    color: #444;
+    font: 14px/24px 'Lato', Helvetica, Arial, sans-serif, 'sans-serif';
+    border: none;
+    outline: none;
+    text-align: center;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s
 }
 
 .schedule-cell {
@@ -403,6 +422,14 @@ td {
 i {
   font-size: 20px;
   cursor: pointer
+}
+
+.pop-up-box:focus {
+    color: #000;
+}
+
+.hidden-form {
+    display: none;
 }
 
 @media screen and (max-width: 1024px) {
@@ -430,4 +457,16 @@ i {
         font-size: 14px;
         line-height: 24px
     }
+}
+
+/* ANIMATIONS */
+
+@-webkit-keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
 }
