@@ -20,6 +20,8 @@ public interface ScheduleService {
 
     ScheduleDto findUserSchedulesWithTaskRelation(int userId, int scheduleId) throws SQLException;
 
+    void addTaskToSchedule(int taskId, int scheduleId, int columnNumber) throws SQLException;
+
     boolean doesRelationExistToScheduleId(int id) throws SQLException;
 
     void deleteRelationRecordByScheduleId(int id) throws SQLException;
