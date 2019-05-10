@@ -333,19 +333,19 @@ function onTaskEditButtonClicked() {
         const tdEl = cells[i];
         const oldValue = tdEl.textContent;
         tdEl.textContent = '';
-        tdEl.appendChild(createPopUpInput(i, oldValue));
+        tdEl.appendChild(createTPopUpInput(i, oldValue));
     }
 
     const buttonEditTdEl = document.getElementById('task-edit-button-' + id);
     const saveButtonEl = document.createElement('i');
     saveButtonEl.classList.add('icon-save');
     saveButtonEl.dataset.taskId = id;
-    saveButtonEl.addEventListener('click', onSaveButtonClicked);
+    saveButtonEl.addEventListener('click', onTSaveButtonClicked);
     buttonEditTdEl.innerHTML = '';
     buttonEditTdEl.appendChild(saveButtonEl);
 }
 
-function createPopUpInput(id, textContent) {
+function createTPopUpInput(id, textContent) {
     const inputEl = document.createElement('input');
     inputEl.classList.add('pop-up-box');
     inputEl.name = 'input-task-id-' + id;
@@ -354,7 +354,7 @@ function createPopUpInput(id, textContent) {
     return inputEl;
 }
 
-function onSaveButtonClicked() {
+function onTSaveButtonClicked() {
     const id = this.dataset.taskId;
     const user = getCurrentUser();
 
