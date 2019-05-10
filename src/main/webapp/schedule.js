@@ -166,16 +166,18 @@ function onScheduleLoad(schedule, tasks) {
 }
 
 function createScheduleTableHeader(schedule) {
-    const daysList = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    const daysList = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     const duration = schedule.duration;
     const theadEl = document.createElement('thead');
     const trEl = document.createElement('tr');
     const timeThEl = document.createElement('th');
+    timeThEl.classList.add('schedule-th');
     timeThEl.textContent = 'Time';
     trEl.appendChild(timeThEl);
     for (let i = 0; i < duration; i++) {
         const thEl = document.createElement('th');
         thEl.textContent = daysList[i];
+        thEl.classList.add('schedule-th');
         trEl.appendChild(thEl);
     }
     theadEl.appendChild(trEl);
@@ -189,6 +191,7 @@ function createScheduleTableBody(schedule) {
         const trEl = document.createElement('tr');
         const hourTdEl = document.createElement('td');
         hourTdEl.textContent = i + ':00';
+        hourTdEl.classList.add('schedule-cell')
         trEl.appendChild(hourTdEl);
         for (let j = 0; j < duration; j++) {
             const tdEl = document.createElement('td');

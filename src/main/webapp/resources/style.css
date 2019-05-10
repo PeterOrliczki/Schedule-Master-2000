@@ -409,13 +409,23 @@ td input {
 }
 
 .schedule-cell {
-  padding: 10px;
-  text-align: center;
-  vertical-align: middle;
-  border-bottom: 1px solid #ddd;
+    display: table-cell;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 1px solid #ddd;
+}
+
+.schedule-th {
+    display: table-cell;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 1px solid #ddd;
 }
 
 .schedule-cell:hover {
+  color: #444;
   border-bottom: 1px solid #FA4646;
 }
 
