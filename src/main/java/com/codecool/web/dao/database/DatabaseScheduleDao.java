@@ -159,6 +159,25 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
             connection.setAutoCommit(autoCommit);
         }
     }
+
+    void addTaskToSchedule(int taskId, int scheduleId, int columnNumber) throws SQLException {
+        boolean autoCommit = connection.getAutoCommit();
+        connection.setAutoCommit(false);
+        String sql = "INSERT INTO schedule_tasks(schedule_id, task_id, column_number) VALUES (?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setInt(1, taskId);
+            statement.setInt(2, scheduleId);
+            statement.setInt(3, columnNumber);
+            executeInsert(statement);
+            connection.commit();
+        } catch (SQLException exc) {
+            connection.rollback();
+            throw exc;
+        } finally {
+            connection.setAutoCommit(autoCommit);
+        }
+    }
+
     @Override
     public void deleteByScheduleId(int id) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
