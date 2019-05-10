@@ -42,15 +42,19 @@ function createActivitiesTableBody(activities) {
     const activity = activities[i];
 
     const titleTdEl = document.createElement('td');
+    titleTdEl.classList.add('schedule-cell');
     titleTdEl.textContent = activity.eventName;
 
     const tableTdEl = document.createElement('td');
+    tableTdEl.classList.add('schedule-cell');
     tableTdEl.textContent = activity.tableName;
 
     const userTdEl = document.createElement('td');
+    userTdEl.classList.add('schedule-cell');
     userTdEl.textContent = activity.userName;
 
     const dateTdEl = document.createElement('td');
+    dateTdEl.classList.add('schedule-cell');
     dateTdEl.textContent = activity.eventDate;
 
     const trEl = document.createElement('tr');
@@ -67,15 +71,19 @@ function createActivitiesTableBody(activities) {
 
 function createActivitiesTableHeader() {
     const titleThEl = document.createElement('th');
+    titleThEl.classList.add('schedule-th');
     titleThEl.textContent = 'Event';
 
     const tableThEl = document.createElement('th');
+    tableThEl.classList.add('schedule-th');
     tableThEl.textContent = 'Table';
 
     const userThEl = document.createElement('th');
+    userThEl.classList.add('schedule-th');
     userThEl.textContent = 'User';
 
     const dateThEl = document.createElement('th');
+    dateThEl.classList.add('schedule-th');
     dateThEl.textContent = 'Date';
 
     const trEl = document.createElement('tr');
