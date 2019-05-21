@@ -11,6 +11,7 @@ function onProfileLoad(user) {
       showMenu();
     } else if (user.role === 'GUEST') {
       hideMenu();
+      onAllSchedulesClicked();
     }
     showProfileContent(user);
 
@@ -55,7 +56,7 @@ function onUserLoad() {
         const user = JSON.parse(this.responseText);
         showProfileData(user);
     } else {
-        onOtherRespons(myTasksDivEl, this);
+        onOtherResponse(myTasksDivEl, this);
     }
 }
 
@@ -165,7 +166,7 @@ function onProfileEditButtonClicked() {
     buttonEditTdEl.appendChild(saveButtonEl);
 }
 
-function createPopUpInput(id, textContent) {
+function createProfilePopUpInput(id, textContent) {
     const inputEl = document.createElement('input');
     inputEl.classList.add('pop-up-box');
     inputEl.name = 'input-user-id-' + id;
