@@ -168,6 +168,12 @@ create trigger check_schedule_coloumns
     INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (4, 'going out', 'shopping', 9, 10);
     INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (5, 'jogging', 'jogging to the nearby park and back', 6, 8);
     INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (5, 'cooking', 'cooking dinner', 11, 12);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'walking the dog', 'walking the dog', 16, 18);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'cinema', 'going to the cinema', 19, 23);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'gym', 'going to the gym', 14, 16);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'studying', 'studying stuff', 12, 14);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'dentist', 'going to the dentist', 10, 12);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'cooking', 'cooking lunch', 11, 12);
 
     -- schedule_tasks
     INSERT INTO schedule_tasks(schedule_id, task_id, column_number) VALUES
