@@ -8,6 +8,8 @@ import com.codecool.web.model.User;
 import com.codecool.web.service.ScheduleService;
 import com.codecool.web.service.simple.SimpleScheduleService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,6 +23,8 @@ import java.sql.SQLException;
 public class ScheduleServlet extends AbstractServlet {
 
     private final ObjectMapper om = new ObjectMapper();
+    private static Logger logger = LoggerFactory.getLogger(ScheduleServlet.class);
+    private static Logger exceptionLogger = LoggerFactory.getLogger(ScheduleServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -32,8 +36,11 @@ public class ScheduleServlet extends AbstractServlet {
             int id = Integer.parseInt(req.getParameter("schedule-id"));
             ScheduleDto schedule = scheduleService.findUserSchedulesWithTaskRelation(user.getId(), id);
 
+            logger.info("Loaded schedule ID " + id + ".");
             sendMessage(resp, HttpServletResponse.SC_OK, schedule);
         } catch (SQLException exc) {
+            logger.error("Exception occurred while processing request - For more information see the exception log file.");
+            exceptionLogger.error("SQL exception occurred at: ", exc);
             handleSqlError(resp, exc);
         }
     }
@@ -51,8 +58,11 @@ public class ScheduleServlet extends AbstractServlet {
             scheduleService.addTaskToSchedule(taskId, columnNumber, scheduleId);
             ScheduleDto schedule = scheduleService.findUserSchedulesWithTaskRelation(user.getId(), scheduleId);
 
+            logger.info("Added task ID " + taskId + " to schedule ID " + scheduleId + ".");
             sendMessage(resp, HttpServletResponse.SC_OK, schedule);
         } catch (SQLException exc) {
+            logger.error("Exception occurred while processing request - For more information see the exception log file.");
+            exceptionLogger.error("SQL exception occurred at: ", exc);
             handleSqlError(resp, exc);
         }
     }
@@ -67,8 +77,11 @@ public class ScheduleServlet extends AbstractServlet {
             scheduleService.updateTitleById(schedule.getId(), schedule.getTitle());
             scheduleService.updateVisibilityById(schedule.getId(), schedule.isVisibility());
 
+            logger.info("Updated schedule ID " + schedule.getId() + ".");
             sendMessage(resp, HttpServletResponse.SC_OK, "Schedule updated.");
         } catch (SQLException exc) {
+            logger.error("Exception occurred while processing request - For more information see the exception log file.");
+            exceptionLogger.error("SQL exception occurred at: ", exc);
             handleSqlError(resp, exc);
         }
     }
@@ -82,8 +95,11 @@ public class ScheduleServlet extends AbstractServlet {
 
             scheduleService.deleteByScheduleId(id);
 
+            logger.info("Deleted schedule ID " + id + ".");
             sendMessage(resp, HttpServletResponse.SC_OK, "Schedule deleted.");
         } catch (SQLException exc) {
+            logger.error("Exception occurred while processing request - For more information see the exception log file.");
+            exceptionLogger.error("SQL exception occurred at: ", exc);
             handleSqlError(resp, exc);
         }
     }

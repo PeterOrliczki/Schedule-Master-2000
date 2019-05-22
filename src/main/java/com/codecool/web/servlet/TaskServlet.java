@@ -8,6 +8,8 @@ import com.codecool.web.dto.RelationDto;
 import com.codecool.web.model.Task;
 import com.codecool.web.service.TaskService;
 import com.codecool.web.service.simple.SimpleTaskService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,9 +19,11 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-
 @WebServlet("/protected/task")
 public class TaskServlet extends AbstractServlet {
+
+    private static Logger logger = LoggerFactory.getLogger(TaskServlet.class);
+    private static Logger exceptionLogger = LoggerFactory.getLogger(TaskServlet.class);
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try (Connection connection = getConnection(request.getServletContext())) {
@@ -30,8 +34,11 @@ public class TaskServlet extends AbstractServlet {
             int id = Integer.valueOf(request.getParameter("id"));
             Task task = taskService.findTaskById(id);
 
+            logger.info("Loaded task ID " + id + ".");
             sendMessage(response, HttpServletResponse.SC_OK, task);
         } catch (SQLException exc) {
+            logger.error("Exception occurred while processing request - For more information see the exception log file.");
+            exceptionLogger.error("SQL exception occurred at: ", exc);
             handleSqlError(response, exc);
         }
     }
@@ -47,12 +54,16 @@ public class TaskServlet extends AbstractServlet {
             int columnNumber = Integer.valueOf(request.getParameter("columnNumber"));
             if (taskService.doesRelationExistByTaskAndScheduleId(taskId, scheduleId)) {
                 RelationDto relationDto = new RelationDto(taskId, columnNumber, scheduleId);
+                logger.info("Requested schedule - task relation found.");
                 sendMessage(response, HttpServletResponse.SC_OK, relationDto);
             } else {
+                logger.info("Requested schedule - task relation not found.");
                 sendMessage(response, HttpServletResponse.SC_OK, "False");
             }
 
         } catch (SQLException exc) {
+            logger.error("Exception occurred while processing request - For more information see the exception log file.");
+            exceptionLogger.error("SQL exception occurred at: ", exc);
             handleSqlError(response, exc);
         }
     }
@@ -68,8 +79,12 @@ public class TaskServlet extends AbstractServlet {
             int columnNumber = Integer.valueOf(request.getParameter("columnNumber"));
             taskService.deleteRelationRecordByTaskAndScheduleId(taskId, scheduleId);
             RelationDto relationDto = new RelationDto(taskId, columnNumber, scheduleId);
+
+            logger.info("Removed task ID " + taskId + " from schedule ID " + scheduleId + ".");
             sendMessage(response, HttpServletResponse.SC_OK, relationDto);
         } catch (SQLException exc) {
+            logger.error("Exception occurred while processing request - For more information see the exception log file.");
+            exceptionLogger.error("SQL exception occurred at: ", exc);
             handleSqlError(response, exc);
         }
     }
