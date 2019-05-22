@@ -175,6 +175,7 @@ create or replace function check_schedule_coloumn() RETURNS trigger AS '
     END;
 ' LANGUAGE plpgsql;
 
+
 create trigger check_task_duplicate_inschedules
     before insert on schedule_tasks
     for each row EXECUTE procedure check_schedule_coloumn();
