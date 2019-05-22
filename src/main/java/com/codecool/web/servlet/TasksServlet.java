@@ -89,7 +89,7 @@ public class TasksServlet extends AbstractServlet {
 
             int id = Integer.valueOf(request.getParameter("id"));
 
-            if (taskService.doesRelationExistsTaskId(id)) {
+            if (taskService.doesRelationExistByTaskId(id)) {
                 taskService.deleteRelationRecordByTaskId(id);
             }
 

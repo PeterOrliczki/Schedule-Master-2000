@@ -11,7 +11,11 @@ function onAllSchedulesLoad() {
         const schedulesDto = JSON.parse(this.responseText);
         const schedules = schedulesDto.publicSchedules;
         createAllSchedulesDisplay(schedules);
-        showContents(['all-schedules-content']);
+        if (getCurrentUser().role === 'GUEST') {
+            showContents(['profile-content', 'all-schedules-content']);
+        } else {
+            showContents(['all-schedules-content']);
+        }
     } else {
         onOtherResponse(allSchedulesDivEl, this);
     }
@@ -90,6 +94,7 @@ function createAllSchedulesTableBody(schedules) {
 }
 
 function onSchedulesClicked() {
+    removeAllChildren(profileContentDivEl);
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onSchedulesLoad);
     xhr.addEventListener('error', onNetworkError);
@@ -249,20 +254,25 @@ function onScheduleResponse() {
 function onScheduleLoad(schedule, tasks, allTasks) {
     const tableEl = document.createElement('table');
     tableEl.setAttribute('id', 'schedules-table');
+    tableEl.setAttribute('schedule-id', schedule.id);
     const theadEl = createScheduleTableHeader(schedule);
     const tbodyEl = createScheduleTableBody(schedule, tasks);
     tableEl.appendChild(theadEl);
     tableEl.appendChild(tbodyEl);
     removeAllChildren(mySchedulesDivEl);
     mySchedulesDivEl.appendChild(tableEl);
-    addSchedulesToSchedule(tasks);
-    debugger;
-    const formEl = createNewTaskAddForm(schedule, tasks, allTasks);
-    formEl.setAttribute('id', 'new-task-add-form');
-    formEl.classList.add('menu-form');
-    formEl.onSubmit = 'return false;';
-    mySchedulesDivEl.insertBefore(formEl, tableEl);
-    showContents(['my-schedules-content'])
+    addTasksToSchedule(tasks);
+    if (getCurrentUser().role !== 'GUEST' && getCurrentUser().id === schedule.userId || getCurrentUser().role === 'ADMIN') {
+        const formEl = createNewTaskAddForm(schedule, tasks, allTasks);
+        formEl.setAttribute('id', 'new-task-add-form');
+        formEl.classList.add('task-cloud-form');
+        formEl.onSubmit = 'return false;';
+        formEl.style.display = 'none';
+        mySchedulesDivEl.insertBefore(formEl, tableEl);
+        setTasksCloudStyling();
+        showContentById('new-task-add-form');
+    }
+    showContents(['my-schedules-content']);
 }
 
 function createScheduleTableHeader(schedule) {
@@ -290,6 +300,7 @@ function createScheduleTableBody(schedule) {
     const duration = schedule.duration;
     for (let i = 0; i < 24; i++) {
         const trEl = document.createElement('tr');
+        trEl.setAttribute('id', 'row-id-' + i);
         const hourTdEl = document.createElement('td');
         hourTdEl.textContent = i + ':00';
         hourTdEl.classList.add('schedule-cell')
@@ -297,7 +308,7 @@ function createScheduleTableBody(schedule) {
         for (let j = 0; j < duration; j++) {
             const tdEl = document.createElement('td');
             tdEl.classList.add('schedule-cell');
-            tdEl.setAttribute('id', j + 1 + ':' + i);
+            tdEl.setAttribute('id', i + ':' + parseInt(j + 1));
             trEl.appendChild(tdEl);
         }
         tbodyEl.appendChild(trEl);
@@ -305,14 +316,22 @@ function createScheduleTableBody(schedule) {
     return tbodyEl;
 }
 
-function addSchedulesToSchedule(tasks) {
+function addTasksToSchedule(tasks) {
     for (let i = 0; i < tasks.length; i++) {
         const task = tasks[i];
         const duration = task.end - task.start;
         for (let j = 0; j < duration; j++) {
             const hour = task.start + j;
-            tdEl = document.getElementById(task.columnNumber + ':' + hour);
+            tdEl = document.getElementById(hour + ':' + task.columnNumber);
             tdEl.textContent = task.title;
+            tdEl.style.cursor = 'pointer';
+            tdEl.setAttribute('duration', duration);
+            tdEl.setAttribute('id', 'task-' + task.id);
+            tdEl.setAttribute('start', task.start);
+            if (getCurrentUser().role !== 'GUEST') {
+                tdEl.setAttribute('draggable', true);
+                tdEl.addEventListener('dragstart', drag);
+            }
         }
     }
 }
@@ -476,69 +495,178 @@ function createNewTaskAddForm(schedule, tasks, allTasks) {
     const formEl = document.createElement('form');
 
     const pEl = document.createElement('p');
-    pEl.textContent = 'Select a task to add: ';
+    pEl.textContent = 'Drag and drop a task on a slot to add them to the schedule.';
     formEl.appendChild(pEl);
 
-    const taskSelectEl = document.createElement('select');
-    taskSelectEl.setAttribute('name', 'task-select');
-    taskSelectEl.classList.add('task-select');
-
-    const tableEl = document.getElementById('schedules-table');
-    const cells = tableEl.rows.namedItem('row-schedule-header').cells;
+    const taskCloudEl = document.createElement('div');
+    taskCloudEl.classList.add('task-cloud');
 
     for (let i = 0; i < allTasks.length; i++) {
         const task = allTasks[i];
-        const optionEl = document.createElement('option');
-        optionEl.value = task.id;
-        optionEl.textContent = task.title + ' (' + task.start + ':00' + ' - ' + task.end + ':00' + ')';
-        taskSelectEl.appendChild(optionEl);
+        const duration = task.end - task.start;
+        const taskItemEl = document.createElement('div');
+        taskItemEl.classList.add('task-item');
+        taskItemEl.setAttribute('duration', duration);
+        taskItemEl.setAttribute('id', 'task-' + task.id);
+        taskItemEl.setAttribute('start', task.start);
+        taskItemEl.setAttribute('draggable', true);
+        taskItemEl.addEventListener('dragstart', drag);
+        taskItemEl.textContent = task.title + ' (' + task.start + ':00' + ' - ' + task.end + ':00' + ')';
+        taskCloudEl.appendChild(taskItemEl);
     }
-
-    const daySelectEl = document.createElement('select');
-    daySelectEl.setAttribute('name', 'day-select');
-    daySelectEl.classList.add('task-select');
-    for (let i = 1; i < cells.length; i ++) {
-        const optionEl = document.createElement('option');
-        optionEl.value = i;
-        optionEl.textContent = cells[i].textContent;
-        daySelectEl.appendChild(optionEl);
-    }
-
-    const buttonEl = document.createElement('button');
-    buttonEl.textContent = 'Add to schedule';
-    buttonEl.classList.add('form-button');
-    buttonEl.addEventListener('click', onAddTaskToScheduleClicked);
-    buttonEl.dataset.scheduleId = schedule.id;
-
-    formEl.appendChild(taskSelectEl);
-    formEl.appendChild(document.createElement('br'));
-    formEl.appendChild(daySelectEl);
-    formEl.appendChild(document.createElement('br'));
-    formEl.appendChild(buttonEl);
-    formEl.appendChild(document.createElement('br'));
+    formEl.appendChild(taskCloudEl);
     return formEl;
 }
 
-function onAddTaskToScheduleClicked() {
-    debugger;
-    const formEl = document.forms['new-task-add-form'];
-    const taskSelectEl = formEl.querySelector('select[name="task-select"]');
-    const daySelectEl = formEl.querySelector('select[name="day-select"]');
+function setTasksCloudStyling() {
+    const fontMin = 12;
+    const fontMax = 24; 
+    const duration = 'duration';
+    const classListSelector = 'div.task-item';
+    const computeColor = true; // flag, if true color will be computed with size
 
-    removeAllChildren(mySchedulesDivEl);
+    const values = [];
+    document.querySelectorAll(classListSelector).forEach(task => {
+    const taskValue = task.getAttribute(duration);
+    
+    values.push({
+        el: task,
+        val: Number(taskValue)
+    })
+    });
 
-    const taskId = taskSelectEl.value;
-    const columnNumber = daySelectEl.value;
+    const valuesSorted = values.sort((a, b) => a.val - b.val);
+    const valueMax = valuesSorted[valuesSorted.length-1].val;
+
+    valuesSorted.forEach(x => {
+    const { val, el } = x;
+    
+    const fontSize = Math.floor(
+        (val/valueMax) * (fontMax-fontMin+1) + fontMin
+    );
+    
+    if (computeColor) {
+        const color = Math
+        .abs(
+        Math.floor(((val/valueMax) * 200) - 200)
+        )
+        .toString(16)
+        .repeat(3); 
+        
+        el.style.color = `#${color}`;
+    }
+    
+    el.style.fontSize = `${fontSize}px`;
+    });
+}
+
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    dragEl = ev.target;
+    ev.dataTransfer.setData("text", dragEl.getAttribute('id'));
+    const row = document.getElementById('schedules-table').rows.namedItem('row-id-' + dragEl.getAttribute('start'));
+    const cells = row.cells;
+    for (let i = 1; i < cells.length; i ++) {
+        const cell = cells[i];
+        if (cell.innerHTML.length == 0) {
+            cell.addEventListener('drop', drop);
+            cell.addEventListener('dragover', allowDrop);
+        }
+    }
+}
+  
+function drop(ev) {
+    ev.preventDefault();
+    const table = document.getElementById('schedules-table');
+    const scheduleId = table.getAttribute('schedule-id');
+    const taskId = ev.dataTransfer.getData("text").split('-')[1];
+    const transferredEl = document.getElementById('task-' + taskId);
+    const start = transferredEl.getAttribute('start');
+    const duration = transferredEl.getAttribute('duration');
+    const row = table.rows.namedItem('row-id-' + start);
+    const cells = row.cells;
+    const columnNumber = ev.target.getAttribute('id').split(':')[1];
+    
+    isTaskInSchedule(taskId, columnNumber, scheduleId);
+
+    ev.target.innerHTML = transferredEl.textContent;
+    if (duration > 1) {
+        for (let j = 1; j < duration; j++) {
+            const rowNum = parseInt(start) + j;
+            const nextCell = document.getElementById(rowNum + ':' + columnNumber);
+            nextCell.innerHTML = transferredEl.cloneNode(true).textContent;
+        }
+    }
+    for (let i = 1; i < cells.length; i ++) {
+        const cell = cells[i];
+        cell.removeEventListener('drop', drop);
+        cell.removeEventListener('dragover', allowDrop);
+    }   
+
+    addTaskToSchedule(taskId, columnNumber, scheduleId)
+}
+
+function addTaskToSchedule(taskId, columnNumber, scheduleId) {
     const params = new URLSearchParams();
     params.append('task-id', taskId);
     params.append('columnNumber', columnNumber);
-    params.append('scheduleId', this.dataset.scheduleId);
+    params.append('scheduleId', scheduleId);
 
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onAddTaskToScheduleResponse);
     xhr.addEventListener('error', onNetworkError);
     xhr.open('POST', 'protected/schedule');
     xhr.send(params);
+}
+
+function isTaskInSchedule(taskId, columnNumber, scheduleId) {
+    debugger;
+    const params = new URLSearchParams();
+    params.append('taskId', taskId);
+    params.append('scheduleId', scheduleId);
+    params.append('columnNumber', columnNumber);
+
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onIsTaskInScheduleResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('POST', 'protected/task');
+    xhr.send(params);
+}
+
+function onIsTaskInScheduleResponse() {
+    if (this.status === OK) {
+        const response = JSON.parse(this.responseText);
+        if (response.message === 'False') {
+            return;
+        } else {
+            removeTaskFromSchedule(response.taskId, response.columnNumber, response.scheduleId);
+        }
+    } else {
+        onOtherResponse(mySchedulesDivEl, this);
+    }
+}
+
+function removeTaskFromSchedule(taskId, columnNumber, scheduleId) {
+    const params = new URLSearchParams();
+    params.append('taskId', taskId);
+    params.append('columnNumber', columnNumber);
+    params.append('scheduleId', scheduleId);
+
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', function() {
+        if (this.status === OK) {
+            const response = JSON.parse(this.responseText);
+            addTaskToSchedule(response.taskId, response.columnNumber, response.scheduleId);
+        } else {
+            onOtherResponse(mySchedulesDivEl, this);
+        }
+    });
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('DELETE', 'protected/task?' + params.toString());
+    xhr.send();
 }
 
 function onAddTaskToScheduleResponse() {
@@ -549,8 +677,8 @@ function onAddTaskToScheduleResponse() {
        const tasks = scheduleDto.tasks;
        const allTasks = scheduleDto.allTasks;
        onScheduleLoad(schedule, tasks, allTasks);
-   } else {
+    } else {
        onOtherResponse(mySchedulesDivEl, this);
-   }
+    }
 }
 

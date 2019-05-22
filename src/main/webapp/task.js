@@ -1,4 +1,5 @@
 function onTasksClicked() {
+    removeAllChildren(profileContentDivEl);
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onTasksLoad);
     xhr.addEventListener('error', onNetworkError);
@@ -187,7 +188,7 @@ function createNewTaskForm() {
     const formEl = document.createElement('form');
     formEl.setAttribute('id','new-task-form');
     formEl.classList.add('menu-form');
-    //formEl.onSubmit = 'return false;';
+    formEl.onSubmit = 'return false;';
 
     const inputTiEl = document.createElement("input"); //input element, text
     inputTiEl.setAttribute("type","text");
@@ -247,7 +248,6 @@ function onSubmitNewTask() {
     const contentInputEl = loginFormEl.querySelector('input[name="task-content"]');
     const beginInputEl = loginFormEl.querySelector('input[name="task-begin"]');
     const endInputEl = loginFormEl.querySelector('input[name="task-end"]');
-    console.log(contentInputEl.value);
 
     removeAllChildren(myTasksDivEl);
     const title = titleInputEl.value;
@@ -366,7 +366,7 @@ function onTSaveButtonClicked() {
     data.title = inputs[0].value;
     data.content = inputs[1].value;
     data.start = inputs[2].value;
-    data.end = inputs[3].value
+    data.end = inputs[3].value;
     data.userId = user.id;
     const json = JSON.stringify(data);
 

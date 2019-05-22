@@ -140,12 +140,45 @@ public final class DatabaseTaskDao extends AbstractDao implements TaskDao {
     }
 
     @Override
-    public boolean doesRelationExistsTaskId(int id) throws SQLException {
+    public void deleteRelationRecordByTaskAndScheduleId(int taskId, int scheduleId) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
+        connection.setAutoCommit(false);
+        String sql = "DELETE FROM schedule_tasks WHERE task_id = ? AND schedule_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setInt(1, taskId);
+            statement.setInt(2, scheduleId);
+            executeInsert(statement);
+            connection.commit();
+        } catch (SQLException exc) {
+            connection.rollback();
+            throw exc;
+        } finally {
+            connection.setAutoCommit(autoCommit);
+        }
+    }
+
+    @Override
+    public boolean doesRelationExistByTaskId(int id) throws SQLException {
         connection.setAutoCommit(false);
         String sql = "SELECT * FROM schedule_tasks WHERE task_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean doesRelationExistByTaskAndScheduleId(int taskId, int scheduleId) throws SQLException {
+        connection.setAutoCommit(false);
+        String sql = "SELECT * FROM schedule_tasks WHERE task_id = ? AND schedule_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, taskId);
+            statement.setInt(2, scheduleId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return true;
