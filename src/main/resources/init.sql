@@ -205,7 +205,6 @@ create trigger check_task_duplicate_inschedules
     INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (5, 'cooking', 'cooking dinner', 11, 12);
 
 	INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'watching movie', 'watching avengers', 1, 4);
-
     INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'walking the dog', 'walking the dog', 16, 18);
     INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'cinema', 'going to the cinema', 19, 23);
     INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'gym', 'going to the gym', 14, 16);

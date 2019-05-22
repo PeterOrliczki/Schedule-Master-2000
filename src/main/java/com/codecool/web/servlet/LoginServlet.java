@@ -33,7 +33,8 @@ public final class LoginServlet extends AbstractServlet {
             logger.info(user.getEmail());
             sendMessage(resp, HttpServletResponse.SC_OK, user);
         } catch (ServiceException ex) {
-            logger.error(ex.getMessage());
+            
+            logger.error("Service: ", ex);
            sendMessage(resp, HttpServletResponse.SC_BAD_REQUEST, ex.getMessage());
         } catch (SQLException ex) {
             handleSqlError(resp, ex);
