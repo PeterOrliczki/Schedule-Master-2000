@@ -317,6 +317,7 @@ function onTaskEditClicked() {
 
 function onTaskEditResponse() {
     if (this.status === OK) {
+        console.log(JSON.parse(this.responseText));
         onTaskTitleEditLoad(JSON.parse(this.responseText));
     } else {
         onOtherResponse(myTasksDivEl, this);
