@@ -258,6 +258,28 @@ select {
     color: #000;
 }
 
+.task-cloud {
+    text-align: center;
+}
+    
+.task-item {
+    display: inline-block;
+    line-height: 1.2em;
+    vertical-align: middle;
+    margin: 0 0.2em;
+    transition: color .12s ease;
+    cursor: pointer;
+    user-select: none;
+}
+
+.task-item:hover {
+    color: #e57873 !important;
+}
+
+.task-item:active {
+    transform: translateY(4px);
+}
+
 .form-button {
     background-color: #e57873;
     margin: 0 auto;
@@ -276,6 +298,13 @@ select {
     background-color: #fff;
     border: 1px solid #e57873;
     color: #e57873;
+}
+
+.task-cloud-form {
+    width: 70%;
+    margin: 0 auto;
+    text-align: center;
+    padding-bottom: 30px;
 }
 
 .container {

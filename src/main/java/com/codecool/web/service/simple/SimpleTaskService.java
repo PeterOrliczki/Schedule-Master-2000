@@ -49,13 +49,23 @@ public final class SimpleTaskService implements TaskService {
     }
 
     @Override
-    public  void deleteRelationRecordByTaskId(int id) throws SQLException {
+    public void deleteRelationRecordByTaskId(int id) throws SQLException {
         taskDao.deleteRelationRecordByTaskId(id);
     }
 
     @Override
-    public boolean doesRelationExistsTaskId(int id) throws SQLException {
-        return taskDao.doesRelationExistsTaskId(id);
+    public void deleteRelationRecordByTaskAndScheduleId(int taskId, int scheduleId) throws SQLException {
+        taskDao.deleteRelationRecordByTaskAndScheduleId(taskId, scheduleId);
+    }
+
+    @Override
+    public boolean doesRelationExistByTaskId(int id) throws SQLException {
+        return taskDao.doesRelationExistByTaskId(id);
+    }
+
+    @Override
+    public boolean doesRelationExistByTaskAndScheduleId(int taskId, int scheduleId) throws SQLException {
+        return taskDao.doesRelationExistByTaskAndScheduleId(taskId, scheduleId);
     }
 
     @Override

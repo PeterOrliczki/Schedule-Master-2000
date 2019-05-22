@@ -124,6 +124,26 @@ create trigger schedule_task_check
     before insert on schedule_tasks
     for each row EXECUTE procedure check_task_id();
 
+create or replace function check_schedule_coloumn() RETURNS trigger AS '
+    BEGIN
+        IF (TG_OP = ''INSERT'') THEN
+            DECLARE
+                rows integer;
+            BEGIN
+				SELECT schedule_duration INTO rows FROM schedules WHERE schedule_id = NEW.schedule_id;
+                IF rows  < NEW.column_number THEN
+                	RAISE EXCEPTION ''Task could not be added to schedule, because the row number is invalid '';
+                END IF;
+			END;
+        END IF;
+        RETURN NEW;
+    END;
+' LANGUAGE plpgsql;
+
+create trigger check_schedule_coloumns
+    before insert on schedule_tasks
+    for each row EXECUTE procedure check_schedule_coloumn();
+
     -- users
     INSERT INTO users(user_name, user_email, user_password, user_role) VALUES('a', 'a', '1000:52a2e5376fe9155814775f1e3231a526:191ade9da2dcbabfc870ba70263b7af6865b40d8e179d19e8ea504d257810c6e78a316d77f5bd8716a7fa54f39b1f082c773ca80b45526dd59c933522e341216', 'ADMIN');
     INSERT INTO users(user_name, user_email, user_password, user_role) VALUES('r', 'r', '1000:12b64240b3c5da1f64daa0d26dbd7bfb:e314534adbb83fa0d605557a1d7394f6936b10efcfc89cae85260e69ad452241cbdd6d043ae51ecc92e8776b4aa369fa6afb028cac5254f9cc7a4e8eae0722c2', 'REGULAR');
@@ -148,6 +168,12 @@ create trigger schedule_task_check
     INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (4, 'going out', 'shopping', 9, 10);
     INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (5, 'jogging', 'jogging to the nearby park and back', 6, 8);
     INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (5, 'cooking', 'cooking dinner', 11, 12);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'walking the dog', 'walking the dog', 16, 18);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'cinema', 'going to the cinema', 19, 23);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'gym', 'going to the gym', 14, 16);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'studying', 'studying stuff', 12, 14);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'dentist', 'going to the dentist', 10, 12);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'cooking', 'cooking lunch', 11, 12);
 
     -- schedule_tasks
     INSERT INTO schedule_tasks(schedule_id, task_id, column_number) VALUES

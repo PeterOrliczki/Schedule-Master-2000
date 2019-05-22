@@ -92,10 +92,9 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
         Schedule schedule = null;
         String sql = "SELECT * FROM tasks JOIN (SELECT schedules.schedule_id, schedule_title, schedule_duration, schedule_visibility, column_number, task_id\n" +
             "FROM schedules JOIN schedule_tasks ON schedules.schedule_id = schedule_tasks.schedule_id) AS temp_table ON tasks.task_id = temp_table.task_id\n" +
-            "WHERE tasks.user_id = ? AND temp_table.schedule_id = ?";
+            "WHERE temp_table.schedule_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, userId);
-            statement.setInt(2, scheduleId);
+            statement.setInt(1, scheduleId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Task task = taskDao.fetchTask(resultSet);
@@ -162,7 +161,7 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
     }
 
     @Override
-    public void addTaskToSchedule(int taskId, int scheduleId, int columnNumber) throws SQLException {
+    public void addTaskToSchedule(int taskId, int columnNumber, int scheduleId) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         String sql = "INSERT INTO schedule_tasks(schedule_id, task_id, column_number) VALUES (?, ?, ?)";
