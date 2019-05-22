@@ -204,3 +204,5 @@ function onUserEditSubmitResponse() {
       onProfileClicked();
    } else {
        onOtherResponse(mySchedulesDivEl, this);
+   }
+}
