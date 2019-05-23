@@ -261,7 +261,7 @@ function onScheduleLoad(schedule, tasks, allTasks) {
     tableEl.appendChild(tbodyEl);
     removeAllChildren(mySchedulesDivEl);
     mySchedulesDivEl.appendChild(tableEl);
-    addTasksToSchedule(tasks);
+    addTasksToSchedule(tasks, schedule);
     if (getCurrentUser().role !== 'GUEST' && getCurrentUser().id === schedule.userId || getCurrentUser().role === 'ADMIN') {
         const formEl = createNewTaskAddForm(schedule, tasks, allTasks);
         formEl.setAttribute('id', 'new-task-add-form');
@@ -316,7 +316,7 @@ function createScheduleTableBody(schedule) {
     return tbodyEl;
 }
 
-function addTasksToSchedule(tasks) {
+function addTasksToSchedule(tasks, schedule) {
     for (let i = 0; i < tasks.length; i++) {
         const task = tasks[i];
         const duration = task.end - task.start;
@@ -328,7 +328,7 @@ function addTasksToSchedule(tasks) {
             tdEl.setAttribute('duration', duration);
             tdEl.setAttribute('id', 'task-' + task.id);
             tdEl.setAttribute('start', task.start);
-            if (getCurrentUser().role !== 'GUEST') {
+            if (getCurrentUser().role !== 'GUEST' && getCurrentUser().id === schedule.userId || getCurrentUser().role === 'ADMIN') {
                 tdEl.setAttribute('draggable', true);
                 tdEl.addEventListener('dragstart', drag);
             }
@@ -592,12 +592,12 @@ function drop(ev) {
     
     isTaskInSchedule(taskId, columnNumber, scheduleId);
 
-    ev.target.innerHTML = transferredEl.textContent;
+    ev.target.innerHTML = transferredEl.textContent.split("(")[0];
     if (duration > 1) {
         for (let j = 1; j < duration; j++) {
             const rowNum = parseInt(start) + j;
             const nextCell = document.getElementById(rowNum + ':' + columnNumber);
-            nextCell.innerHTML = transferredEl.cloneNode(true).textContent;
+            nextCell.innerHTML = transferredEl.cloneNode(true).textContent.split("(")[0];
         }
     }
     for (let i = 1; i < cells.length; i ++) {
