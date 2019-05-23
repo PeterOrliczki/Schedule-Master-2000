@@ -20,7 +20,7 @@ create TABLE users(
 create TABLE schedules(
 	schedule_id SERIAL UNIQUE PRIMARY KEY,
 	user_id integer,
-	schedule_title varchar(40) NOT NULL,
+	schedule_title varchar(20) NOT NULL,
 	schedule_duration integer NOT NULL,
 	schedule_visibility boolean DEFAULT false,
 	FOREIGN KEY(user_id) REFERENCES users(user_id),
@@ -30,8 +30,8 @@ create TABLE schedules(
 create TABLE tasks(
 	task_id SERIAL UNIQUE PRIMARY KEY,
 	user_id integer,
-	task_title text NOT NULL,
-	task_content text NOT NULL,
+	task_title varchar(20) NOT NULL,
+	task_content varchar(20) NOT NULL,
 	task_start integer NOT NULL,
 	task_end integer NOT NULL,
 	FOREIGN KEY(user_id) REFERENCES users(user_id),
@@ -198,11 +198,11 @@ create trigger check_task_duplicate_inschedules
     -- tasks
     INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'cleaning', 'cleaning the kitchen', 3, 5);
     INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'jogging', 'morning jogging', 6, 7);
-    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (2, 'cleaning', 'cleaning the livingroom', 8, 9);
-    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (3, 'watering plants', 'watering plants in the garden', 3, 4);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (2, 'cleaning', 'cleaning the car', 8, 9);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (3, 'watering plants', 'watering plants', 3, 4);
     INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (3, 'going out', 'going to concert', 16, 21);
     INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (4, 'going out', 'shopping', 9, 10);
-    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (5, 'jogging', 'jogging to the nearby park and back', 6, 8);
+    INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (5, 'jogging', 'jogging to the park', 6, 8);
     INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (5, 'cooking', 'cooking dinner', 11, 12);
 
 	INSERT INTO tasks(user_id, task_title, task_content, task_start, task_end) VALUES (1, 'watching movie', 'watching avengers', 1, 4);
@@ -217,19 +217,9 @@ create trigger check_task_duplicate_inschedules
     -- schedule_tasks
     INSERT INTO schedule_tasks(schedule_id, task_id, column_number) VALUES
         (1, 1, 1),
-        (1, 2, 3),
-        (2, 3, 2),
-        (3, 4, 4),
-        (3, 5, 3),
-        (4, 5, 5),
-        (5, 7, 1);
-
-
-
-    -- INSERT INTO users VALUES(2, 'a', 'b', 'c', 'd');
-   --INSERT INTO tasks VALUES(1, 1, 'a', 'b', 1, 1);
-   --INSERT INTO schedules VALUES(1, 1, 'title', 1, true);
-   -- UPDATE users SET user_name = 'z';
-   -- DELETE FROM users WHERE user_id = 2;
-   --INSERT INTO schedule_tasks VALUES(1, 1);
-   --INSERT INTO schedule_tasks VALUES(1, 1);
+        (2, 2, 3),
+        (3, 3, 2),
+        (4, 4, 4),
+        (4, 5, 3),
+        (6, 7, 1),
+        (6, 8, 2);
