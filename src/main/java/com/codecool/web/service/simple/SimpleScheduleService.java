@@ -1,7 +1,6 @@
 package com.codecool.web.service.simple;
 
 import com.codecool.web.dao.ScheduleDao;
-import com.codecool.web.dao.database.DatabaseTaskDao;
 import com.codecool.web.dto.ScheduleDto;
 import com.codecool.web.model.Role;
 import com.codecool.web.model.Schedule;
@@ -39,11 +38,6 @@ public final class SimpleScheduleService implements ScheduleService {
     @Override
     public Schedule findByScheduleId(int id) throws SQLException {
         return scheduleDao.findByScheduleId(id);
-    }
-
-    @Override
-    public Schedule findByUserId(int id) throws SQLException {
-        return scheduleDao.findByUserId(id);
     }
 
     @Override

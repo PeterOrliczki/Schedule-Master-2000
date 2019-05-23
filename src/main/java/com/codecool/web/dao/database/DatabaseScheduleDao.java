@@ -72,20 +72,6 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
     }
 
     @Override
-    public Schedule findByUserId(int id) throws SQLException {
-        String sql = "SELECT * FROM schedules WHERE user_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return fetchSchedule(resultSet);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
     public ScheduleDto findUserSchedulesWithTaskRelation(int userId, int scheduleId) throws SQLException {
         List<Task> tasks = new ArrayList<>();
         List<Task> allTasks = taskDao.findAllByUserId(userId);
