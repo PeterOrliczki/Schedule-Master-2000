@@ -9,6 +9,8 @@ import com.codecool.web.model.User;
 import com.codecool.web.service.TaskService;
 import com.codecool.web.service.simple.SimpleTaskService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,11 +21,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-
 @WebServlet("/protected/tasks")
 public class TasksServlet extends AbstractServlet {
 
     private final ObjectMapper om = new ObjectMapper();
+    private static Logger logger = LoggerFactory.getLogger(TasksServlet.class);
+    private static Logger exceptionLogger = LoggerFactory.getLogger(TasksServlet.class);
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try (Connection connection = getConnection(request.getServletContext())) {
@@ -34,8 +37,11 @@ public class TasksServlet extends AbstractServlet {
             User user = (User) request.getSession().getAttribute("user");
             List<Task> tasks = taskService.findAllByTaskId(user.getId());
 
+            logger.info("Loaded " + tasks.size() + " tasks.");
             sendMessage(response, HttpServletResponse.SC_OK, tasks);
         } catch (SQLException exc) {
+            logger.error("Exception occurred while processing request - For more information see the exception log file.");
+            exceptionLogger.error("SQL exception occurred at: ", exc);
             handleSqlError(response, exc);
         }
     }
@@ -55,8 +61,12 @@ public class TasksServlet extends AbstractServlet {
             int taskEnd = Integer.parseInt(request.getParameter("task-end"));
 
             Task task = taskService.addTask(userId, taskTitle, taskContent, taskStart, taskEnd);
-            sendMessage(response, HttpServletResponse.SC_OK, "Task succesfully added");
+
+            logger.info("Created new task by user " + user.getName() + ", with task ID " + task.getId() + ".");
+            sendMessage(response, HttpServletResponse.SC_OK, "Task successfully added");
         } catch (SQLException exc) {
+            logger.error("Exception occurred while processing request - For more information see the exception log file.");
+            exceptionLogger.error("SQL exception occurred at: ", exc);
             handleSqlError(response, exc);
         }
     }
@@ -73,8 +83,11 @@ public class TasksServlet extends AbstractServlet {
             taskService.updateStartById(task.getId(), task.getStart());
             taskService.updateEndById(task.getId(), task.getEnd());
 
+            logger.info("Updated task ID " + task.getId() + ".");
             sendMessage(resp, HttpServletResponse.SC_OK, "Task updated.");
         } catch (SQLException exc) {
+            logger.error("Exception occurred while processing request - For more information see the exception log file.");
+            exceptionLogger.error("SQL exception occurred at: ", exc);
             handleSqlError(resp, exc);
         }
     }
@@ -85,19 +98,18 @@ public class TasksServlet extends AbstractServlet {
             ScheduleDao scheduleDao = new DatabaseScheduleDao(connection);
             TaskService taskService = new SimpleTaskService(taskDao, scheduleDao);
 
-            User user = (User) request.getSession().getAttribute("user");
-
             int id = Integer.valueOf(request.getParameter("id"));
 
             if (taskService.doesRelationExistByTaskId(id)) {
                 taskService.deleteRelationRecordByTaskId(id);
             }
-
             taskService.deleteTaskById(id);
-            List<Task> tasks = taskService.findAllByTaskId(user.getId());
 
+            logger.info("Deleted task ID " + id + ".");
             sendMessage(response, HttpServletResponse.SC_OK, "Task succesfully deleted");
         } catch (SQLException exc) {
+            logger.error("Exception occurred while processing request - For more information see the exception log file.");
+            exceptionLogger.error("SQL exception occurred at: ", exc);
             handleSqlError(response, exc);
         }
     }

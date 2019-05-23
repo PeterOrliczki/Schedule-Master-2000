@@ -20,6 +20,7 @@ import java.sql.SQLException;
 public final class LoginServlet extends AbstractServlet {
 
     private static Logger logger = LoggerFactory.getLogger(LoginServlet.class);
+    private static Logger exceptionLogger = LoggerFactory.getLogger(LoginServlet.class);
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -30,13 +31,15 @@ public final class LoginServlet extends AbstractServlet {
             String password = req.getParameter("password");
             User user = userService.loginUser(email, password);
             req.getSession().setAttribute("user", user);
-            logger.info(user.getEmail());
+            logger.info("Successfully logged in as user: " + email + ".");
             sendMessage(resp, HttpServletResponse.SC_OK, user);
         } catch (ServiceException ex) {
-            
-            logger.error("Service: ", ex);
-           sendMessage(resp, HttpServletResponse.SC_BAD_REQUEST, ex.getMessage());
+            logger.error("Exception occurred while processing request - For more information see the exception log file.");
+            exceptionLogger.error("Service exception occurred at: ", ex);
+            sendMessage(resp, HttpServletResponse.SC_BAD_REQUEST, ex.getMessage());
         } catch (SQLException ex) {
+            logger.error("Exception occurred while processing request - For more information see the exception log file.");
+            exceptionLogger.error("SQL exception occurred at: ", ex);
             handleSqlError(resp, ex);
         }
     }

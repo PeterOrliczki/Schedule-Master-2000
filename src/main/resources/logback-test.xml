@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <configuration>
-    <appender name="STDOUTINFO" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
-        </encoder>
-    </appender>
-    <appender name="FILEINFO" class="ch.qos.logback.core.FileAppender">
-        <file>./testFile.log</file>
+    <appender name="FILE-INFO" class="ch.qos.logback.core.FileAppender">
+        <file>./info.log</file>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return (throwable == null);</expression>
+            </evaluator>
+            <OnMismatch>NEUTRAL</OnMismatch>
+            <OnMatch>DENY</OnMatch>
+        </filter>
         <append>true</append>
         <!-- set immediateFlush to false for much higher logging throughput -->
         <immediateFlush>true</immediateFlush>
@@ -16,13 +18,15 @@
         </encoder>
     </appender>
 
-    <appender name="STDOUTERROR" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
-        </encoder>
-    </appender>
-    <appender name="FILEERROR" class="ch.qos.logback.core.FileAppender">
-        <file>./errorFile.log</file>
+    <appender name="FILE-ERROR" class="ch.qos.logback.core.FileAppender">
+        <file>./exception.log</file>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return (throwable == null);</expression>
+            </evaluator>
+            <OnMismatch>ACCEPT</OnMismatch>
+            <OnMatch>DENY</OnMatch>
+        </filter>
         <append>true</append>
         <!-- set immediateFlush to false for much higher logging throughput -->
         <immediateFlush>true</immediateFlush>
@@ -32,12 +36,12 @@
     </appender>
 
     <root level="INFO">
-        <appender-ref ref="FILEINFO" />
-        <appender-ref ref="STDOUTINFO" />
+        <appender-ref ref="FILE-INFO" />
+    </root>
+    <root level="ERROR">
+        <appender-ref ref="FILE-INFO" />
+        <appender-ref ref="FILE-ERROR" />
     </root>
 
-    <root level="ERROR">
-        <appender-ref ref="FILEERROR" />
-        <appender-ref ref="STDOUTERROR" />
-    </root>
+
 </configuration>
