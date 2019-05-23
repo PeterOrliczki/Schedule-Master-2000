@@ -16,8 +16,6 @@ public interface ScheduleDao {
 
     Schedule findByScheduleId(int id) throws SQLException;
 
-    Schedule findByUserId(int id) throws SQLException;
-
     ScheduleDto findUserSchedulesWithTaskRelation(int userId, int scheduleId) throws SQLException;
 
     void addTaskToSchedule(int taskId, int scheduleId, int columnNumber) throws SQLException;
