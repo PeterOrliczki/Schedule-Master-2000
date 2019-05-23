@@ -217,19 +217,9 @@ create trigger check_task_duplicate_inschedules
     -- schedule_tasks
     INSERT INTO schedule_tasks(schedule_id, task_id, column_number) VALUES
         (1, 1, 1),
-        (1, 2, 3),
-        (2, 3, 2),
-        (3, 4, 4),
-        (3, 5, 3),
-        (4, 5, 5),
-        (5, 7, 1);
-
-
-
-    -- INSERT INTO users VALUES(2, 'a', 'b', 'c', 'd');
-   --INSERT INTO tasks VALUES(1, 1, 'a', 'b', 1, 1);
-   --INSERT INTO schedules VALUES(1, 1, 'title', 1, true);
-   -- UPDATE users SET user_name = 'z';
-   -- DELETE FROM users WHERE user_id = 2;
-   --INSERT INTO schedule_tasks VALUES(1, 1);
-   --INSERT INTO schedule_tasks VALUES(1, 1);
+        (2, 2, 3),
+        (3, 3, 2),
+        (4, 4, 4),
+        (4, 5, 3),
+        (6, 7, 1),
+        (6, 8, 2);
