@@ -11,15 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/logout")
-public final class LogoutServlet extends HttpServlet {
+public final class LogoutServlet extends AbstractServlet {
 
     private static Logger logger = LoggerFactory.getLogger(LogoutServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getSession().invalidate();
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.sendRedirect("index.html");
+        sendMessage(resp, HttpServletResponse.SC_OK, "Logged out.");
         logger.info("Successfully logged out.");
     }
 }
