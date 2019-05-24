@@ -34,8 +34,8 @@ public class ActivityLogServlet extends AbstractServlet {
             logger.info("Loaded activity log.");
             sendMessage(response, HttpServletResponse.SC_OK, activities);
         } catch (SQLException exc) {
-            logger.error("Exception occurred while processing request - For more information see the exception log file.");
-            exceptionLogger.error("SQL exception occurred at: ", exc);
+            logger.warn("Exception occurred while processing request - For more information see the exception log file.");
+            logger.error("SQL exception occurred at: ", exc);
             handleSqlError(response, exc);
         }
     }

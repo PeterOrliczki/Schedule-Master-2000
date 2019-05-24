@@ -37,8 +37,8 @@ public class TaskServlet extends AbstractServlet {
             logger.info("Loaded task ID " + id + ".");
             sendMessage(response, HttpServletResponse.SC_OK, task);
         } catch (SQLException exc) {
-            logger.error("Exception occurred while processing request - For more information see the exception log file.");
-            exceptionLogger.error("SQL exception occurred at: ", exc);
+            logger.warn("Exception occurred while processing request - For more information see the exception log file.");
+            logger.error("SQL exception occurred at: ", exc);
             handleSqlError(response, exc);
         }
     }
@@ -62,8 +62,8 @@ public class TaskServlet extends AbstractServlet {
             }
 
         } catch (SQLException exc) {
-            logger.error("Exception occurred while processing request - For more information see the exception log file.");
-            exceptionLogger.error("SQL exception occurred at: ", exc);
+            logger.warn("Exception occurred while processing request - For more information see the exception log file.");
+            logger.error("SQL exception occurred at: ", exc);
             handleSqlError(response, exc);
         }
     }
@@ -83,8 +83,8 @@ public class TaskServlet extends AbstractServlet {
             logger.info("Removed task ID " + taskId + " from schedule ID " + scheduleId + ".");
             sendMessage(response, HttpServletResponse.SC_OK, relationDto);
         } catch (SQLException exc) {
-            logger.error("Exception occurred while processing request - For more information see the exception log file.");
-            exceptionLogger.error("SQL exception occurred at: ", exc);
+            logger.warn("Exception occurred while processing request - For more information see the exception log file.");
+            logger.error("SQL exception occurred at: ", exc);
             handleSqlError(response, exc);
         }
     }

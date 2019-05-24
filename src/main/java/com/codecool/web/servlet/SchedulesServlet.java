@@ -22,7 +22,7 @@ import java.sql.SQLException;
 public class SchedulesServlet extends AbstractServlet {
 
     private static Logger logger = LoggerFactory.getLogger(SchedulesServlet.class);
-    private static Logger exceptionLogger = LoggerFactory.getLogger(SchedulesServlet.class);
+
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
@@ -36,12 +36,12 @@ public class SchedulesServlet extends AbstractServlet {
             logger.info("Loaded " + numOfSchedules + " schedules.");
             sendMessage(resp, HttpServletResponse.SC_OK, schedules);
         } catch (SQLException exc) {
-            logger.error("Exception occurred while processing request - For more information see the exception log file.");
-            exceptionLogger.error("SQL exception occurred at: ", exc);
+            logger.warn("Exception occurred while processing request - For more information see the exception log file.");
+            logger.error("SQL exception occurred at: ", exc);
             handleSqlError(resp, exc);
         } catch (ServiceException e) {
-            logger.error("Exception occurred while processing request - For more information see the exception log file.");
-            exceptionLogger.error("Service exception occurred at: ", e);
+            logger.warn("Exception occurred while processing request - For more information see the exception log file.");
+            logger.error("Service exception occurred at: ", e);
             sendMessage(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }
     }
@@ -60,8 +60,8 @@ public class SchedulesServlet extends AbstractServlet {
             logger.info("New schedule created by " + user.getName() + ".");
             sendMessage(response, HttpServletResponse.SC_OK, "Schedule added.");
         } catch (SQLException exc) {
-            logger.error("Exception occurred while processing request - For more information see the exception log file.");
-            exceptionLogger.error("SQL exception occurred at: ", exc);
+            logger.warn("Exception occurred while processing request - For more information see the exception log file.");
+            logger.error("SQL exception occurred at: ", exc);
             handleSqlError(response, exc);
         }
     }

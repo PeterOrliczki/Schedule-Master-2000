@@ -44,8 +44,8 @@ public class ProfileServlet extends AbstractServlet {
             logger.info("Updated user data for " + user.getName() + ".");
             sendMessage(resp, HttpServletResponse.SC_OK, "Your data has been updated.");
         } catch (SQLException exc) {
-            logger.error("Exception occurred while processing request - For more information see the exception log file.");
-            exceptionLogger.error("SQL exception occurred at: ", exc);
+            logger.warn("Exception occurred while processing request - For more information see the exception log file.");
+            logger.error("SQL exception occurred at: ", exc);
             handleSqlError(resp, exc);
         }
     }

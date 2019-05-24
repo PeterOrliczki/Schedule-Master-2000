@@ -40,8 +40,8 @@ public class TasksServlet extends AbstractServlet {
             logger.info("Loaded " + tasks.size() + " tasks.");
             sendMessage(response, HttpServletResponse.SC_OK, tasks);
         } catch (SQLException exc) {
-            logger.error("Exception occurred while processing request - For more information see the exception log file.");
-            exceptionLogger.error("SQL exception occurred at: ", exc);
+            logger.warn("Exception occurred while processing request - For more information see the exception log file.");
+            logger.error("SQL exception occurred at: ", exc);
             handleSqlError(response, exc);
         }
     }
@@ -65,8 +65,8 @@ public class TasksServlet extends AbstractServlet {
             logger.info("Created new task by user " + user.getName() + ", with task ID " + task.getId() + ".");
             sendMessage(response, HttpServletResponse.SC_OK, "Task successfully added");
         } catch (SQLException exc) {
-            logger.error("Exception occurred while processing request - For more information see the exception log file.");
-            exceptionLogger.error("SQL exception occurred at: ", exc);
+            logger.warn("Exception occurred while processing request - For more information see the exception log file.");
+            logger.error("SQL exception occurred at: ", exc);
             handleSqlError(response, exc);
         }
     }
@@ -86,8 +86,8 @@ public class TasksServlet extends AbstractServlet {
             logger.info("Updated task ID " + task.getId() + ".");
             sendMessage(resp, HttpServletResponse.SC_OK, "Task updated.");
         } catch (SQLException exc) {
-            logger.error("Exception occurred while processing request - For more information see the exception log file.");
-            exceptionLogger.error("SQL exception occurred at: ", exc);
+            logger.warn("Exception occurred while processing request - For more information see the exception log file.");
+            logger.error("SQL exception occurred at: ", exc);
             handleSqlError(resp, exc);
         }
     }
@@ -108,8 +108,8 @@ public class TasksServlet extends AbstractServlet {
             logger.info("Deleted task ID " + id + ".");
             sendMessage(response, HttpServletResponse.SC_OK, "Task succesfully deleted");
         } catch (SQLException exc) {
-            logger.error("Exception occurred while processing request - For more information see the exception log file.");
-            exceptionLogger.error("SQL exception occurred at: ", exc);
+            logger.warn("Exception occurred while processing request - For more information see the exception log file.");
+            logger.error("SQL exception occurred at: ", exc);
             handleSqlError(response, exc);
         }
     }

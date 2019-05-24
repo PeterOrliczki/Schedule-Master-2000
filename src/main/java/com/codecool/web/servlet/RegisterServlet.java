@@ -46,12 +46,12 @@ public class RegisterServlet extends AbstractServlet {
             }
 
         } catch (ServiceException | NoSuchAlgorithmException | InvalidKeySpecException ex) {
-            logger.error("Exception occurred while processing request - For more information see the exception log file.");
-            exceptionLogger.error("Service exception occurred at: ", ex);
+            logger.warn("Exception occurred while processing request - For more information see the exception log file.");
+            logger.error("Service exception occurred at: ", ex);
             sendMessage(resp, HttpServletResponse.SC_BAD_REQUEST, ex.getMessage());
         } catch (SQLException ex) {
-            logger.error("Exception occurred while processing request - For more information see the exception log file.");
-            exceptionLogger.error("SQL exception occurred at: ", ex);
+            logger.warn("Exception occurred while processing request - For more information see the exception log file.");
+            logger.error("SQL exception occurred at: ", ex);
             handleSqlError(resp, ex);
         }
     }
