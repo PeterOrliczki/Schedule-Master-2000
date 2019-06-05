@@ -24,7 +24,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 
 
-@WebServlet("/protected/google-sign-in")
+@WebServlet("/google-sign-in")
 public final class GoogleSignInServlet extends AbstractServlet {
 
     @Override

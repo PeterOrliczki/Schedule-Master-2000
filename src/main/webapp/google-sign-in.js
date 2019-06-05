@@ -12,7 +12,7 @@ function onSignIn(googleUser) {
     var xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onLoad);
     xhr.addEventListener('error', onNetworkError);
-    xhr.open('POST', 'protected/google-sign-in');
+    xhr.open('POST', 'google-sign-in');
     xhr.onload = function() {
     console.log('Signed in as: ' + xhr.responseText);
     };
