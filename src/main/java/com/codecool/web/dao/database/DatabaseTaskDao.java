@@ -112,7 +112,7 @@ public final class DatabaseTaskDao extends AbstractDao implements TaskDao {
         String sql = "DELETE FROM tasks WHERE task_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, id);
-            executeInsert(statement);
+            statement.executeUpdate();
             connection.commit();
         } catch (SQLException exc) {
             connection.rollback();
@@ -129,7 +129,7 @@ public final class DatabaseTaskDao extends AbstractDao implements TaskDao {
         String sql = "DELETE FROM schedule_tasks WHERE task_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, id);
-            executeInsert(statement);
+            statement.executeUpdate();
             connection.commit();
         } catch (SQLException exc) {
             connection.rollback();
@@ -147,7 +147,7 @@ public final class DatabaseTaskDao extends AbstractDao implements TaskDao {
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, taskId);
             statement.setInt(2, scheduleId);
-            executeInsert(statement);
+            statement.executeUpdate();
             connection.commit();
         } catch (SQLException exc) {
             connection.rollback();

@@ -99,7 +99,7 @@ public final class DatabaseUserDao extends AbstractDao implements UserDao {
         String sql = "DELETE FROM users WHERE user_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setInt(1, id);
-            executeInsert(preparedStatement);
+            preparedStatement.executeUpdate();
             connection.commit();
         } catch (SQLException ex) {
             connection.rollback();

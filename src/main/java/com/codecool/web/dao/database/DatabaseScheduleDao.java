@@ -115,7 +115,7 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
         String sql = "DELETE FROM schedule_tasks WHERE schedule_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, id);
-            executeInsert(statement);
+            statement.executeUpdate();
             connection.commit();
         } catch (SQLException exc) {
             connection.rollback();
@@ -172,7 +172,7 @@ public final class DatabaseScheduleDao extends AbstractDao implements ScheduleDa
         String sql = "DELETE FROM schedules WHERE schedule_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, id);
-            executeInsert(statement);
+            statement.executeUpdate();
             connection.commit();
         } catch (SQLException exc) {
             connection.rollback();
