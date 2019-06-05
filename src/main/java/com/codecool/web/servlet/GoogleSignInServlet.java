@@ -25,12 +25,10 @@ public final class GoogleSignInServlet extends AbstractServlet {
         HttpTransport transport = new NetHttpTransport();
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
             // Specify the CLIENT_ID of the app that accesses the backend:
-            .setAudience(Collections.singletonList(req.getParameter("idtoken")))
+            .setAudience(Collections.singletonList(req.getParameter("idToken")))
             // Or, if multiple clients access the backend:
             //.setAudience(Arrays.asList(CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3))
             .build();
-
-// (Receive idTokenString by HTTPS POST)
 
         try {
             GoogleIdToken idToken = verifier.verify(req.getParameter("idtoken"));

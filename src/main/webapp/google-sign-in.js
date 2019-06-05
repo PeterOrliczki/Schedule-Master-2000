@@ -1,18 +1,22 @@
 function onSignIn(googleUser) {
-  var id_token = googleUser.getAuthResponse().id_token;
-  var profile = googleUser.getBasicProfile();
-  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  console.log('Name: ' + profile.getName());
-  console.log('Image URL: ' + profile.getImageUrl());
-  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+    const id_token = googleUser.getAuthResponse().id_token;
+    const profile = googleUser.getBasicProfile();
+    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    console.log('Name: ' + profile.getName());
+    console.log('Image URL: ' + profile.getImageUrl());
+    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', 'protected/google-sign-in');
-  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  xhr.onload = function() {
+    const params = new URLSearchParams();
+    params.append('idToken', id_token);
+
+    var xhr = new XMLHttpRequest();
+    xhr.addEventlistener('load', onLoad);
+    xhr.addEventlistener('error', onNetworkError);
+    xhr.open('POST', 'protected/google-sign-in');
+    xhr.onload = function() {
     console.log('Signed in as: ' + xhr.responseText);
-  };
-  xhr.send('idtoken=' + id_token);
+    };
+    xhr.send(params);
 }
 
 function signOut() {
