@@ -10,13 +10,22 @@ function onSignIn(googleUser) {
     params.append('idToken', id_token);
 
     var xhr = new XMLHttpRequest();
-    xhr.addEventListener('load', onLoad);
+    xhr.addEventListener('load', onVerified);
     xhr.addEventListener('error', onNetworkError);
     xhr.open('POST', 'google-sign-in');
     xhr.onload = function() {
     console.log('Signed in as: ' + xhr.responseText);
     };
     xhr.send(params);
+}
+
+function onVerified() {
+    if (this.status === OK) {
+        alert("OK");
+        onLoad();
+    } else {
+        onOtherResponse(loginContentDivEl, this);
+    }
 }
 
 function signOut() {
