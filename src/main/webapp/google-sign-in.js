@@ -10,8 +10,8 @@ function onSignIn(googleUser) {
     params.append('idToken', id_token);
 
     var xhr = new XMLHttpRequest();
-    xhr.addEventlistener('load', onLoad);
-    xhr.addEventlistener('error', onNetworkError);
+    xhr.addEventListener('load', onLoad);
+    xhr.addEventListener('error', onNetworkError);
     xhr.open('POST', 'protected/google-sign-in');
     xhr.onload = function() {
     console.log('Signed in as: ' + xhr.responseText);
