@@ -164,7 +164,7 @@ function onLoad() {
 
     const registerButtonEl = document.getElementById('register-button');
     registerButtonEl.addEventListener('click', onRegisterButtonClicked);
-
+getCurrentUser();
     if (hasAuthorization()) {
         onProfileLoad(getCurrentUser());
     } else {

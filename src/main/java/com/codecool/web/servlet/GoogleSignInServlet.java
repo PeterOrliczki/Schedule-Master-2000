@@ -17,6 +17,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.sql.Connection;
@@ -24,7 +25,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 
 
-@WebServlet("/google-sign-in")
+@WebServlet("/googlesignin")
 public final class GoogleSignInServlet extends AbstractServlet {
 
     @Override
@@ -34,13 +35,14 @@ public final class GoogleSignInServlet extends AbstractServlet {
             HttpTransport transport = new NetHttpTransport();
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
                 // Specify the CLIENT_ID of the app that accesses the backend:
-                .setAudience(Collections.singletonList(req.getParameter("idToken")))
+                .setAudience(Collections.singletonList("442693073873-plpoc0nhj0nqn5c69bubk73pa3sohg0a.apps.googleusercontent.com"))
                 // Or, if multiple clients access the backend:
                 //.setAudience(Arrays.asList(CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3))
                 .build();
 
             try {
-                GoogleIdToken idToken = verifier.verify(req.getParameter("idToken"));
+                String id = req.getParameter("idtoken");
+                GoogleIdToken idToken = verifier.verify(id);
                 if (idToken != null) {
                     Payload payload = idToken.getPayload();
 
@@ -63,7 +65,8 @@ public final class GoogleSignInServlet extends AbstractServlet {
 
                     UserDao userDao = new DatabaseUserDao(connection);
                     UserService userService = new SimpleUserService(userDao);
-                    User user = userService.addUser(name, email, String.valueOf(idToken), Role.REGULAR);
+                    User user = userService.addUser(name, email, String.valueOf(id), Role.REGULAR);
+                    HttpSession session = req.getSession(true);
                     req.getSession().setAttribute("user", user);
                     sendMessage(resp, HttpServletResponse.SC_OK, user);
                 } else {

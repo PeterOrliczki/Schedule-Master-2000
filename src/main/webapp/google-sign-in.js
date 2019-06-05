@@ -6,23 +6,18 @@ function onSignIn(googleUser) {
     console.log('Image URL: ' + profile.getImageUrl());
     console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 
-    const params = new URLSearchParams();
-    params.append('idToken', id_token);
-
     var xhr = new XMLHttpRequest();
-    xhr.addEventListener('load', onVerified);
-    xhr.addEventListener('error', onNetworkError);
-    xhr.open('POST', 'google-sign-in');
-    xhr.onload = function() {
-    console.log('Signed in as: ' + xhr.responseText);
-    };
-    xhr.send(params);
+    xhr.open('POST', 'googlesignin');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = onVerified;
+    xhr.send('idtoken=' + id_token);
 }
 
 function onVerified() {
     if (this.status === OK) {
+        const user = JSON.parse(this.responseText);
         alert("OK");
-        onLoad();
+        onProfileLoad(user)
     } else {
         onOtherResponse(loginContentDivEl, this);
     }
