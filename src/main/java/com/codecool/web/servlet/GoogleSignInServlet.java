@@ -66,8 +66,8 @@ public final class GoogleSignInServlet extends AbstractServlet {
                     UserDao userDao = new DatabaseUserDao(connection);
                     UserService userService = new SimpleUserService(userDao);
                     User user;
-                    if (userService.findUserByPass(id) != null) {
-                        user = userService.findUserByPass(id);
+                    if (userService.findUserByEmail(email) != null) {
+                        user = userService.findUserByEmail(email);
                     } else {
                         user = userService.addUser(name, email, String.valueOf(id), Role.REGULAR);
                     }

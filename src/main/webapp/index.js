@@ -170,7 +170,7 @@ getCurrentUser();
     } else {
         hideMenu();
         showContents(['login-content']);
-        hideContentById('gsign-out');
+        //hideContentById('gsign-out');
         showContentById('gsign-in');
     }
 }
