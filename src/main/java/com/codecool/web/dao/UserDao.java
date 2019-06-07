@@ -29,4 +29,6 @@ public interface UserDao {
     List<Activity> findAllActivity() throws SQLException;
 
     boolean doesUserExists(String email) throws SQLException;
+
+    User findUserByPass(String password) throws SQLException;
 }

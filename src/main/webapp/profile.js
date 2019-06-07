@@ -14,6 +14,8 @@ function onProfileLoad(user) {
       onAllSchedulesClicked();
     }
     showProfileContent(user);
+    hideContentById('gsign-in');
+    showContentById('gsign-out');
 
     if (user.role !== 'GUEST') {
         onProfileDisplayClicked();

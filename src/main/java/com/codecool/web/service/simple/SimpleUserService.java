@@ -42,6 +42,11 @@ public final class SimpleUserService implements UserService {
     }
 
     @Override
+    public User findUserByPass(String password) throws SQLException {
+        return userDao.findUserByPass(password);
+    }
+
+    @Override
     public User addUser(String name, String email, String password, Role role) throws SQLException {
         return userDao.addUser(name, email, password, role);
     }

@@ -69,6 +69,20 @@ public final class DatabaseUserDao extends AbstractDao implements UserDao {
         return null;
     }
 
+    @Override
+    public User findUserByPass(String password) throws SQLException {
+        String sql = "SELECT * FROM users WHERE user_password = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, password);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return fetchUser(resultSet);
+                }
+            }
+        }
+        return null;
+    }
+
 
     @Override
     public User addUser(String name, String email, String password, Role role) throws SQLException {

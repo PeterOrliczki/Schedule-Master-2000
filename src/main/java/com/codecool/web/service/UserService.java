@@ -18,6 +18,8 @@ public interface UserService {
 
     User findUserByEmail(String email) throws SQLException;
 
+    User findUserByPass(String password) throws SQLException;
+
     User addUser(String name, String email, String password, Role role) throws SQLException;
 
     void deleteUserById(int id) throws SQLException;
@@ -33,5 +35,6 @@ public interface UserService {
     boolean doesUserExists(String email) throws SQLException, ServiceException;
 
     User loginUser(String email, String password) throws SQLException, ServiceException;
+
 
 }

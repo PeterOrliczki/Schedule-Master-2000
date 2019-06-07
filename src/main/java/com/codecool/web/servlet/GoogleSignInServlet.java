@@ -65,8 +65,13 @@ public final class GoogleSignInServlet extends AbstractServlet {
 
                     UserDao userDao = new DatabaseUserDao(connection);
                     UserService userService = new SimpleUserService(userDao);
-                    User user = userService.addUser(name, email, String.valueOf(id), Role.REGULAR);
-                    HttpSession session = req.getSession(true);
+                    User user;
+                    if (userService.findUserByPass(id) != null) {
+                        user = userService.findUserByPass(id);
+                    } else {
+                        user = userService.addUser(name, email, String.valueOf(id), Role.REGULAR);
+                    }
+                    //HttpSession session = req.getSession(true);
                     req.getSession().setAttribute("user", user);
                     sendMessage(resp, HttpServletResponse.SC_OK, user);
                 } else {
